@@ -20,9 +20,9 @@
             <Bloom />
          </effect>
       </Label>
-      <Button fx:id="goBackHome" layoutX="29.0" layoutY="348.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="82.0" style="-fx-background-radius: 25px;" text="Home">
+      <Button fx:id="goBackHome" layoutX="29.0" layoutY="348.0" mnemonicParsing="false" onAction="#goBackHome" prefHeight="25.0" prefWidth="82.0" style="-fx-background-radius: 25px;" text="Home">
          <graphic>
-            <ImageView fx:id="goBackHome" fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../image/dash1.png" />
                </image>

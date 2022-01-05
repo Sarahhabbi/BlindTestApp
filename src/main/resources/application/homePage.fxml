@@ -11,12 +11,12 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #333239;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.HomePageController">
    <children>
-      <Button fx:id="joinGameBtn" layoutX="197.0" layoutY="245.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="191.0" style="-fx-background-radius: 25px;" text="Join a Game">
+      <Button fx:id="joinGameBtn" layoutX="197.0" layoutY="245.0" mnemonicParsing="false" onAction="#homeToGameCreation" prefHeight="48.0" prefWidth="191.0" style="-fx-background-radius: 25px;" text="Join a Game">
          <font>
             <Font name="Verdana Pro Cond Semibold" size="22.0" />
          </font>
       </Button>
-      <Button fx:id="createGameBtn" layoutX="197.0" layoutY="152.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="191.0" style="-fx-background-radius: 25px; -fx-font-weight: 900;" text="Create a Game">
+      <Button fx:id="createGameBtn" layoutX="197.0" layoutY="152.0" mnemonicParsing="false" onAction="#homeToGameCreation" prefHeight="48.0" prefWidth="191.0" style="-fx-background-radius: 25px; -fx-font-weight: 900;" text="Create a Game">
          <font>
             <Font name="Verdana Pro Cond Semibold" size="22.0" />
          </font>

@@ -40,17 +40,29 @@ public class HomePageController implements Initializable {
     @FXML
     public void homeToGameCreation(ActionEvent event) throws IOException {
         try {
-            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/createGamePage.fxml")));
+            String title = "BlindTest.IO";
+            String pageToLoad = " ";
+            if(event.getSource().equals(createGameBtn))
+            {
+                pageToLoad = "/application/createGamePage.fxml";
+                title = ("BlindTest.IO | Create a game");
+            }
+            else if(event.getSource().equals(joinGameBtn))
+            {
+                pageToLoad = "/application/joinGamePage.fxml";
+                title = ("BlindTest.IO | Join a game");
+            }
+            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(pageToLoad)));
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
-            stage.setTitle("BlindTest.IO | Create a Game");
+            stage.setTitle(title);
             stage.show();
+            System.out.println("fin debug");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
 
     @FXML
     public void homeToGameJoin(ActionEvent event) throws IOException {
@@ -65,7 +77,6 @@ public class HomePageController implements Initializable {
             e.printStackTrace();
         }
     }
-
 
     //exit the app
     @FXML
