@@ -39,7 +39,11 @@
             </Text>
             <ImageView fx:id="imageBox" fitHeight="188.0" fitWidth="327.0" layoutX="65.0" layoutY="109.0" pickOnBounds="true" preserveRatio="true">
                <image>
+<<<<<<< HEAD
                   <Image url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxC1NfYV_YoBcLp3m65JPG4LS5s8QjhI2ycv-AUDc2MRKxc2eWMmjn5fcwX3aXa4r1DVc&usqp=CAU" />
+=======
+                  <Image url="https://miro.medium.com/max/1400/1*4Ha05TwcqYA1s0BG2FQPJg.jpeg" />
+>>>>>>> pk
                </image>
             </ImageView>
          </children>

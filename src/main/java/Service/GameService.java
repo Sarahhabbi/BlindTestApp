@@ -14,15 +14,17 @@ public class GameService {
     }
 
     public ArrayList<MyImage> randomList(){
-        ArrayList<Integer> id=new ArrayList<>();
-        ArrayList<MyImage> images=new ArrayList<>();
+        System.out.println("Choix aleatoire des fichiers");
+        ArrayList<Integer> id = new ArrayList<>();
+        ArrayList<MyImage> images=myImages.findAll();
+        ArrayList<MyImage> selctedImages=new ArrayList<>();
         int size= myImages.count();
         int i=0;
-        while(i<10){
-            int e= (int)(Math.random() * size);
+        while(i < 1){
+            int e = (int)(Math.random()*size);
             if(! id.contains(e)){
                 id.add(e);
-                images.add(myImages.find(String.valueOf(e)));
+                selctedImages.add(images.get(e));
                 i++;
             }
         }

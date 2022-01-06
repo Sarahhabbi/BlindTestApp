@@ -5,13 +5,55 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0cf24a8b-798b-4f0c-b88a-c6a11a405633" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_openjfx_javafx_base_mac_17_ea_11.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_openjfx_javafx_controls_mac_17_ea_11.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_openjfx_javafx_fxml_mac_17_ea_11.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_openjfx_javafx_graphics_mac_17_ea_11.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_openjfx_javafx_media_mac_17_ea_11.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_openjfx_javafx_web_mac_17_ea_11.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/models/MyImage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/MyImage.java" afterDir="false" />
+<<<<<<< HEAD
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_openjfx_javafx_base_mac_17_ea_11.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_openjfx_javafx_controls_mac_17_ea_11.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_openjfx_javafx_fxml_mac_17_ea_11.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_openjfx_javafx_graphics_mac_17_ea_11.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_openjfx_javafx_media_mac_17_ea_11.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_openjfx_javafx_web_mac_17_ea_11.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dbnavigator.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo.iml" beforeDir="false" afterPath="$PROJECT_DIR$/demo.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Service/GameService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Service/GameService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/application/BlindTestApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/application/BlindTestApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/application/GlobalGameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/application/GlobalGameController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/caches/MemoryCache.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/caches/MemoryCache.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/repositories/CompositeRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/repositories/CompositeRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/repositories/MyImageRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/repositories/MyImageRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/repositories/RepositoryFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/repositories/RepositoryFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/application/BlindTestApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application/BlindTestApplication.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/application/GlobalGameController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application/GlobalGameController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/models/MyImage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/models/MyImage.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/module-info.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/module-info.class" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dbnavigator.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_06_01_2022_17_00_[Changes]/mysql-connector-java-8.0.27.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_06_01_2022_17_00_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_06_01_2022_17_00_[Changes]1/mysql-connector-java-8.0.27.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_06_01_2022_17_00_[Changes]1/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_06_01_2022_17_00__Changes_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_06_01_2022_17_00__Changes_1.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_06_01_2022_17_24_[Changes]/mysql-connector-java-8.0.27.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_06_01_2022_17_24_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_06_01_2022_17_24__Changes_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_06_01_2022_17_24_[Changes]/mysql-connector-java-8.0.27.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_06_01_2022_17_24_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_06_01_2022_17_24__Changes_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/repositories/RepositoryFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/repositories/RepositoryFactory.java" afterDir="false" />
+>>>>>>> pk
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,10 +71,19 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
+<<<<<<< HEAD
         <entry key="$PROJECT_DIR$" value="test" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
+=======
+        <entry key="$PROJECT_DIR$" value="data" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="HARD" />
+>>>>>>> pk
   </component>
   <component name="GitSEFilterConfiguration">
     <file-type-list>
@@ -51,10 +102,21 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+<<<<<<< HEAD
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+=======
+>>>>>>> pk
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
+    <property name="project.structure.last.edited" value="Modules" />
+<<<<<<< HEAD
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
+=======
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
+>>>>>>> pk
     <property name="settings.editor.selected.configurable" value="MavenSettings" />
   </component>
   <component name="RecentsManager">
@@ -90,9 +152,31 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+<<<<<<< HEAD
     <recent_temporary>
       <list>
         <item itemvalue="Application.BlindTestApplication" />
+=======
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="sql.Main" />
+      <module name="demo" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="sql.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.BlindTestApplication" />
+        <item itemvalue="Application.Main" />
+        <item itemvalue="Application.HelloApplication" />
+        <item itemvalue="Application.BlindTestApplication" />
+>>>>>>> pk
         <item itemvalue="Application.HelloApplication" />
       </list>
     </recent_temporary>
@@ -109,6 +193,11 @@
       <workItem from="1641458859725" duration="110000" />
       <workItem from="1641459062368" duration="167000" />
       <workItem from="1641459341920" duration="14040000" />
+<<<<<<< HEAD
+      <workItem from="1641489376332" duration="3470000" />
+=======
+      <workItem from="1641498789832" duration="513000" />
+>>>>>>> pk
     </task>
     <servers />
   </component>

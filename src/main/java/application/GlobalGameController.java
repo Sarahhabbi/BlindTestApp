@@ -1,5 +1,6 @@
 package application;
 
+import Service.GameService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -51,17 +52,19 @@ public class GlobalGameController implements Initializable {
     @FXML
     private Button submitBtn;
 
-    private ArrayList<MyImage> images = BlindTestApplication.images;
+    private final GameService gameService = new GameService();
     private int nextImage = 0;
-    private String goodAnswer;
-    private ExecutorService executor = Executors.newSingleThreadExecutor();
+    private ArrayList<MyImage> images = gameService.randomList();
+
     private int counterRightAnswer = 0;
+    private String goodAnswer;
     private int numberOfRound = 1;
+
+    private ExecutorService executor = Executors.newSingleThreadExecutor();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         changeImage();
-
         /*new Thread() {
             public void run() {
                 System.out.println("execute game() in another thread");
@@ -72,7 +75,6 @@ public class GlobalGameController implements Initializable {
                 }
             }
         }.start();*/
-
     }
 
 //    public Future<Integer> timer() {
@@ -127,7 +129,7 @@ public class GlobalGameController implements Initializable {
 
     public void handlePlayerAnswer(ActionEvent event){
 
-        if(numberOfRound < ROUND){
+        if(numberOfRound <= ROUND){
             String playerAnswer = answerField.getText().toLowerCase();
             String rightOrWrongResponse;
             String color;   // background color depending on the answer wrong=red/ right=green
@@ -181,6 +183,7 @@ public class GlobalGameController implements Initializable {
         {
             // create new Image
             String url = images.get(nextImage).getUrl();
+
             String newGoodAnswer = images.get(nextImage).getAnswer();
             MyImage image = new MyImage(url, newGoodAnswer);
 

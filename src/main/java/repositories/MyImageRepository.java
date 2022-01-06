@@ -23,10 +23,9 @@ public class MyImageRepository implements Repository<MyImage> {
 
     @Override
     public MyImage save(MyImage obj) {
-        String req = "INSERT INTO MyImage (image_path,answer) VALUES (?, ?)";
-        try (PreparedStatement ps = this.DBConnexion.prepareStatement(req, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement ps = this.DBConnexion.prepareStatement("INSERT INTO images (id,answer) VALUES (?, ?)")) {
 
-            ps.setString(1,obj.getUrl() );
+            ps.setString(1,obj.getUrl());
             ps.setString(2,obj.getAnswer());
             ps.executeUpdate();
 
@@ -39,20 +38,19 @@ public class MyImageRepository implements Repository<MyImage> {
 
     @Override
     public ArrayList<MyImage> findAll() {
-        String req="SELECT * FROM MyImage";
-        ArrayList<MyImage> channels = new ArrayList<>();
+        ArrayList<MyImage> images = new ArrayList<>();
         try{
-            PreparedStatement ps = this.DBConnexion.prepareStatement(req, Statement.RETURN_GENERATED_KEYS);
-            ResultSet generatedKeys=ps.executeQuery(req);
+            PreparedStatement ps = this.DBConnexion.prepareStatement("SELECT * FROM images");
+            ResultSet generatedKeys=ps.executeQuery();
             while(generatedKeys.next()){
-                channels.add(new MyImage(generatedKeys.getString(1),generatedKeys.getString(2),generatedKeys.getString(2)));
-                System.out.println(generatedKeys.getString(1)+ " "+generatedKeys.getString(2)+" "+generatedKeys.getString(3));
+                images.add(new MyImage(generatedKeys.getString(1),generatedKeys.getString(2)));
+                System.out.println("data "+generatedKeys.getString(1)+" "+generatedKeys.getString(2));
             }
             generatedKeys.close();
         }catch (SQLException e) {
             e.printStackTrace();
         }
-        return channels;
+        return images;
     }
 
 
@@ -60,7 +58,7 @@ public class MyImageRepository implements Repository<MyImage> {
     public void delete(MyImage obj){
 
         try {
-            PreparedStatement ps = this.DBConnexion.prepareStatement("DELETE FROM MyImage WHERE image_path=?");
+            PreparedStatement ps = this.DBConnexion.prepareStatement("DELETE FROM images WHERE id=?");
             ps.setString(1, obj.getUrl());
             ps.executeUpdate();
             System.out.println(" successfully deleted to CHANNEL_USERS table !");
@@ -72,12 +70,12 @@ public class MyImageRepository implements Repository<MyImage> {
     @Override
     public MyImage find(String id){
         try {
-            PreparedStatement ps = this.DBConnexion.prepareStatement("SELECT * FROM MyImage WHERE id=? ");
+            PreparedStatement ps = this.DBConnexion.prepareStatement("SELECT * FROM images WHERE id=? ");
             ps.setString(1, id);
 
             ResultSet res=ps.executeQuery();
             if(res.next()){
-                MyImage u=new MyImage(id,res.getString(2),res.getString(3));
+                MyImage u=new MyImage(res.getString(1),res.getString(2));
                 System.out.println();
                 res.close();
                 return u;
@@ -93,9 +91,10 @@ public class MyImageRepository implements Repository<MyImage> {
     @Override
     public int count (){
         try {
-            PreparedStatement ps = this.DBConnexion.prepareStatement("SELECT Count(*) FROM MyImage");
+            PreparedStatement ps = this.DBConnexion.prepareStatement("SELECT Count(*) FROM images");
             ResultSet res=ps.executeQuery();
             if(res.next()){
+                //System.out.println("DEBUG COUNT = " + res.getInt(1));
                 return res.getInt(1);
             }
             res.close();
@@ -115,7 +114,7 @@ public class MyImageRepository implements Repository<MyImage> {
 
     public void deleteAll() {
         try {
-            PreparedStatement ps = this.DBConnexion.prepareStatement("DELETE * FROM MyImage");
+            PreparedStatement ps = this.DBConnexion.prepareStatement("DELETE * FROM images");
             ps.executeUpdate();
             System.out.println(" successfully deleted to CHANNEL_USERS table !");
         } catch (SQLException e) {
