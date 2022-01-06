@@ -129,7 +129,7 @@ public class GlobalGameController implements Initializable {
 
     public void handlePlayerAnswer(ActionEvent event){
 
-        if(numberOfRound < ROUND){
+        if(numberOfRound <= ROUND){
             String playerAnswer = answerField.getText().toLowerCase();
             String rightOrWrongResponse;
             String color;   // background color depending on the answer wrong=red/ right=green
@@ -183,6 +183,7 @@ public class GlobalGameController implements Initializable {
         {
             // create new Image
             String url = images.get(nextImage).getUrl();
+            System.out.println("DEBUG " + url);
             String newGoodAnswer = images.get(nextImage).getAnswer();
             MyImage image = new MyImage(url, newGoodAnswer);
 

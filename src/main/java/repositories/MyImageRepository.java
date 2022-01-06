@@ -2,6 +2,7 @@ package repositories;
 
 import models.MyImage;
 
+
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -23,14 +24,14 @@ public class MyImageRepository implements Repository<MyImage> {
 
     @Override
     public MyImage save(MyImage obj) {
-        String req = "INSERT INTO MyImage (image_path,answer) VALUES (?, ?)";
+        String req = "INSERT INTO images (image_path,answer) VALUES (?, ?)";
         try (PreparedStatement ps = this.DBConnexion.prepareStatement(req, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setString(1,obj.getUrl());
             ps.setString(2,obj.getAnswer());
             ps.executeUpdate();
 
-            System.out.println(" successfully added to MyImage table !");
+            System.out.println(" successfully added to IMAGES table !");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -39,20 +40,20 @@ public class MyImageRepository implements Repository<MyImage> {
 
     @Override
     public ArrayList<MyImage> findAll() {
-        String req="SELECT * FROM MyImage";
-        ArrayList<MyImage> channels = new ArrayList<>();
+        String req="SELECT * FROM images";
+        ArrayList<MyImage> images = new ArrayList<>();
         try{
             PreparedStatement ps = this.DBConnexion.prepareStatement(req, Statement.RETURN_GENERATED_KEYS);
             ResultSet generatedKeys=ps.executeQuery(req);
             while(generatedKeys.next()){
-                channels.add(new MyImage(generatedKeys.getString(1),generatedKeys.getString(2),generatedKeys.getString(2)));
+                images.add(new MyImage(generatedKeys.getString(1),generatedKeys.getString(2),generatedKeys.getString(2)));
                 System.out.println(generatedKeys.getString(1)+ " "+generatedKeys.getString(2)+" "+generatedKeys.getString(3));
             }
             generatedKeys.close();
         }catch (SQLException e) {
             e.printStackTrace();
         }
-        return channels;
+        return images;
     }
 
 
@@ -60,7 +61,7 @@ public class MyImageRepository implements Repository<MyImage> {
     public void delete(MyImage obj){
 
         try {
-            PreparedStatement ps = this.DBConnexion.prepareStatement("DELETE FROM MyImage WHERE image_path=?");
+            PreparedStatement ps = this.DBConnexion.prepareStatement("DELETE FROM images WHERE image_path=?");
             ps.setString(1, obj.getUrl());
             ps.executeUpdate();
             System.out.println(" successfully deleted to CHANNEL_USERS table !");
@@ -69,16 +70,17 @@ public class MyImageRepository implements Repository<MyImage> {
         }
     }
 
+
     @Override
     public MyImage find(String id){
         try {
-            PreparedStatement ps = this.DBConnexion.prepareStatement("SELECT * FROM MyImage WHERE id=? ");
+            PreparedStatement ps = this.DBConnexion.prepareStatement("SELECT * FROM images WHERE id=? ");
             ps.setString(1, id);
 
             ResultSet res=ps.executeQuery();
             if(res.next()){
-                MyImage u=new MyImage(id,res.getString(2),res.getString(3));
-                System.out.println();
+                MyImage u = new MyImage(id,res.getString(2),res.getString(3));
+                System.out.println("getUrl()");
                 res.close();
                 return u;
             }
@@ -93,7 +95,7 @@ public class MyImageRepository implements Repository<MyImage> {
     @Override
     public int count (){
         try {
-            PreparedStatement ps = this.DBConnexion.prepareStatement("SELECT Count(*) FROM MyImage");
+            PreparedStatement ps = this.DBConnexion.prepareStatement("SELECT Count(*) FROM images");
             ResultSet res=ps.executeQuery();
             if(res.next()){
                 return res.getInt(1);
@@ -105,8 +107,8 @@ public class MyImageRepository implements Repository<MyImage> {
         }
         return -1;
     }
-    public ArrayList<MyImage> saveAll(ArrayList<MyImage> MyImages) {
-        for(MyImage element:MyImages){
+    public ArrayList<MyImage> saveAll(ArrayList<MyImage> images) {
+        for(MyImage element:images){
             save(element);
         }
         return null;

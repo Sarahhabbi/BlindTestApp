@@ -43,6 +43,7 @@ public class MemoryCache<T extends HasId> implements Repository<T> {
     @Override
     public T find(String id) {
         return cache.get(id);
+
     }
 
     @Override

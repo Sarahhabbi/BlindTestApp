@@ -26,8 +26,7 @@
     <show-object-properties value="true" />
     <loaded-nodes>
       <connection connection-id="24763392-ddf6-4e27-b6ee-b1bb9aea5b62">
-        <schema name="blind_test" object-types="table, view, procedure, function, constraint, index, column, dataset trigger" />
-        <schema name="mysql" object-types="table, function" />
+        <schema name="blind_test" object-types="table, view" />
       </connection>
     </loaded-nodes>
   </component>
@@ -38,9 +37,7 @@ INSERT INTO blind_test.images VALUES ("https://miro.medium.com/max/9012/1*Ffd2A4
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
-    <open-files>
-      <object connection-id="24763392-ddf6-4e27-b6ee-b1bb9aea5b62" object-ref="consoles/Connection" />
-    </open-files>
+    <open-files />
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
     <connection id="24763392-ddf6-4e27-b6ee-b1bb9aea5b62" />

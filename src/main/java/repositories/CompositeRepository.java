@@ -12,12 +12,13 @@ public class CompositeRepository<T extends HasId> implements Repository<T> {
 
     public CompositeRepository(Repository<T> file) {
         this.memory= new MemoryCache<>();
+        this.file = file;
+
         List<T> r = file.findAll();
         for (T element : r) {
             this.memory.save(element);
             System.out.println("Element ajoute "+ element.getId());
         }
-        this.file = file;
     }
 
     @Override
@@ -34,17 +35,17 @@ public class CompositeRepository<T extends HasId> implements Repository<T> {
 
     @Override
     public List<T> findAll(){
-        return memory.findAll();
+        return file.findAll();
     }
 
     @Override
     public T find(String id) {
-        return (T)memory.find(id);
+        return (T)file.find(id);
     }
 
     @Override
     public int count() {
-        return memory.count();
+        return file.count();
     }
 
 
