@@ -13,8 +13,7 @@ import java.util.ArrayList;
 import static java.lang.Thread.sleep;
 
 public class BlindTestApplication extends Application {
-    public static ArrayList<MyImage> images = new ArrayList<>();
-    public static int ROUND = 2;
+    public static int ROUND = 5;
 
     @Override
     public void start(Stage stage) throws IOException, InterruptedException {
