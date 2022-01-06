@@ -5,29 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0cf24a8b-798b-4f0c-b88a-c6a11a405633" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Service/GameService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/caches/MemoryCache.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/database/Database.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/models/HasId.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/models/MyTimerTask.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/repositories/CompositeRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/repositories/MyImageRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/repositories/Repository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/repositories/RepositoryFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dbnavigator.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_openjfx_javafx_base_mac_17_ea_11.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_openjfx_javafx_controls_mac_17_ea_11.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_openjfx_javafx_fxml_mac_17_ea_11.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_openjfx_javafx_graphics_mac_17_ea_11.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_openjfx_javafx_media_mac_17_ea_11.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_openjfx_javafx_web_mac_17_ea_11.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/application/BlindTestApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/application/BlindTestApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/application/GlobalGameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/application/GlobalGameController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/models/MyImage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/MyImage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
