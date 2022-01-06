@@ -26,7 +26,7 @@ public class MyImageRepository implements Repository<MyImage> {
         String req = "INSERT INTO MyImage (image_path,answer) VALUES (?, ?)";
         try (PreparedStatement ps = this.DBConnexion.prepareStatement(req, Statement.RETURN_GENERATED_KEYS)) {
 
-            ps.setString(1,obj.getUrl() );
+            ps.setString(1,obj.getUrl());
             ps.setString(2,obj.getAnswer());
             ps.executeUpdate();
 
