@@ -1,0 +1,768 @@
+Index: src/main/java/repositories/MyImageRepository.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package repositories;\r\n\r\nimport models.MyImage;\r\n\r\nimport java.sql.*;\r\nimport java.util.ArrayList;\r\n\r\n\r\npublic class MyImageRepository implements Repository<MyImage> {\r\n    private static MyImageRepository instance;\r\n    private final Connection DBConnexion;\r\n\r\n    private MyImageRepository(Connection DBConnexion){\r\n        this.DBConnexion = DBConnexion;\r\n    }\r\n\r\n    public static MyImageRepository getInstance(Connection DBConnexion){\r\n        if (MyImageRepository.instance == null) {\r\n            MyImageRepository.instance = new MyImageRepository(DBConnexion);\r\n        }\r\n        return instance;\r\n    }\r\n\r\n    @Override\r\n    public MyImage save(MyImage obj) {\r\n        String req = \"INSERT INTO MyImage (image_path,answer) VALUES (?, ?)\";\r\n        try (PreparedStatement ps = this.DBConnexion.prepareStatement(req, Statement.RETURN_GENERATED_KEYS)) {\r\n\r\n            ps.setString(1,obj.getPath() );\r\n            ps.setString(2,obj.getAnswer());\r\n            ps.executeUpdate();\r\n\r\n            System.out.println(\" successfully added to MyImage table !\");\r\n        } catch (SQLException e) {\r\n            e.printStackTrace();\r\n        }\r\n        return obj;\r\n    }\r\n\r\n    @Override\r\n    public ArrayList<MyImage> findAll() {\r\n        String req=\"SELECT * FROM MyImage\";\r\n        ArrayList<MyImage> channels = new ArrayList<>();\r\n        try{\r\n            PreparedStatement ps = this.DBConnexion.prepareStatement(req, Statement.RETURN_GENERATED_KEYS);\r\n            ResultSet generatedKeys=ps.executeQuery(req);\r\n            while(generatedKeys.next()){\r\n                channels.add(new MyImage(generatedKeys.getString(1),generatedKeys.getString(2)));\r\n                System.out.println(generatedKeys.getString(1)+ \" \"+generatedKeys.getString(2));\r\n            }\r\n            generatedKeys.close();\r\n        }catch (SQLException e) {\r\n            e.printStackTrace();\r\n        }\r\n        return channels;\r\n    }\r\n\r\n\r\n    @Override\r\n    public void delete(MyImage obj){\r\n\r\n        try {\r\n            PreparedStatement ps = this.DBConnexion.prepareStatement(\"DELETE FROM MyImage WHERE image_path=?\");\r\n            ps.setString(1, obj.getPath());\r\n            ps.executeUpdate();\r\n            System.out.println(\" successfully deleted to CHANNEL_USERS table !\");\r\n        } catch (SQLException e) {\r\n            e.printStackTrace();\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public MyImage find(String id){\r\n        try {\r\n            PreparedStatement ps = this.DBConnexion.prepareStatement(\"SELECT * FROM MyImage WHERE id=? \");\r\n            ps.setString(1, id);\r\n\r\n            ResultSet res=ps.executeQuery();\r\n            if(res.next()){\r\n                MyImage u=new MyImage(id,res.getString(2));\r\n                System.out.println();\r\n                res.close();\r\n                return u;\r\n            }\r\n            res.close();\r\n            System.out.println(\"There is no user with this name\");\r\n        } catch (SQLException e) {\r\n            e.printStackTrace();\r\n        }\r\n        return null;\r\n    }\r\n\r\n    @Override\r\n    public int count (){\r\n        try {\r\n            PreparedStatement ps = this.DBConnexion.prepareStatement(\"SELECT Count(*) FROM MyImage\");\r\n            ResultSet res=ps.executeQuery();\r\n            if(res.next()){\r\n                return res.getInt(1);\r\n            }\r\n            res.close();\r\n            System.out.println(\"There is no user with this name\");\r\n        } catch (SQLException e) {\r\n            e.printStackTrace();\r\n        }\r\n        return -1;\r\n    }\r\n    public ArrayList<MyImage> saveAll(ArrayList<MyImage> MyImages) {\r\n        for(MyImage element:MyImages){\r\n            save(element);\r\n        }\r\n        return null;\r\n    }\r\n\r\n\r\n    public void deleteAll() {\r\n        try {\r\n            PreparedStatement ps = this.DBConnexion.prepareStatement(\"DELETE * FROM MyImage\");\r\n            ps.executeUpdate();\r\n            System.out.println(\" successfully deleted to CHANNEL_USERS table !\");\r\n        } catch (SQLException e) {\r\n            e.printStackTrace();\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/repositories/MyImageRepository.java b/src/main/java/repositories/MyImageRepository.java
+--- a/src/main/java/repositories/MyImageRepository.java	(revision 6a96c5315bb73d980857fc8b8b29e87fd12bff2d)
++++ b/src/main/java/repositories/MyImageRepository.java	(date 1641486265120)
+@@ -26,7 +26,7 @@
+         String req = "INSERT INTO MyImage (image_path,answer) VALUES (?, ?)";
+         try (PreparedStatement ps = this.DBConnexion.prepareStatement(req, Statement.RETURN_GENERATED_KEYS)) {
+ 
+-            ps.setString(1,obj.getPath() );
++            ps.setString(1,obj.getUrl());
+             ps.setString(2,obj.getAnswer());
+             ps.executeUpdate();
+ 
+@@ -45,8 +45,8 @@
+             PreparedStatement ps = this.DBConnexion.prepareStatement(req, Statement.RETURN_GENERATED_KEYS);
+             ResultSet generatedKeys=ps.executeQuery(req);
+             while(generatedKeys.next()){
+-                channels.add(new MyImage(generatedKeys.getString(1),generatedKeys.getString(2)));
+-                System.out.println(generatedKeys.getString(1)+ " "+generatedKeys.getString(2));
++                channels.add(new MyImage(generatedKeys.getString(1),generatedKeys.getString(2),generatedKeys.getString(2)));
++                System.out.println(generatedKeys.getString(1)+ " "+generatedKeys.getString(2)+" "+generatedKeys.getString(3));
+             }
+             generatedKeys.close();
+         }catch (SQLException e) {
+@@ -61,7 +61,7 @@
+ 
+         try {
+             PreparedStatement ps = this.DBConnexion.prepareStatement("DELETE FROM MyImage WHERE image_path=?");
+-            ps.setString(1, obj.getPath());
++            ps.setString(1, obj.getUrl());
+             ps.executeUpdate();
+             System.out.println(" successfully deleted to CHANNEL_USERS table !");
+         } catch (SQLException e) {
+@@ -77,7 +77,7 @@
+ 
+             ResultSet res=ps.executeQuery();
+             if(res.next()){
+-                MyImage u=new MyImage(id,res.getString(2));
++                MyImage u=new MyImage(id,res.getString(2),res.getString(3));
+                 System.out.println();
+                 res.close();
+                 return u;
+Index: src/main/java/models/MyImage.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package models;\r\n\r\npublic class MyImage implements HasId{\r\n    private final String id;\r\n    private final String path;\r\n    private final String answer;\r\n\r\n    public MyImage(String id, String path, String answer) {\r\n        this.id = id;\r\n        this.path = path;\r\n        this.answer = answer;\r\n    }\r\n    public MyImage(String path, String answer) {\r\n        this.id =null;\r\n        this.path = path;\r\n        this.answer = answer;\r\n    }\r\n    @Override\r\n    public String getId() {\r\n        return this.id;\r\n    }\r\n\r\n    public String getPath() {\r\n        return path;\r\n    }\r\n\r\n    public String getAnswer() {\r\n        return answer;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/models/MyImage.java b/src/main/java/models/MyImage.java
+--- a/src/main/java/models/MyImage.java	(revision 6a96c5315bb73d980857fc8b8b29e87fd12bff2d)
++++ b/src/main/java/models/MyImage.java	(date 1641486265156)
+@@ -1,30 +1,34 @@
+ package models;
+ 
+-public class MyImage implements HasId{
++import javafx.scene.image.Image;
++import repositories.RepositoryFactory;
++import java.util.concurrent.atomic.AtomicLong;
++
++public class MyImage extends Image implements HasId{
++
++    private static final int nb = RepositoryFactory.images().count();
++    private final AtomicLong ID_GENERATOR = new AtomicLong(nb);
+     private final String id;
+-    private final String path;
+-    private final String answer;
+ 
+-    public MyImage(String id, String path, String answer) {
+-        this.id = id;
+-        this.path = path;
++    private String answer;
++    public MyImage(String url, String answer) {
++        super(url);
++        this.id = Long.toString(ID_GENERATOR.incrementAndGet()) ;
+         this.answer = answer;
+     }
+-    public MyImage(String path, String answer) {
+-        this.id =null;
+-        this.path = path;
++
++    public MyImage(String id, String url, String answer) {
++        super(url);
++        this.id =Long.toString(ID_GENERATOR.incrementAndGet()) ;
+         this.answer = answer;
+     }
++
+     @Override
+     public String getId() {
+         return this.id;
+     }
+ 
+-    public String getPath() {
+-        return path;
+-    }
+-
+     public String getAnswer() {
+         return answer;
+     }
+-}
++}
+\ No newline at end of file
+Index: src/main/java/com/example/demo/HelloController.java
+===================================================================
+diff --git a/src/main/java/com/example/demo/HelloController.java b/src/main/java/com/example/demo/HelloController.java
+deleted file mode 100644
+--- a/src/main/java/com/example/demo/HelloController.java	(revision 6a96c5315bb73d980857fc8b8b29e87fd12bff2d)
++++ /dev/null	(revision 6a96c5315bb73d980857fc8b8b29e87fd12bff2d)
+@@ -1,14 +0,0 @@
+-package com.example.demo;
+-
+-import javafx.fxml.FXML;
+-import javafx.scene.control.Label;
+-
+-public class HelloController {
+-    @FXML
+-    private Label welcomeText;
+-
+-    @FXML
+-    protected void onHelloButtonClick() {
+-        welcomeText.setText("Welcome to JavaFX Application!");
+-    }
+-}
+\ No newline at end of file
+Index: src/main/java/com/example/demo/HelloApplication.java
+===================================================================
+diff --git a/src/main/java/com/example/demo/HelloApplication.java b/src/main/java/com/example/demo/HelloApplication.java
+deleted file mode 100644
+--- a/src/main/java/com/example/demo/HelloApplication.java	(revision 6a96c5315bb73d980857fc8b8b29e87fd12bff2d)
++++ /dev/null	(revision 6a96c5315bb73d980857fc8b8b29e87fd12bff2d)
+@@ -1,76 +0,0 @@
+-package com.example.demo;
+-
+-import javafx.application.Application;
+-import javafx.scene.Group;
+-import javafx.scene.Scene;
+-import javafx.scene.image.Image;
+-import javafx.scene.image.ImageView;
+-import javafx.stage.Stage;
+-
+-import java.io.FileInputStream;
+-import java.io.IOException;
+-import java.io.InputStream;
+-import java.nio.charset.StandardCharsets;
+-
+-
+-public class HelloApplication extends Application {
+-    @Override
+-    public void start(Stage stage) throws IOException, InterruptedException {
+-        /*FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
+-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
+-        stage.setTitle("Hello!");
+-        stage.setScene(scene);
+-        stage.show();*/
+-        InputStream stream = new FileInputStream("C:\\Users\\33768\\OneDrive\\Documents\\test.jpg");
+-        Image image = new Image(stream);
+-        //Creating the image view
+-        ImageView imageView = new ImageView();
+-        //Setting image to the image view
+-        imageView.setImage(image);
+-        imageView.setPreserveRatio(true);
+-        //Setting the Scene object
+-        Group root = new Group(imageView);
+-        Scene scene = new Scene(root, 595, 370);
+-        stage.setTitle("Displaying Image");
+-        stage.setScene(scene);
+-        stage.show();
+-
+-    }
+-
+-
+-
+-
+-    public static void main(String[] args) throws IOException, InterruptedException {
+-
+-        System.out.println("Bonjour, bienvenue dans le blind test ");
+-        int round=0;
+-        int score=0;
+-        InputStream i= System.in;
+-        String answer="answer";
+-        byte[] b;
+-        String s;
+-        while(round<5) {
+-            Thread.sleep(10000);
+-            int length = i.available();
+-            if (length == 0) {
+-                System.out.println("La réponse ????");
+-            } else {
+-                b = new byte[length - 1];
+-                System.in.read(b);
+-                s = new String(b, StandardCharsets.UTF_8);
+-                System.out.println("Vérification ...........");
+-                System.out.println("Est-ce que " + s + " est la bonne réponse ?");
+-                if (s.equals(answer)) {
+-                    System.out.println("Bonne réponse, vous avez 1 point");
+-                    score++;
+-                } else {
+-                    System.out.println("Mauvaise réponse, vous avez 0 point");
+-                }
+-            }
+-            round++;
+-        }
+-        System.out.println("Partie terminée, vous avez gagné "+score+" fois");
+-
+-
+-    }
+-}
+\ No newline at end of file
+Index: demo.iml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule=\"true\" type=\"JAVA_MODULE\" version=\"4\">\r\n  <component name=\"NewModuleRootManager\" LANGUAGE_LEVEL=\"JDK_17\">\r\n    <output url=\"file://$MODULE_DIR$/target/classes\" />\r\n    <output-test url=\"file://$MODULE_DIR$/target/test-classes\" />\r\n    <content url=\"file://$MODULE_DIR$\">\r\n      <sourceFolder url=\"file://$MODULE_DIR$/BlindTestApp/src/main/java\" isTestSource=\"false\" />\r\n      <sourceFolder url=\"file://$MODULE_DIR$/BlindTestApp/src/main/resources\" type=\"java-resource\" />\r\n      <sourceFolder url=\"file://$MODULE_DIR$/src/main/java\" isTestSource=\"false\" />\r\n      <sourceFolder url=\"file://$MODULE_DIR$/src/main/resources\" type=\"java-resource\" />\r\n      <excludeFolder url=\"file://$MODULE_DIR$/target\" />\r\n    </content>\r\n    <orderEntry type=\"inheritedJdk\" />\r\n    <orderEntry type=\"sourceFolder\" forTests=\"false\" />\r\n    <orderEntry type=\"library\" name=\"Maven: org.openjfx:javafx-controls:17-ea+11\" level=\"project\" />\r\n    <orderEntry type=\"library\" name=\"Maven: org.openjfx:javafx-controls:win:17-ea+11\" level=\"project\" />\r\n    <orderEntry type=\"library\" name=\"Maven: org.openjfx:javafx-graphics:17-ea+11\" level=\"project\" />\r\n    <orderEntry type=\"library\" name=\"Maven: org.openjfx:javafx-graphics:win:17-ea+11\" level=\"project\" />\r\n    <orderEntry type=\"library\" name=\"Maven: org.openjfx:javafx-base:17-ea+11\" level=\"project\" />\r\n    <orderEntry type=\"library\" name=\"Maven: org.openjfx:javafx-base:win:17-ea+11\" level=\"project\" />\r\n    <orderEntry type=\"library\" name=\"Maven: org.openjfx:javafx-fxml:17-ea+11\" level=\"project\" />\r\n    <orderEntry type=\"library\" name=\"Maven: org.openjfx:javafx-fxml:win:17-ea+11\" level=\"project\" />\r\n    <orderEntry type=\"library\" name=\"Maven: org.openjfx:javafx-web:17-ea+11\" level=\"project\" />\r\n    <orderEntry type=\"library\" name=\"Maven: org.openjfx:javafx-web:win:17-ea+11\" level=\"project\" />\r\n    <orderEntry type=\"library\" name=\"Maven: org.openjfx:javafx-media:17-ea+11\" level=\"project\" />\r\n    <orderEntry type=\"library\" name=\"Maven: org.openjfx:javafx-media:win:17-ea+11\" level=\"project\" />\r\n    <orderEntry type=\"library\" name=\"Maven: org.controlsfx:controlsfx:11.1.0\" level=\"project\" />\r\n    <orderEntry type=\"library\" name=\"Maven: com.dlsc.formsfx:formsfx-core:11.3.2\" level=\"project\" />\r\n    <orderEntry type=\"library\" name=\"Maven: net.synedra:validatorfx:0.1.13\" level=\"project\" />\r\n    <orderEntry type=\"library\" name=\"Maven: org.kordamp.ikonli:ikonli-javafx:12.2.0\" level=\"project\" />\r\n    <orderEntry type=\"library\" name=\"Maven: org.kordamp.ikonli:ikonli-core:12.2.0\" level=\"project\" />\r\n    <orderEntry type=\"library\" name=\"Maven: org.kordamp.bootstrapfx:bootstrapfx-core:0.4.0\" level=\"project\" />\r\n    <orderEntry type=\"library\" name=\"Maven: eu.hansolo:tilesfx:11.48\" level=\"project\" />\r\n    <orderEntry type=\"library\" scope=\"TEST\" name=\"Maven: org.junit.jupiter:junit-jupiter-api:5.7.1\" level=\"project\" />\r\n    <orderEntry type=\"library\" scope=\"TEST\" name=\"Maven: org.apiguardian:apiguardian-api:1.1.0\" level=\"project\" />\r\n    <orderEntry type=\"library\" scope=\"TEST\" name=\"Maven: org.opentest4j:opentest4j:1.2.0\" level=\"project\" />\r\n    <orderEntry type=\"library\" scope=\"TEST\" name=\"Maven: org.junit.platform:junit-platform-commons:1.7.1\" level=\"project\" />\r\n    <orderEntry type=\"library\" scope=\"TEST\" name=\"Maven: org.junit.jupiter:junit-jupiter-engine:5.7.1\" level=\"project\" />\r\n    <orderEntry type=\"library\" scope=\"TEST\" name=\"Maven: org.junit.platform:junit-platform-engine:1.7.1\" level=\"project\" />\r\n  </component>\r\n</module>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/demo.iml b/demo.iml
+--- a/demo.iml	(revision 6a96c5315bb73d980857fc8b8b29e87fd12bff2d)
++++ b/demo.iml	(date 1641486265330)
+@@ -37,5 +37,14 @@
+     <orderEntry type="library" scope="TEST" name="Maven: org.junit.platform:junit-platform-commons:1.7.1" level="project" />
+     <orderEntry type="library" scope="TEST" name="Maven: org.junit.jupiter:junit-jupiter-engine:5.7.1" level="project" />
+     <orderEntry type="library" scope="TEST" name="Maven: org.junit.platform:junit-platform-engine:1.7.1" level="project" />
++    <orderEntry type="module-library">
++      <library>
++        <CLASSES>
++          <root url="jar://$MODULE_DIR$/mysql-connector-java-8.0.27.jar!/" />
++        </CLASSES>
++        <JAVADOC />
++        <SOURCES />
++      </library>
++    </orderEntry>
+   </component>
+ </module>
+\ No newline at end of file
+Index: src/main/java/application/HomePageController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/application/HomePageController.java b/src/main/java/application/HomePageController.java
+new file mode 100644
+--- /dev/null	(date 1641486265354)
++++ b/src/main/java/application/HomePageController.java	(date 1641486265354)
+@@ -0,0 +1,91 @@
++package application;
++
++import javafx.application.Platform;
++import javafx.event.ActionEvent;
++import javafx.fxml.FXML;
++import javafx.fxml.FXMLLoader;
++import javafx.fxml.Initializable;
++import javafx.scene.Node;
++import javafx.scene.Parent;
++import javafx.scene.Scene;
++import javafx.scene.control.Button;
++import javafx.stage.Stage;
++
++import java.io.IOException;
++import java.net.URL;
++import java.util.Objects;
++import java.util.ResourceBundle;
++
++public class HomePageController implements Initializable {
++
++    //Binding the fxml elements with the controller class
++    @FXML
++    private Button createGameBtn;
++
++    @FXML
++    private Button joinGameBtn;
++
++    @FXML
++    private Button quitFromHome;
++
++    /*------------------------------------------------------------
++     * Preparing variables to change the scene after login
++     * -----------------------------------------------------------*/
++    private Stage stage;
++    private Scene scene;
++    private static Parent root;
++
++
++
++    @FXML
++    public void homeToGameCreation(ActionEvent event) throws IOException {
++        try {
++            String title = "BlindTest.IO";
++            String pageToLoad = " ";
++            if(event.getSource().equals(createGameBtn))
++            {
++                pageToLoad = "/application/createGamePage.fxml";
++                title = ("BlindTest.IO | Create a game");
++            }
++            else if(event.getSource().equals(joinGameBtn))
++            {
++                pageToLoad = "/application/joinGamePage.fxml";
++                title = ("BlindTest.IO | Join a game");
++            }
++            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(pageToLoad)));
++            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
++            scene = new Scene(root);
++            stage.setScene(scene);
++            stage.setTitle(title);
++            stage.show();
++            System.out.println("fin debug");
++        } catch (Exception e) {
++            e.printStackTrace();
++        }
++    }
++
++    @FXML
++    public void homeToGameJoin(ActionEvent event) throws IOException {
++        try {
++            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/joinGamePage.fxml")));
++            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
++            scene = new Scene(root);
++            stage.setScene(scene);
++            stage.setTitle("BlindTest.IO | Join a Game");
++            stage.show();
++        } catch (Exception e) {
++            e.printStackTrace();
++        }
++    }
++
++    //exit the app
++    @FXML
++    public void quitFromHome(ActionEvent event){
++        Platform.exit();
++    }
++
++    @Override
++    public void initialize(URL url, ResourceBundle resourceBundle) {
++
++    }
++}
+Index: src/main/java/application/JoinGameController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/application/JoinGameController.java b/src/main/java/application/JoinGameController.java
+new file mode 100644
+--- /dev/null	(date 1641486265305)
++++ b/src/main/java/application/JoinGameController.java	(date 1641486265305)
+@@ -0,0 +1,74 @@
++package application;
++
++import javafx.application.Platform;
++import javafx.event.ActionEvent;
++import javafx.fxml.FXML;
++import javafx.fxml.FXMLLoader;
++import javafx.fxml.Initializable;
++import javafx.scene.Node;
++import javafx.scene.Parent;
++import javafx.scene.Scene;
++import javafx.scene.control.Button;
++import javafx.scene.control.TextField;
++import javafx.stage.Stage;
++
++import java.io.IOException;
++import java.net.URL;
++import java.util.Objects;
++import java.util.ResourceBundle;
++
++public class JoinGameController implements Initializable {
++
++    @FXML
++    private TextField usernameFieldJ;
++
++    @FXML
++    private TextField gameNameFieldJ;
++
++    @FXML
++    private Button goBackHome;
++
++    @FXML
++    private Button quitFromGameJoin;
++
++    /*------------------------------------------------------------
++     * Preparing variables to change the scene after joining
++     * -----------------------------------------------------------*/
++    private Stage stage;
++    private Scene scene;
++    private static Parent root;
++
++    @FXML
++    public void goBackHome(ActionEvent event) throws IOException {
++        try {
++            String title = "BlindTest.IO";
++            String pageToLoad = " ";
++
++            if(event.getSource().equals(goBackHome))
++            {
++                pageToLoad = "/application/homePage.fxml";
++            }
++
++            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(pageToLoad)));
++            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
++            scene = new Scene(root);
++            stage.setScene(scene);
++            stage.setTitle(title);
++            stage.show();
++            System.out.println("fin debug");
++        } catch (Exception e) {
++            e.printStackTrace();
++        }
++    }
++
++    //exit the app
++    @FXML
++    public void quitFromGameJoin(ActionEvent event){
++        Platform.exit();
++    }
++
++    @Override
++    public void initialize(URL url, ResourceBundle resourceBundle) {
++
++    }
++}
+Index: src/main/java/application/BlindTestApplication.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/application/BlindTestApplication.java b/src/main/java/application/BlindTestApplication.java
+new file mode 100644
+--- /dev/null	(date 1641486265273)
++++ b/src/main/java/application/BlindTestApplication.java	(date 1641486265273)
+@@ -0,0 +1,30 @@
++package application;
++
++import javafx.application.Application;
++import javafx.fxml.FXMLLoader;
++import javafx.scene.Scene;
++import javafx.stage.Stage;
++import models.MyImage;
++
++import java.io.IOException;
++import java.util.ArrayList;
++
++import static java.lang.Thread.sleep;
++
++public class BlindTestApplication extends Application {
++    public static int ROUND = 2;
++
++    @Override
++    public void start(Stage stage) throws IOException, InterruptedException {
++        FXMLLoader fxmlLoader = new FXMLLoader(BlindTestApplication.class.getResource("/application/AppView.fxml"));
++        Scene scene = new Scene(fxmlLoader.load());
++
++        stage.setTitle("BlindTest.IO | HomePage!");
++        stage.setScene(scene);
++        stage.show();
++    }
++
++    public static void main(String[] args) {
++        launch();
++    }
++}
+\ No newline at end of file
+Index: src/main/java/application/CreateGameController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/application/CreateGameController.java b/src/main/java/application/CreateGameController.java
+new file mode 100644
+--- /dev/null	(date 1641486265455)
++++ b/src/main/java/application/CreateGameController.java	(date 1641486265455)
+@@ -0,0 +1,76 @@
++package application;
++
++import javafx.application.Platform;
++import javafx.event.ActionEvent;
++import javafx.fxml.FXML;
++import javafx.fxml.FXMLLoader;
++import javafx.fxml.Initializable;
++import javafx.scene.Node;
++import javafx.scene.Parent;
++import javafx.scene.Scene;
++import javafx.scene.control.Button;
++import javafx.scene.control.TextField;
++import javafx.stage.Stage;
++
++import java.io.IOException;
++import java.net.URL;
++import java.util.Objects;
++import java.util.ResourceBundle;
++
++public class CreateGameController implements Initializable {
++
++
++    @FXML
++    private TextField usernameFieldC;
++
++    @FXML
++    private TextField gameNameFieldC;
++
++    @FXML
++    private Button goBackHome;
++
++    @FXML
++    private Button quitFromGameCreation;
++
++    /*------------------------------------------------------------
++     * Preparing variables to change the scene after login
++     * -----------------------------------------------------------*/
++    private Stage stage;
++    private Scene scene;
++    private static Parent root;
++
++
++    @FXML
++    public void goBackHome(ActionEvent event) throws IOException {
++        try {
++            String title = "BlindTest.IO";
++            String pageToLoad = " ";
++
++            if(event.getSource().equals(goBackHome))
++            {
++                pageToLoad = "/application/homePage.fxml";
++            }
++
++            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(pageToLoad)));
++            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
++            scene = new Scene(root);
++            stage.setScene(scene);
++            stage.setTitle(title);
++            stage.show();
++            System.out.println("fin debug");
++        } catch (Exception e) {
++            e.printStackTrace();
++        }
++    }
++
++    //exit the app
++    @FXML
++    public void quitFromGameCreation(ActionEvent event){
++        Platform.exit();
++    }
++
++    @Override
++    public void initialize(URL url, ResourceBundle resourceBundle) {
++
++    }
++}
+Index: src/main/java/application/GlobalGameController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/application/GlobalGameController.java b/src/main/java/application/GlobalGameController.java
+new file mode 100644
+--- /dev/null	(date 1641486265382)
++++ b/src/main/java/application/GlobalGameController.java	(date 1641486265382)
+@@ -0,0 +1,206 @@
++package application;
++
++import Service.GameService;
++import javafx.event.ActionEvent;
++import javafx.fxml.FXML;
++import javafx.fxml.Initializable;
++import javafx.geometry.Insets;
++import javafx.geometry.Pos;
++import javafx.scene.control.Button;
++import javafx.scene.control.TextField;
++import javafx.scene.image.ImageView;
++import javafx.scene.layout.AnchorPane;
++import javafx.scene.layout.BorderPane;
++import javafx.scene.layout.HBox;
++import javafx.scene.layout.Pane;
++import javafx.scene.paint.Color;
++import javafx.scene.text.Text;
++import javafx.scene.text.TextFlow;
++import models.MyImage;
++
++import java.net.URL;
++import java.util.ArrayList;
++import java.util.ResourceBundle;
++import java.util.Timer;
++import java.util.TimerTask;
++import java.util.concurrent.ExecutorService;
++import java.util.concurrent.Executors;
++import java.util.concurrent.Future;
++
++import static application.BlindTestApplication.ROUND;
++import static javafx.geometry.Pos.CENTER_RIGHT;
++
++public class GlobalGameController implements Initializable {
++    @FXML
++    private BorderPane paneGame;
++
++    @FXML
++    private ImageView imageBox;
++
++    @FXML
++    private TextField answerField;
++
++    @FXML
++    private Text minutesTimer;
++
++    @FXML
++    private Text secondsTimer;
++
++    @FXML
++    private Button startBtn;
++
++    @FXML
++    private Button submitBtn;
++
++    private final GameService gameService = new GameService();
++    private int nextImage = 0;
++    private ArrayList<MyImage> images = gameService.randomList();
++
++    private int counterRightAnswer = 0;
++    private String goodAnswer;
++    private int numberOfRound = 1;
++
++    private ExecutorService executor = Executors.newSingleThreadExecutor();
++
++    @Override
++    public void initialize(URL url, ResourceBundle resourceBundle) {
++        changeImage();
++
++        /*new Thread() {
++            public void run() {
++                System.out.println("execute game() in another thread");
++                try {
++                    game();
++                } catch (InterruptedException e) {
++                    e.printStackTrace();
++                }
++            }
++        }.start();*/
++
++    }
++
++//    public Future<Integer> timer() {
++//        return executor.submit(() -> {
++//            Timer t = new Timer();
++//            t.schedule(new TimerTask() {
++//                @Override
++//                public void run() {
++//                    System.out.println("Next round !");
++//                    System.out.println("Changing the image");
++//                    changeImage();
++//                }
++//            }, 5000);
++//
++//            return 0;
++//        });
++//    }
++
++//    public void game() throws InterruptedException {
++//        int numberRounds= 0;
++//        while(numberRounds < ROUND ) {
++//
++//            System.out.println("You have 30s to answer! ");
++//            Future<Integer> future = timer();
++//
++//            while(!future.isDone()) {
++//                System.out.println("timer is not finished...");
++//            }
++//            System.out.println("TIMER IS FINISHED..");
++//            System.out.println("TIMER IS FINISHED...");
++//
++//            numberRounds++;
++//        }
++//
++//        // game is finished
++//        displayFinalResult();
++//    }
++
++    public void displayFinalResult(){
++
++        HBox hbox = new HBox();
++        Text textSent = new Text("Your final result is " + counterRightAnswer);
++        hbox.setPadding(new Insets(5,5,5,10));
++        hbox.setLayoutX(100.0);
++        hbox.getChildren().add(textSent);
++
++        paneGame.setCenter(hbox);
++        paneGame.getChildren().remove(imageBox);
++        paneGame.getChildren().remove(answerField);
++        paneGame.getChildren().remove(submitBtn);
++    }
++
++    public void handlePlayerAnswer(ActionEvent event){
++
++        if(numberOfRound < ROUND){
++            String playerAnswer = answerField.getText().toLowerCase();
++            String rightOrWrongResponse;
++            String color;   // background color depending on the answer wrong=red/ right=green
++
++            if(playerAnswer.equals(goodAnswer) == true){
++                System.out.println("good answer ->"  + playerAnswer);
++                color = "#4ab721";
++                rightOrWrongResponse = "Bonne réponse bien joué !";
++
++                //increment counter for the player and display another image
++                counterRightAnswer++;
++
++                // next round
++                answerField.clear();
++                numberOfRound++;
++
++                if(numberOfRound > ROUND){
++                    displayFinalResult();
++                }else{
++                    changeImage();
++                }
++            }
++            else{
++                System.out.println("bad answer ->"  + playerAnswer);
++                color = "#ff2222";
++                rightOrWrongResponse = "Mauvaise réponse, essayez de nouveau";
++            }
++            HBox hbox = new HBox();
++            Text textSent = new Text(rightOrWrongResponse);
++            TextFlow textFlow = new TextFlow(textSent);
++
++            //just styling the box for the message
++            textFlow.setStyle("-fx-background-radius: 15px; -fx-color: rgb(255,255,255); -fx-background-color:" + color + ";");
++            textFlow.setPadding(new Insets(5,10,5,10));
++            textSent.setFill(Color.color(0.934,0.945,0.996));
++            hbox.setPadding(new Insets(5,5,5,10));
++            hbox.setLayoutX(100.0);
++            hbox.getChildren().add(textFlow);
++
++            paneGame.setBottom(hbox);
++            answerField.clear();
++        }
++        else
++        {
++            displayFinalResult();
++        }
++    }
++
++    public void changeImage(){
++        if(nextImage < images.size())
++        {
++            // create new Image
++            String url = images.get(nextImage).getUrl();
++            String newGoodAnswer = images.get(nextImage).getAnswer();
++            MyImage image = new MyImage(url, newGoodAnswer);
++
++            // change the image
++            imageBox.setImage(image);
++
++            // new good answer;
++            this.goodAnswer = newGoodAnswer;
++            System.out.println("new good answer = "+ goodAnswer);
++            // for next call to this method
++            nextImage++;
++        }
++        else{
++            nextImage = 0;
++        }
++
++    }
++
++}

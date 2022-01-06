@@ -1,0 +1,161 @@
+Index: src/main/java/repositories/MyImageRepository.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package repositories;\r\n\r\nimport models.MyImage;\r\n\r\nimport java.sql.*;\r\nimport java.util.ArrayList;\r\n\r\n\r\npublic class MyImageRepository implements Repository<MyImage> {\r\n    private static MyImageRepository instance;\r\n    private final Connection DBConnexion;\r\n\r\n    private MyImageRepository(Connection DBConnexion){\r\n        this.DBConnexion = DBConnexion;\r\n    }\r\n\r\n    public static MyImageRepository getInstance(Connection DBConnexion){\r\n        if (MyImageRepository.instance == null) {\r\n            MyImageRepository.instance = new MyImageRepository(DBConnexion);\r\n        }\r\n        return instance;\r\n    }\r\n\r\n    @Override\r\n    public MyImage save(MyImage obj) {\r\n        String req = \"INSERT INTO MyImage (image_path,answer) VALUES (?, ?)\";\r\n        try (PreparedStatement ps = this.DBConnexion.prepareStatement(req, Statement.RETURN_GENERATED_KEYS)) {\r\n\r\n            ps.setString(1,obj.getPath() );\r\n            ps.setString(2,obj.getAnswer());\r\n            ps.executeUpdate();\r\n\r\n            System.out.println(\" successfully added to MyImage table !\");\r\n        } catch (SQLException e) {\r\n            e.printStackTrace();\r\n        }\r\n        return obj;\r\n    }\r\n\r\n    @Override\r\n    public ArrayList<MyImage> findAll() {\r\n        String req=\"SELECT * FROM MyImage\";\r\n        ArrayList<MyImage> channels = new ArrayList<>();\r\n        try{\r\n            PreparedStatement ps = this.DBConnexion.prepareStatement(req, Statement.RETURN_GENERATED_KEYS);\r\n            ResultSet generatedKeys=ps.executeQuery(req);\r\n            while(generatedKeys.next()){\r\n                channels.add(new MyImage(generatedKeys.getString(1),generatedKeys.getString(2)));\r\n                System.out.println(generatedKeys.getString(1)+ \" \"+generatedKeys.getString(2));\r\n            }\r\n            generatedKeys.close();\r\n        }catch (SQLException e) {\r\n            e.printStackTrace();\r\n        }\r\n        return channels;\r\n    }\r\n\r\n\r\n    @Override\r\n    public void delete(MyImage obj){\r\n\r\n        try {\r\n            PreparedStatement ps = this.DBConnexion.prepareStatement(\"DELETE FROM MyImage WHERE image_path=?\");\r\n            ps.setString(1, obj.getPath());\r\n            ps.executeUpdate();\r\n            System.out.println(\" successfully deleted to CHANNEL_USERS table !\");\r\n        } catch (SQLException e) {\r\n            e.printStackTrace();\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public MyImage find(String id){\r\n        try {\r\n            PreparedStatement ps = this.DBConnexion.prepareStatement(\"SELECT * FROM MyImage WHERE id=? \");\r\n            ps.setString(1, id);\r\n\r\n            ResultSet res=ps.executeQuery();\r\n            if(res.next()){\r\n                MyImage u=new MyImage(id,res.getString(2));\r\n                System.out.println();\r\n                res.close();\r\n                return u;\r\n            }\r\n            res.close();\r\n            System.out.println(\"There is no user with this name\");\r\n        } catch (SQLException e) {\r\n            e.printStackTrace();\r\n        }\r\n        return null;\r\n    }\r\n\r\n    @Override\r\n    public int count (){\r\n        try {\r\n            PreparedStatement ps = this.DBConnexion.prepareStatement(\"SELECT Count(*) FROM MyImage\");\r\n            ResultSet res=ps.executeQuery();\r\n            if(res.next()){\r\n                return res.getInt(1);\r\n            }\r\n            res.close();\r\n            System.out.println(\"There is no user with this name\");\r\n        } catch (SQLException e) {\r\n            e.printStackTrace();\r\n        }\r\n        return -1;\r\n    }\r\n    public ArrayList<MyImage> saveAll(ArrayList<MyImage> MyImages) {\r\n        for(MyImage element:MyImages){\r\n            save(element);\r\n        }\r\n        return null;\r\n    }\r\n\r\n\r\n    public void deleteAll() {\r\n        try {\r\n            PreparedStatement ps = this.DBConnexion.prepareStatement(\"DELETE * FROM MyImage\");\r\n            ps.executeUpdate();\r\n            System.out.println(\" successfully deleted to CHANNEL_USERS table !\");\r\n        } catch (SQLException e) {\r\n            e.printStackTrace();\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/repositories/MyImageRepository.java b/src/main/java/repositories/MyImageRepository.java
+--- a/src/main/java/repositories/MyImageRepository.java	(revision 6a96c5315bb73d980857fc8b8b29e87fd12bff2d)
++++ b/src/main/java/repositories/MyImageRepository.java	(date 1641484079265)
+@@ -23,7 +23,7 @@
+ 
+     @Override
+     public MyImage save(MyImage obj) {
+-        String req = "INSERT INTO MyImage (image_path,answer) VALUES (?, ?)";
++        String req = "INSERT INTO images (image_path,answer) VALUES (?, ?)";
+         try (PreparedStatement ps = this.DBConnexion.prepareStatement(req, Statement.RETURN_GENERATED_KEYS)) {
+ 
+             ps.setString(1,obj.getPath() );
+@@ -39,7 +39,7 @@
+ 
+     @Override
+     public ArrayList<MyImage> findAll() {
+-        String req="SELECT * FROM MyImage";
++        String req="SELECT * FROM images";
+         ArrayList<MyImage> channels = new ArrayList<>();
+         try{
+             PreparedStatement ps = this.DBConnexion.prepareStatement(req, Statement.RETURN_GENERATED_KEYS);
+@@ -60,7 +60,7 @@
+     public void delete(MyImage obj){
+ 
+         try {
+-            PreparedStatement ps = this.DBConnexion.prepareStatement("DELETE FROM MyImage WHERE image_path=?");
++            PreparedStatement ps = this.DBConnexion.prepareStatement("DELETE FROM images WHERE image_path=?");
+             ps.setString(1, obj.getPath());
+             ps.executeUpdate();
+             System.out.println(" successfully deleted to CHANNEL_USERS table !");
+@@ -72,7 +72,7 @@
+     @Override
+     public MyImage find(String id){
+         try {
+-            PreparedStatement ps = this.DBConnexion.prepareStatement("SELECT * FROM MyImage WHERE id=? ");
++            PreparedStatement ps = this.DBConnexion.prepareStatement("SELECT * FROM images WHERE id=? ");
+             ps.setString(1, id);
+ 
+             ResultSet res=ps.executeQuery();
+@@ -93,7 +93,7 @@
+     @Override
+     public int count (){
+         try {
+-            PreparedStatement ps = this.DBConnexion.prepareStatement("SELECT Count(*) FROM MyImage");
++            PreparedStatement ps = this.DBConnexion.prepareStatement("SELECT Count(*) FROM images");
+             ResultSet res=ps.executeQuery();
+             if(res.next()){
+                 return res.getInt(1);
+@@ -115,7 +115,7 @@
+ 
+     public void deleteAll() {
+         try {
+-            PreparedStatement ps = this.DBConnexion.prepareStatement("DELETE * FROM MyImage");
++            PreparedStatement ps = this.DBConnexion.prepareStatement("DELETE * FROM images");
+             ps.executeUpdate();
+             System.out.println(" successfully deleted to CHANNEL_USERS table !");
+         } catch (SQLException e) {
+Index: src/main/java/models/MyImage.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package models;\r\n\r\npublic class MyImage implements HasId{\r\n    private final String id;\r\n    private final String path;\r\n    private final String answer;\r\n\r\n    public MyImage(String id, String path, String answer) {\r\n        this.id = id;\r\n        this.path = path;\r\n        this.answer = answer;\r\n    }\r\n    public MyImage(String path, String answer) {\r\n        this.id =null;\r\n        this.path = path;\r\n        this.answer = answer;\r\n    }\r\n    @Override\r\n    public String getId() {\r\n        return this.id;\r\n    }\r\n\r\n    public String getPath() {\r\n        return path;\r\n    }\r\n\r\n    public String getAnswer() {\r\n        return answer;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/models/MyImage.java b/src/main/java/models/MyImage.java
+--- a/src/main/java/models/MyImage.java	(revision 6a96c5315bb73d980857fc8b8b29e87fd12bff2d)
++++ b/src/main/java/models/MyImage.java	(date 1641481429961)
+@@ -1,6 +1,12 @@
+ package models;
+ 
++import repositories.RepositoryFactory;
++
++import java.util.concurrent.atomic.AtomicLong;
++
+ public class MyImage implements HasId{
++    private static final int nb= RepositoryFactory.images().count();
++    private final AtomicLong ID_GENERATOR = new AtomicLong(nb);
+     private final String id;
+     private final String path;
+     private final String answer;
+@@ -11,7 +17,7 @@
+         this.answer = answer;
+     }
+     public MyImage(String path, String answer) {
+-        this.id =null;
++        this.id =Long.toString(ID_GENERATOR.incrementAndGet()) ;
+         this.path = path;
+         this.answer = answer;
+     }
+Index: src/main/java/com/example/demo/HelloApplication.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.demo;\r\n\r\nimport javafx.application.Application;\r\nimport javafx.scene.Group;\r\nimport javafx.scene.Scene;\r\nimport javafx.scene.image.Image;\r\nimport javafx.scene.image.ImageView;\r\nimport javafx.stage.Stage;\r\n\r\nimport java.io.FileInputStream;\r\nimport java.io.IOException;\r\nimport java.io.InputStream;\r\nimport java.nio.charset.StandardCharsets;\r\n\r\n\r\npublic class HelloApplication extends Application {\r\n    @Override\r\n    public void start(Stage stage) throws IOException, InterruptedException {\r\n        /*FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource(\"hello-view.fxml\"));\r\n        Scene scene = new Scene(fxmlLoader.load(), 320, 240);\r\n        stage.setTitle(\"Hello!\");\r\n        stage.setScene(scene);\r\n        stage.show();*/\r\n        InputStream stream = new FileInputStream(\"C:\\\\Users\\\\33768\\\\OneDrive\\\\Documents\\\\test.jpg\");\r\n        Image image = new Image(stream);\r\n        //Creating the image view\r\n        ImageView imageView = new ImageView();\r\n        //Setting image to the image view\r\n        imageView.setImage(image);\r\n        imageView.setPreserveRatio(true);\r\n        //Setting the Scene object\r\n        Group root = new Group(imageView);\r\n        Scene scene = new Scene(root, 595, 370);\r\n        stage.setTitle(\"Displaying Image\");\r\n        stage.setScene(scene);\r\n        stage.show();\r\n\r\n    }\r\n\r\n\r\n\r\n\r\n    public static void main(String[] args) throws IOException, InterruptedException {\r\n\r\n        System.out.println(\"Bonjour, bienvenue dans le blind test \");\r\n        int round=0;\r\n        int score=0;\r\n        InputStream i= System.in;\r\n        String answer=\"answer\";\r\n        byte[] b;\r\n        String s;\r\n        while(round<5) {\r\n            Thread.sleep(10000);\r\n            int length = i.available();\r\n            if (length == 0) {\r\n                System.out.println(\"La réponse ????\");\r\n            } else {\r\n                b = new byte[length - 1];\r\n                System.in.read(b);\r\n                s = new String(b, StandardCharsets.UTF_8);\r\n                System.out.println(\"Vérification ...........\");\r\n                System.out.println(\"Est-ce que \" + s + \" est la bonne réponse ?\");\r\n                if (s.equals(answer)) {\r\n                    System.out.println(\"Bonne réponse, vous avez 1 point\");\r\n                    score++;\r\n                } else {\r\n                    System.out.println(\"Mauvaise réponse, vous avez 0 point\");\r\n                }\r\n            }\r\n            round++;\r\n        }\r\n        System.out.println(\"Partie terminée, vous avez gagné \"+score+\" fois\");\r\n\r\n\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/example/demo/HelloApplication.java b/src/main/java/com/example/demo/HelloApplication.java
+--- a/src/main/java/com/example/demo/HelloApplication.java	(revision 6a96c5315bb73d980857fc8b8b29e87fd12bff2d)
++++ b/src/main/java/com/example/demo/HelloApplication.java	(date 1641483845873)
+@@ -6,6 +6,8 @@
+ import javafx.scene.image.Image;
+ import javafx.scene.image.ImageView;
+ import javafx.stage.Stage;
++import models.MyImage;
++import repositories.RepositoryFactory;
+ 
+ import java.io.FileInputStream;
+ import java.io.IOException;
+@@ -43,7 +45,7 @@
+     public static void main(String[] args) throws IOException, InterruptedException {
+ 
+         System.out.println("Bonjour, bienvenue dans le blind test ");
+-        int round=0;
++        /*int round=0;
+         int score=0;
+         InputStream i= System.in;
+         String answer="answer";
+@@ -69,7 +71,9 @@
+             }
+             round++;
+         }
+-        System.out.println("Partie terminée, vous avez gagné "+score+" fois");
++        System.out.println("Partie terminée, vous avez gagné "+score+" fois");*/
++        MyImage m=new MyImage( "https://miro.medium.com/max/1400/1*4Ha05TwcqYA1s0BG2FQPJg.jpeg", "jennifer lawrence");
++        RepositoryFactory.images().save(m);
+ 
+ 
+     }
+Index: demo.iml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule=\"true\" type=\"JAVA_MODULE\" version=\"4\">\r\n  <component name=\"NewModuleRootManager\" LANGUAGE_LEVEL=\"JDK_17\">\r\n    <output url=\"file://$MODULE_DIR$/target/classes\" />\r\n    <output-test url=\"file://$MODULE_DIR$/target/test-classes\" />\r\n    <content url=\"file://$MODULE_DIR$\">\r\n      <sourceFolder url=\"file://$MODULE_DIR$/BlindTestApp/src/main/java\" isTestSource=\"false\" />\r\n      <sourceFolder url=\"file://$MODULE_DIR$/BlindTestApp/src/main/resources\" type=\"java-resource\" />\r\n      <sourceFolder url=\"file://$MODULE_DIR$/src/main/java\" isTestSource=\"false\" />\r\n      <sourceFolder url=\"file://$MODULE_DIR$/src/main/resources\" type=\"java-resource\" />\r\n      <excludeFolder url=\"file://$MODULE_DIR$/target\" />\r\n    </content>\r\n    <orderEntry type=\"inheritedJdk\" />\r\n    <orderEntry type=\"sourceFolder\" forTests=\"false\" />\r\n    <orderEntry type=\"library\" name=\"Maven: org.openjfx:javafx-controls:17-ea+11\" level=\"project\" />\r\n    <orderEntry type=\"library\" name=\"Maven: org.openjfx:javafx-controls:win:17-ea+11\" level=\"project\" />\r\n    <orderEntry type=\"library\" name=\"Maven: org.openjfx:javafx-graphics:17-ea+11\" level=\"project\" />\r\n    <orderEntry type=\"library\" name=\"Maven: org.openjfx:javafx-graphics:win:17-ea+11\" level=\"project\" />\r\n    <orderEntry type=\"library\" name=\"Maven: org.openjfx:javafx-base:17-ea+11\" level=\"project\" />\r\n    <orderEntry type=\"library\" name=\"Maven: org.openjfx:javafx-base:win:17-ea+11\" level=\"project\" />\r\n    <orderEntry type=\"library\" name=\"Maven: org.openjfx:javafx-fxml:17-ea+11\" level=\"project\" />\r\n    <orderEntry type=\"library\" name=\"Maven: org.openjfx:javafx-fxml:win:17-ea+11\" level=\"project\" />\r\n    <orderEntry type=\"library\" name=\"Maven: org.openjfx:javafx-web:17-ea+11\" level=\"project\" />\r\n    <orderEntry type=\"library\" name=\"Maven: org.openjfx:javafx-web:win:17-ea+11\" level=\"project\" />\r\n    <orderEntry type=\"library\" name=\"Maven: org.openjfx:javafx-media:17-ea+11\" level=\"project\" />\r\n    <orderEntry type=\"library\" name=\"Maven: org.openjfx:javafx-media:win:17-ea+11\" level=\"project\" />\r\n    <orderEntry type=\"library\" name=\"Maven: org.controlsfx:controlsfx:11.1.0\" level=\"project\" />\r\n    <orderEntry type=\"library\" name=\"Maven: com.dlsc.formsfx:formsfx-core:11.3.2\" level=\"project\" />\r\n    <orderEntry type=\"library\" name=\"Maven: net.synedra:validatorfx:0.1.13\" level=\"project\" />\r\n    <orderEntry type=\"library\" name=\"Maven: org.kordamp.ikonli:ikonli-javafx:12.2.0\" level=\"project\" />\r\n    <orderEntry type=\"library\" name=\"Maven: org.kordamp.ikonli:ikonli-core:12.2.0\" level=\"project\" />\r\n    <orderEntry type=\"library\" name=\"Maven: org.kordamp.bootstrapfx:bootstrapfx-core:0.4.0\" level=\"project\" />\r\n    <orderEntry type=\"library\" name=\"Maven: eu.hansolo:tilesfx:11.48\" level=\"project\" />\r\n    <orderEntry type=\"library\" scope=\"TEST\" name=\"Maven: org.junit.jupiter:junit-jupiter-api:5.7.1\" level=\"project\" />\r\n    <orderEntry type=\"library\" scope=\"TEST\" name=\"Maven: org.apiguardian:apiguardian-api:1.1.0\" level=\"project\" />\r\n    <orderEntry type=\"library\" scope=\"TEST\" name=\"Maven: org.opentest4j:opentest4j:1.2.0\" level=\"project\" />\r\n    <orderEntry type=\"library\" scope=\"TEST\" name=\"Maven: org.junit.platform:junit-platform-commons:1.7.1\" level=\"project\" />\r\n    <orderEntry type=\"library\" scope=\"TEST\" name=\"Maven: org.junit.jupiter:junit-jupiter-engine:5.7.1\" level=\"project\" />\r\n    <orderEntry type=\"library\" scope=\"TEST\" name=\"Maven: org.junit.platform:junit-platform-engine:1.7.1\" level=\"project\" />\r\n  </component>\r\n</module>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/demo.iml b/demo.iml
+--- a/demo.iml	(revision 6a96c5315bb73d980857fc8b8b29e87fd12bff2d)
++++ b/demo.iml	(date 1641483926458)
+@@ -37,5 +37,14 @@
+     <orderEntry type="library" scope="TEST" name="Maven: org.junit.platform:junit-platform-commons:1.7.1" level="project" />
+     <orderEntry type="library" scope="TEST" name="Maven: org.junit.jupiter:junit-jupiter-engine:5.7.1" level="project" />
+     <orderEntry type="library" scope="TEST" name="Maven: org.junit.platform:junit-platform-engine:1.7.1" level="project" />
++    <orderEntry type="module-library">
++      <library>
++        <CLASSES>
++          <root url="jar://$MODULE_DIR$/mysql-connector-java-8.0.27.jar!/" />
++        </CLASSES>
++        <JAVADOC />
++        <SOURCES />
++      </library>
++    </orderEntry>
+   </component>
+ </module>
+\ No newline at end of file
