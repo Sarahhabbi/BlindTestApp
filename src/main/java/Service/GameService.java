@@ -17,14 +17,14 @@ public class GameService {
         System.out.println("Choix aleatoire des fichiers");
         ArrayList<Integer> id = new ArrayList<>();
         ArrayList<MyImage> images=myImages.findAll();
-        ArrayList<MyImage> selctedImages=new ArrayList<>();
+        ArrayList<MyImage> selectedImages=new ArrayList<>();
         int size= myImages.count();
         int i=0;
         while(i < 1){
             int e = (int)(Math.random()*size);
             if(! id.contains(e)){
                 id.add(e);
-                selctedImages.add(images.get(e));
+                selectedImages.add(images.get(e));
                 i++;
             }
         }
