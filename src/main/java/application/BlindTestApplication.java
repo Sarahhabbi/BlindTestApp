@@ -17,8 +17,8 @@ public class BlindTestApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException, InterruptedException {
-        MyImage img1 = new MyImage("https://miro.medium.com/max/1400/1*4Ha05TwcqYA1s0BG2FQPJg.jpeg", "jennifer lawrence");
-        MyImage img2 = new MyImage("https://miro.medium.com/max/9012/1*Ffd2A4DGyn6y0NaC7eNzlQ.jpeg", "cristiano ronaldo");
+        MyImage img1 = new MyImage("1", "https://miro.medium.com/max/1400/1*4Ha05TwcqYA1s0BG2FQPJg.jpeg", "jennifer lawrence");
+        MyImage img2 = new MyImage("2", "https://miro.medium.com/max/9012/1*Ffd2A4DGyn6y0NaC7eNzlQ.jpeg", "cristiano ronaldo");
         images.add(img1);
         images.add(img2);
 

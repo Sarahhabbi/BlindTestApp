@@ -181,7 +181,7 @@ public class GlobalGameController implements Initializable {
         {
             // create new Image
             String url = images.get(nextImage).getUrl();
-            String newGoodAnswer = images.get(nextImage).getGoodAnswer();
+            String newGoodAnswer = images.get(nextImage).getAnswer();
             MyImage image = new MyImage(url, newGoodAnswer);
 
             // change the image
