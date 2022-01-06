@@ -2,7 +2,6 @@ package repositories;
 
 import models.MyImage;
 
-
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -24,14 +23,13 @@ public class MyImageRepository implements Repository<MyImage> {
 
     @Override
     public MyImage save(MyImage obj) {
-        String req = "INSERT INTO images (image_path,answer) VALUES (?, ?)";
-        try (PreparedStatement ps = this.DBConnexion.prepareStatement(req, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement ps = this.DBConnexion.prepareStatement("INSERT INTO images (id,answer) VALUES (?, ?)")) {
 
             ps.setString(1,obj.getUrl());
             ps.setString(2,obj.getAnswer());
             ps.executeUpdate();
 
-            System.out.println(" successfully added to IMAGES table !");
+            System.out.println(" successfully added to MyImage table !");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -40,14 +38,13 @@ public class MyImageRepository implements Repository<MyImage> {
 
     @Override
     public ArrayList<MyImage> findAll() {
-        String req="SELECT * FROM images";
         ArrayList<MyImage> images = new ArrayList<>();
         try{
-            PreparedStatement ps = this.DBConnexion.prepareStatement(req, Statement.RETURN_GENERATED_KEYS);
-            ResultSet generatedKeys=ps.executeQuery(req);
+            PreparedStatement ps = this.DBConnexion.prepareStatement("SELECT * FROM images");
+            ResultSet generatedKeys=ps.executeQuery();
             while(generatedKeys.next()){
-                images.add(new MyImage(generatedKeys.getString(1),generatedKeys.getString(2),generatedKeys.getString(2)));
-                System.out.println(generatedKeys.getString(1)+ " "+generatedKeys.getString(2)+" "+generatedKeys.getString(3));
+                images.add(new MyImage(generatedKeys.getString(1),generatedKeys.getString(2)));
+                System.out.println("data "+generatedKeys.getString(1)+" "+generatedKeys.getString(2));
             }
             generatedKeys.close();
         }catch (SQLException e) {
@@ -61,7 +58,7 @@ public class MyImageRepository implements Repository<MyImage> {
     public void delete(MyImage obj){
 
         try {
-            PreparedStatement ps = this.DBConnexion.prepareStatement("DELETE FROM images WHERE image_path=?");
+            PreparedStatement ps = this.DBConnexion.prepareStatement("DELETE FROM images WHERE id=?");
             ps.setString(1, obj.getUrl());
             ps.executeUpdate();
             System.out.println(" successfully deleted to CHANNEL_USERS table !");
@@ -69,7 +66,6 @@ public class MyImageRepository implements Repository<MyImage> {
             e.printStackTrace();
         }
     }
-
 
     @Override
     public MyImage find(String id){
@@ -79,8 +75,8 @@ public class MyImageRepository implements Repository<MyImage> {
 
             ResultSet res=ps.executeQuery();
             if(res.next()){
-                MyImage u = new MyImage(id,res.getString(2),res.getString(3));
-                System.out.println("getUrl()");
+                MyImage u=new MyImage(res.getString(1),res.getString(2));
+                System.out.println();
                 res.close();
                 return u;
             }
@@ -98,6 +94,7 @@ public class MyImageRepository implements Repository<MyImage> {
             PreparedStatement ps = this.DBConnexion.prepareStatement("SELECT Count(*) FROM images");
             ResultSet res=ps.executeQuery();
             if(res.next()){
+                //System.out.println("DEBUG COUNT = " + res.getInt(1));
                 return res.getInt(1);
             }
             res.close();
@@ -107,8 +104,8 @@ public class MyImageRepository implements Repository<MyImage> {
         }
         return -1;
     }
-    public ArrayList<MyImage> saveAll(ArrayList<MyImage> images) {
-        for(MyImage element:images){
+    public ArrayList<MyImage> saveAll(ArrayList<MyImage> MyImages) {
+        for(MyImage element:MyImages){
             save(element);
         }
         return null;
@@ -117,7 +114,7 @@ public class MyImageRepository implements Repository<MyImage> {
 
     public void deleteAll() {
         try {
-            PreparedStatement ps = this.DBConnexion.prepareStatement("DELETE * FROM MyImage");
+            PreparedStatement ps = this.DBConnexion.prepareStatement("DELETE * FROM images");
             ps.executeUpdate();
             System.out.println(" successfully deleted to CHANNEL_USERS table !");
         } catch (SQLException e) {

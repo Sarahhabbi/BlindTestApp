@@ -24,16 +24,11 @@
     <autoscroll-to-editor value="false" />
     <autoscroll-from-editor value="true" />
     <show-object-properties value="true" />
-    <loaded-nodes>
-      <connection connection-id="24763392-ddf6-4e27-b6ee-b1bb9aea5b62">
-        <schema name="blind_test" object-types="table, view" />
-      </connection>
-    </loaded-nodes>
+    <loaded-nodes />
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="24763392-ddf6-4e27-b6ee-b1bb9aea5b62">
-      <console name="Connection" type="STANDARD" schema="mysql" session="Main"><![CDATA[INSERT INTO blind_test.images VALUES ("https://miro.medium.com/max/1400/1*4Ha05TwcqYA1s0BG2FQPJg.jpeg", "jennifer lawrence");
-INSERT INTO blind_test.images VALUES ("https://miro.medium.com/max/9012/1*Ffd2A4DGyn6y0NaC7eNzlQ.jpeg", "cristiano ronaldo");]]></console>
+      <console name="Connection" type="STANDARD" schema="" session="Main" />
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
@@ -69,9 +64,6 @@ INSERT INTO blind_test.images VALUES ("https://miro.medium.com/max/9012/1*Ffd2A4
   <component name="DBNavigator.Project.ObjectQuickFilterManager">
     <last-used-operator value="EQUAL" />
     <filters />
-  </component>
-  <component name="DBNavigator.Project.ParserDiagnosticsManager">
-    <diagnostics-history />
   </component>
   <component name="DBNavigator.Project.ScriptExecutionManager" clear-outputs="true">
     <recently-used-interfaces />

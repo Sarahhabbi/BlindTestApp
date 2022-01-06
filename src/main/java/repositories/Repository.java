@@ -2,7 +2,7 @@ package repositories;
 
 import models.HasId;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public interface Repository<T extends HasId> {
 
@@ -10,7 +10,7 @@ public interface Repository<T extends HasId> {
 
     void delete(T obj) throws Exception;
 
-    List<T> findAll();
+    ArrayList<T> findAll();
 
     T find(String id);
 

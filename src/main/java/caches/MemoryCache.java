@@ -36,14 +36,13 @@ public class MemoryCache<T extends HasId> implements Repository<T> {
     }
 
     @Override
-    public List<T> findAll() {
+    public ArrayList<T> findAll() {
         return new ArrayList<>(cache.values());
     }
 
     @Override
     public T find(String id) {
         return cache.get(id);
-
     }
 
     @Override

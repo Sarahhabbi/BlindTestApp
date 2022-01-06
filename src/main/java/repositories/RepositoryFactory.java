@@ -10,7 +10,7 @@ public class RepositoryFactory {
     public static Repository<MyImage> images() {
         return new CompositeRepository<>(MyImageRepository.getInstance(DATABASE.getConnection()));
     }
-
+    
 }
 
 

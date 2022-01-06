@@ -3,7 +3,7 @@ package repositories;
 import caches.MemoryCache;
 import models.HasId;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class CompositeRepository<T extends HasId> implements Repository<T> {
 
@@ -12,13 +12,13 @@ public class CompositeRepository<T extends HasId> implements Repository<T> {
 
     public CompositeRepository(Repository<T> file) {
         this.memory= new MemoryCache<>();
-        this.file = file;
-
-        List<T> r = file.findAll();
+        ArrayList<T> r = file.findAll();
+        System.out.println("taille au debut "+r.size());
         for (T element : r) {
             this.memory.save(element);
             System.out.println("Element ajoute "+ element.getId());
         }
+        this.file = file;
     }
 
     @Override
@@ -34,18 +34,18 @@ public class CompositeRepository<T extends HasId> implements Repository<T> {
     }
 
     @Override
-    public List<T> findAll(){
-        return file.findAll();
+    public ArrayList<T> findAll(){
+        return memory.findAll();
     }
 
     @Override
     public T find(String id) {
-        return (T)file.find(id);
+        return (T)memory.find(id);
     }
 
     @Override
     public int count() {
-        return file.count();
+        return memory.count();
     }
 
 
