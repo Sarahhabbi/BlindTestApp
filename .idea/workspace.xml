@@ -5,35 +5,30 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0cf24a8b-798b-4f0c-b88a-c6a11a405633" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_openjfx_javafx_base_win_17_ea_11.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_openjfx_javafx_controls_win_17_ea_11.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_openjfx_javafx_fxml_win_17_ea_11.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_openjfx_javafx_graphics_win_17_ea_11.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_openjfx_javafx_media_win_17_ea_11.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_openjfx_javafx_web_win_17_ea_11.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_06_01_2022_17_00__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_06_01_2022_17_00__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_06_01_2022_17_00__Changes_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_06_01_2022_17_00__Changes_1.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_06_01_2022_17_24__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_06_01_2022_17_24__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_06_01_2022_17_24__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_06_01_2022_17_24__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/application/BlindTestApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/application/BlindTestApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Service/GameService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/application/BlindTestApplication.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/application/CreateGameController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/application/GlobalGameController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/application/HomePageController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/application/JoinGameController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/caches/MemoryCache.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/database/Database.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/models/HasId.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/models/MyImage.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/models/MyTimerTask.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/module-info.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/repositories/CompositeRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/repositories/MyImageRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/repositories/Repository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/repositories/RepositoryFactory.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sql/Main.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dbnavigator.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_06_01_2022_17_00_[Changes]/mysql-connector-java-8.0.27.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_06_01_2022_17_00_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_06_01_2022_17_00_[Changes]1/mysql-connector-java-8.0.27.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_06_01_2022_17_00_[Changes]1/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_06_01_2022_17_00__Changes_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_06_01_2022_17_00__Changes_1.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_06_01_2022_17_24_[Changes]/mysql-connector-java-8.0.27.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_06_01_2022_17_24_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_06_01_2022_17_24__Changes_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_06_01_2022_17_24_[Changes]/mysql-connector-java-8.0.27.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_06_01_2022_17_24_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_06_01_2022_17_24__Changes_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/repositories/RepositoryFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/repositories/RepositoryFactory.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,7 +69,6 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
@@ -151,6 +145,7 @@
       <workItem from="1641458859725" duration="110000" />
       <workItem from="1641459062368" duration="167000" />
       <workItem from="1641459341920" duration="14040000" />
+      <workItem from="1641498789832" duration="513000" />
     </task>
     <servers />
   </component>
@@ -167,5 +162,6 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
 </project>
