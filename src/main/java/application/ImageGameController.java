@@ -40,7 +40,7 @@ public class ImageGameController implements Initializable {
 
     private final GameService gameService = new GameService();
     private int nextImage = 0;
-    private ArrayList<MyImage> images = gameService.randomList();
+    private ArrayList<MyImage> images = gameService.randomList(ROUND);
 
     private int counterRightAnswer = 0;
     private String goodAnswer;

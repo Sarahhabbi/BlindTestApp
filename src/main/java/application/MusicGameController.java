@@ -47,7 +47,7 @@ public class MusicGameController implements Initializable {
     private MediaPlayer mediaPlayer;
 
     private final GameService gameService = new GameService();
-    private ArrayList<Audio> songs = gameService.randomListaudio();
+    private ArrayList<Audio> songs = gameService.randomListaudio(ROUND);
     private int nextSong = 0;
     private ExecutorService executor = Executors.newSingleThreadExecutor();
 
