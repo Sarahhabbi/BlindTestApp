@@ -12,6 +12,7 @@ module com.example.demo {
     requires javafx.graphics;
     requires java.sql;
     requires java.desktop;
+    requires junit;
 
     opens application to javafx.fxml;
     exports application;

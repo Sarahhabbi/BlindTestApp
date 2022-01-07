@@ -1,6 +1,7 @@
 package application;
 
 import Service.GameService;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -14,9 +15,14 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import models.Audio;
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import static application.BlindTestApplication.ROUND;
 
@@ -32,15 +38,77 @@ public class MusicGameController implements Initializable {
     @FXML
 
     private int counterRightAnswer = 0;
-    private String goodAnswer;
+    private String goodAnswer = "bruno mars";
     private int numberOfRound = 1;
-    private static String url = "/Users/habbi/Documents/L3-DANT/PROJETS_GROUPE/BlindTestApp/src/main/resources/music/bruno-mars-talking-to-the-moon-lyrics.mp3";
+
+
+    private static String url = "../BlindTestApp/src/main/resources/music/bruno-mars-talking-to-the-moon-lyrics_d62CgrRx.mp3";
     private Media media;
     private MediaPlayer mediaPlayer;
+
+    private final GameService gameService = new GameService();
+    private ArrayList<Audio> songs = gameService.randomListaudio();
+    private int nextSong = 0;
+    private ExecutorService executor = Executors.newSingleThreadExecutor();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         playMusic(MusicGameController.url);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    game();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    public Future<Integer> timer() {
+        return executor.submit(() -> {
+            playMusic(url);
+            Thread.sleep(5000);
+            System.out.println("Next round !");
+            System.out.println("Changing the image");
+            changeSong();
+            return 0;
+        });
+    }
+
+    public void game() throws InterruptedException {
+        int numberRounds = 0;
+        while(numberRounds < ROUND ) {
+
+            System.out.println("You have 30s to answer! ");
+            Future<Integer> future = timer();
+
+            while(!future.isDone()) {
+
+            }
+            System.out.println("TIMER IS FINISHED...\n");
+            numberRounds++;
+        }
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                displayFinalResultMusic();
+            }
+        });
+    }
+
+    public synchronized void displayFinalResultMusic(){
+        System.out.println("final result music");
+        paneGame.getChildren().remove(answerField);
+        paneGame.getChildren().remove(submitBtn);
+        HBox hbox = new HBox();
+        Text textSent = new Text("Your final result is " + counterRightAnswer);
+        hbox.setPadding(new Insets(5,5,5,10));
+        hbox.setLayoutX(100.0);
+        hbox.getChildren().add(textSent);
+
+        paneGame.setCenter(hbox);
     }
 
     public void playMusic(String url) {
@@ -110,4 +178,30 @@ public class MusicGameController implements Initializable {
             displayFinalResult();
         }
     }
+
+    public void changeSong() throws InterruptedException {
+        if(mediaPlayer!=null){
+            System.out.println("stoping music");
+            mediaPlayer.stop();
+            Thread.sleep(500);
+        }
+        if(nextSong < songs.size())
+        {
+            // create new Image
+            String url = songs.get(nextSong).getId();
+            String newGoodAnswer = songs.get(nextSong).getAnswer();
+
+            playMusic(url);
+
+            // new good answer;
+            this.goodAnswer = newGoodAnswer;
+            System.out.println("new good answer = "+ goodAnswer);
+            // for next call to this method
+            nextSong++;
+        }
+        else{
+            nextSong = 0;
+        }
+    }
+
 }

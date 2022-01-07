@@ -28,7 +28,6 @@ public class MyImageRepository implements Repository<MyImage> {
             ps.setString(1,obj.getUrl());
             ps.setString(2,obj.getAnswer());
             ps.executeUpdate();
-
             System.out.println(" successfully added to MyImage table !");
         } catch (SQLException e) {
             e.printStackTrace();

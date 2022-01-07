@@ -65,16 +65,7 @@ public class ImageGameController implements Initializable {
 
     public Future<Integer> timer() {
         return executor.submit(() -> {
-//            Timer t = new Timer();
-            /*t.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    System.out.println("Next round !");
-                    System.out.println("Changing the image");
-                    changeImage();
-                }
-                }, 20000);*/
-            Thread.sleep(5000);
+            Thread.sleep(10000);
             System.out.println("Next round !");
             System.out.println("Changing the image");
             changeImage();
@@ -90,7 +81,6 @@ public class ImageGameController implements Initializable {
             Future<Integer> future = timer();
 
             while(!future.isDone()) {
-
             }
             System.out.println("TIMER IS FINISHED...\n");
 
@@ -118,49 +108,41 @@ public class ImageGameController implements Initializable {
     }
 
     public void handlePlayerAnswer(ActionEvent event){
+        String playerAnswer = answerField.getText().toLowerCase();
+        String rightOrWrongResponse;
+        String color;   // background color depending on the answer wrong=red/ right=green
 
-        if(numberOfRound < ROUND){
-            String playerAnswer = answerField.getText().toLowerCase();
-            String rightOrWrongResponse;
-            String color;   // background color depending on the answer wrong=red/ right=green
+        if(playerAnswer.equals(goodAnswer) == true){
+            System.out.println("good answer ->"  + playerAnswer);
+            color = "#4ab721";
+            rightOrWrongResponse = "Bonne réponse bien joué !";
 
-            if(playerAnswer.equals(goodAnswer) == true){
-                System.out.println("good answer ->"  + playerAnswer);
-                color = "#4ab721";
-                rightOrWrongResponse = "Bonne réponse bien joué !";
+            //increment counter for the player and display another image
+            counterRightAnswer++;
 
-                //increment counter for the player and display another image
-                counterRightAnswer++;
-
-                // next round
-                answerField.clear();
-                numberOfRound++;
-            }
-            else{
-                System.out.println("bad answer ->"  + playerAnswer);
-                color = "#ff2222";
-                rightOrWrongResponse = "Mauvaise réponse, essayez de nouveau";
-            }
-            HBox hbox = new HBox();
-            Text textSent = new Text(rightOrWrongResponse);
-            TextFlow textFlow = new TextFlow(textSent);
-
-            //just styling the box for the message
-            textFlow.setStyle("-fx-background-radius: 15px; -fx-color: rgb(255,255,255); -fx-background-color:" + color + ";");
-            textFlow.setPadding(new Insets(5,10,5,10));
-            textSent.setFill(Color.color(0.934,0.945,0.996));
-            hbox.setPadding(new Insets(5,5,5,10));
-            hbox.setLayoutX(100.0);
-            hbox.getChildren().add(textFlow);
-
-            paneGame.setBottom(hbox);
+            // next round
             answerField.clear();
+            numberOfRound++;
         }
-      /*  else
-        {
-            displayFinalResult();
-            System.out.println("final result "+ counterRightAnswer);
-        }*/
+        else{
+            System.out.println("bad answer ->"  + playerAnswer);
+            color = "#ff2222";
+            rightOrWrongResponse = "Mauvaise réponse, essayez de nouveau";
+        }
+        HBox hbox = new HBox();
+        Text textSent = new Text(rightOrWrongResponse);
+        TextFlow textFlow = new TextFlow(textSent);
+
+        //just styling the box for the message
+        textFlow.setStyle("-fx-background-radius: 15px; -fx-color: rgb(255,255,255); -fx-background-color:" + color + ";");
+        textFlow.setPadding(new Insets(5,10,5,10));
+        textSent.setFill(Color.color(0.934,0.945,0.996));
+        hbox.setPadding(new Insets(5,5,5,10));
+        hbox.setLayoutX(100.0);
+        hbox.getChildren().add(textFlow);
+
+        paneGame.setBottom(hbox);
+        answerField.clear();
     }
 
     public void changeImage(){
@@ -184,7 +166,6 @@ public class ImageGameController implements Initializable {
         else{
             nextImage = 0;
         }
-
     }
 
 }

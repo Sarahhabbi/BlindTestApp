@@ -2,6 +2,7 @@ package repositories;
 
 import database.Database;
 import models.MyImage;
+import models.Audio;
 
 public class RepositoryFactory {
 
@@ -9,6 +10,10 @@ public class RepositoryFactory {
 
     public static Repository<MyImage> images() {
         return new CompositeRepository<>(MyImageRepository.getInstance(DATABASE.getConnection()));
+    }
+
+    public static Repository<Audio> audios() {
+        return new CompositeRepository<>(AudioRepository.getInstance(DATABASE.getConnection()));
     }
     
 }
