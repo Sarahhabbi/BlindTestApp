@@ -47,13 +47,14 @@ public class MusicGameController implements Initializable {
     private MediaPlayer mediaPlayer;
 
     private final GameService gameService = new GameService();
-    private ArrayList<Audio> songs = gameService.randomListaudio(ROUND);
+    private ArrayList<Audio> songs = gameService.randomListaudio();
     private int nextSong = 0;
     private ExecutorService executor = Executors.newSingleThreadExecutor();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        playMusic(MusicGameController.url);
+
+        playMusic(songs.get(0).getId());
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -68,8 +69,7 @@ public class MusicGameController implements Initializable {
 
     public Future<Integer> timer() {
         return executor.submit(() -> {
-            playMusic(url);
-            Thread.sleep(5000);
+            Thread.sleep(10000);
             System.out.println("Next round !");
             System.out.println("Changing the image");
             changeSong();
@@ -183,11 +183,13 @@ public class MusicGameController implements Initializable {
         if(mediaPlayer!=null){
             System.out.println("stoping music");
             mediaPlayer.stop();
-            Thread.sleep(500);
+            System.out.println("next music in 5s");
+            Thread.sleep(5000);
         }
         if(nextSong < songs.size())
         {
-            // create new Image
+            System.out.println("next music in 5s");
+            // create new song
             String url = songs.get(nextSong).getId();
             String newGoodAnswer = songs.get(nextSong).getAnswer();
 
