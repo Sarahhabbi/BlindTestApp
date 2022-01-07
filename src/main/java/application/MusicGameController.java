@@ -30,7 +30,6 @@ public class MusicGameController implements Initializable {
     @FXML
     private Button submitBtn;
     @FXML
-    private Button playMusic;
 
     private int counterRightAnswer = 0;
     private String goodAnswer;

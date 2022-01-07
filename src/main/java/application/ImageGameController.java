@@ -1,18 +1,16 @@
 package application;
 
 import Service.GameService;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
@@ -21,14 +19,11 @@ import models.MyImage;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import static application.BlindTestApplication.ROUND;
-import static javafx.geometry.Pos.CENTER_RIGHT;
 
 public class ImageGameController implements Initializable {
     @FXML
@@ -49,63 +44,70 @@ public class ImageGameController implements Initializable {
 
     private int counterRightAnswer = 0;
     private String goodAnswer;
-    private int numberOfRound = 1;
+    volatile private int numberOfRound = 1;
 
     private ExecutorService executor = Executors.newSingleThreadExecutor();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         changeImage();
-        /*new Thread() {
+        new Thread(new Runnable() {
+            @Override
             public void run() {
-                System.out.println("execute game() in another thread");
                 try {
                     game();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
-        }.start();*/
+        }).start();
     }
 
-//    public Future<Integer> timer() {
-//        return executor.submit(() -> {
+    public Future<Integer> timer() {
+        return executor.submit(() -> {
 //            Timer t = new Timer();
-//            t.schedule(new TimerTask() {
-//                @Override
-//                public void run() {
-//                    System.out.println("Next round !");
-//                    System.out.println("Changing the image");
-//                    changeImage();
-//                }
-//            }, 5000);
-//
-//            return 0;
-//        });
-//    }
+            /*t.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    System.out.println("Next round !");
+                    System.out.println("Changing the image");
+                    changeImage();
+                }
+                }, 20000);*/
+            Thread.sleep(5000);
+            System.out.println("Next round !");
+            System.out.println("Changing the image");
+            changeImage();
+            return 0;
+        });
+    }
 
-//    public void game() throws InterruptedException {
-//        int numberRounds= 0;
-//        while(numberRounds < ROUND ) {
-//
-//            System.out.println("You have 30s to answer! ");
-//            Future<Integer> future = timer();
-//
-//            while(!future.isDone()) {
-//                System.out.println("timer is not finished...");
-//            }
-//            System.out.println("TIMER IS FINISHED..");
-//            System.out.println("TIMER IS FINISHED...");
-//
-//            numberRounds++;
-//        }
-//
-//        // game is finished
-//        displayFinalResult();
-//    }
+    public void game() throws InterruptedException {
+        int numberRounds = 0;
+        while(numberRounds < ROUND ) {
 
-    public void displayFinalResult(){
+            System.out.println("You have 30s to answer! ");
+            Future<Integer> future = timer();
 
+            while(!future.isDone()) {
+
+            }
+            System.out.println("TIMER IS FINISHED...\n");
+
+            numberRounds++;
+        }
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                displayFinalResult();
+            }
+        });
+    }
+
+    public synchronized void displayFinalResult(){
+        paneGame.getChildren().remove(imageBox);
+        paneGame.getChildren().remove(answerField);
+        paneGame.getChildren().remove(submitBtn);
         HBox hbox = new HBox();
         Text textSent = new Text("Your final result is " + counterRightAnswer);
         hbox.setPadding(new Insets(5,5,5,10));
@@ -113,14 +115,11 @@ public class ImageGameController implements Initializable {
         hbox.getChildren().add(textSent);
 
         paneGame.setCenter(hbox);
-        paneGame.getChildren().remove(imageBox);
-        paneGame.getChildren().remove(answerField);
-        paneGame.getChildren().remove(submitBtn);
     }
 
     public void handlePlayerAnswer(ActionEvent event){
 
-        if(numberOfRound <= ROUND){
+        if(numberOfRound < ROUND){
             String playerAnswer = answerField.getText().toLowerCase();
             String rightOrWrongResponse;
             String color;   // background color depending on the answer wrong=red/ right=green
@@ -136,12 +135,6 @@ public class ImageGameController implements Initializable {
                 // next round
                 answerField.clear();
                 numberOfRound++;
-
-                if(numberOfRound > ROUND){
-                    displayFinalResult();
-                }else{
-                    changeImage();
-                }
             }
             else{
                 System.out.println("bad answer ->"  + playerAnswer);
@@ -163,10 +156,11 @@ public class ImageGameController implements Initializable {
             paneGame.setBottom(hbox);
             answerField.clear();
         }
-        else
+      /*  else
         {
             displayFinalResult();
-        }
+            System.out.println("final result "+ counterRightAnswer);
+        }*/
     }
 
     public void changeImage(){
