@@ -10,6 +10,7 @@ public class BlindTestApplication extends Application {
 
     public static int ROUND = 2;
 
+
     @Override
     public void start(Stage stage) throws IOException{
 

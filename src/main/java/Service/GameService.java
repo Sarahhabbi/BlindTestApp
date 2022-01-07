@@ -37,15 +37,21 @@ public class GameService {
         System.out.println("Choix aleatoire des fichiers");
         ArrayList<Integer> id = new ArrayList<>();
         ArrayList<Audio> audios = myAudios.findAll();
-        ArrayList<Audio> selectedAudios=new ArrayList<>();
         int size = myAudios.count();
+        ArrayList<Audio> selectedAudios = new ArrayList<>();
+        System.out.println("SIZE = "+ size);
+
         int i=0;
         while(i < 2){
-            int e = (int)(Math.random()*size);
+            int e = (int)(Math.random()*(size-1));
             if(!id.contains(e)){
                 id.add(e);
-                selectedAudios.add(audios.get(e));
-                i++;
+                if(e < audios.size()){
+                    selectedAudios.add(audios.get(e));
+                    i++;
+                }
+                /*selectedAudios.add(audios.get(e));
+                i++;*/
             }
         }
         return selectedAudios;

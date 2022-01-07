@@ -4,7 +4,7 @@ public class Audio implements HasId {
     private String answer;
     private String url;
 
-    public Audio(String answer, String url) {
+    public Audio(String url, String answer) {
         this.answer = answer;
         this.url = url;
     }

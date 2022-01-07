@@ -11,17 +11,12 @@ public class MemoryCache<T extends HasId> implements Repository<T> {
 
     @Override
     public T save(T obj) {
-        /*List<T> a=new ArrayList<>(cache.values());
-        System.out.println("before");
-        for(T b:a){
-            System.out.println(b.toString());
-        }*/
         cache.put(obj.getId(), obj);
-        /*System.out.println("after");
+        System.out.println("after");
         List<T> c=new ArrayList<>(cache.values());
         for(T b:c){
             System.out.println(b.toString());
-        }*/
+        }
         return obj;
     }
 

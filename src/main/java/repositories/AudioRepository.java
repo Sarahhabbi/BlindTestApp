@@ -41,7 +41,8 @@ public class AudioRepository implements Repository<Audio> {
         ArrayList<Audio> audios = new ArrayList<>();
         try{
             PreparedStatement ps = this.DBConnexion.prepareStatement("SELECT * FROM audios");
-            ResultSet generatedKeys=ps.executeQuery();
+            ResultSet generatedKeys = ps.executeQuery();
+
             while(generatedKeys.next()){
                 audios.add(new Audio(generatedKeys.getString(1),generatedKeys.getString(2)));
                 System.out.println("data "+generatedKeys.getString(1)+" "+generatedKeys.getString(2));

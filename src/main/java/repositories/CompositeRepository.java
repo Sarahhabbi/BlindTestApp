@@ -12,13 +12,13 @@ public class CompositeRepository<T extends HasId> implements Repository<T> {
 
     public CompositeRepository(Repository<T> file) {
         this.memory= new MemoryCache<>();
+        this.file = file;
         ArrayList<T> r = file.findAll();
         System.out.println("taille au debut "+r.size());
         for (T element : r) {
             this.memory.save(element);
             System.out.println("Element ajoute "+ element.getId());
         }
-        this.file = file;
     }
 
     @Override
