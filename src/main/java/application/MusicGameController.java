@@ -35,26 +35,33 @@ public class MusicGameController implements Initializable {
 
     @FXML
     private Button submitBtn;
-    @FXML
 
-    private int counterRightAnswer = 0;
-    private String goodAnswer = "bruno mars";
-    private int numberOfRound = 1;
+    /**********************************************************************/
 
-
-    private static String url = "../BlindTestApp/src/main/resources/music/bruno-mars-talking-to-the-moon-lyrics_d62CgrRx.mp3";
+    /* for playlist and audio */
+    private final GameService gameService = new GameService();
+    private ArrayList<Audio> songs = gameService.randomListaudio(ROUND);
     private Media media;
     private MediaPlayer mediaPlayer;
 
-    private final GameService gameService = new GameService();
-    private ArrayList<Audio> songs = gameService.randomListaudio();
-    private int nextSong = 0;
+    private int nextSong = 1;
+    private int numberOfRound = 1;
+    
+    /* for player answer */
+    private String goodAnswer;    
+    private int counterRightAnswer = 0;
+
+    /* for timer */
     private ExecutorService executor = Executors.newSingleThreadExecutor();
 
+    /**********************************************************************/
+    
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        playMusic(songs.get(0).getId());
+        playMusic(songs.get(0));
+        goodAnswer = songs.get(0).getAnswer();
+        
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -71,7 +78,7 @@ public class MusicGameController implements Initializable {
         return executor.submit(() -> {
             Thread.sleep(10000);
             System.out.println("Next round !");
-            System.out.println("Changing the image");
+            System.out.println("Changing the song");
             changeSong();
             return 0;
         });
@@ -81,7 +88,7 @@ public class MusicGameController implements Initializable {
         int numberRounds = 0;
         while(numberRounds < ROUND ) {
 
-            System.out.println("You have 30s to answer! ");
+            System.out.println("You have 30s to answer!");
             Future<Integer> future = timer();
 
             while(!future.isDone()) {
@@ -90,6 +97,7 @@ public class MusicGameController implements Initializable {
             System.out.println("TIMER IS FINISHED...\n");
             numberRounds++;
         }
+
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -111,15 +119,14 @@ public class MusicGameController implements Initializable {
         paneGame.setCenter(hbox);
     }
 
-    public void playMusic(String url) {
-        media = new Media(new File(url).toURI().toString());
+    public void playMusic(Audio audio) {
+        media = new Media(new File(audio.getId()).toURI().toString());
         mediaPlayer = new MediaPlayer(media);
         mediaPlayer.setVolume(23 * 0.01);
         mediaPlayer.play();
     }
 
     public void displayFinalResult(){
-
         HBox hbox = new HBox();
         Text textSent = new Text("Your final result is " + counterRightAnswer);
         hbox.setPadding(new Insets(5,5,5,10));
@@ -130,6 +137,7 @@ public class MusicGameController implements Initializable {
         paneGame.getChildren().remove(answerField);
         paneGame.getChildren().remove(submitBtn);
     }
+    
     public void handlePlayerAnswer(ActionEvent event){
 
         if(numberOfRound <= ROUND){
@@ -137,7 +145,8 @@ public class MusicGameController implements Initializable {
             String rightOrWrongResponse;
             String color;   // background color depending on the answer wrong=red/ right=green
 
-            if(playerAnswer.equals(goodAnswer) == true){
+            if(playerAnswer.equals(goodAnswer) == true) {
+                answerField.clear();
                 System.out.println("good answer ->"  + playerAnswer);
                 color = "#4ab721";
                 rightOrWrongResponse = "Bonne réponse bien joué !";
@@ -146,7 +155,6 @@ public class MusicGameController implements Initializable {
                 counterRightAnswer++;
 
                 // next round
-                answerField.clear();
                 numberOfRound++;
 
                 if(numberOfRound > ROUND){
@@ -179,30 +187,30 @@ public class MusicGameController implements Initializable {
         }
     }
 
+
     public void changeSong() throws InterruptedException {
-        if(mediaPlayer!=null){
-            System.out.println("stoping music");
+        // stops the current music
+        if(mediaPlayer != null){
             mediaPlayer.stop();
-            System.out.println("next music in 5s");
+            System.out.println("next music in 5s");   // wait 5s before playing next
             Thread.sleep(5000);
-        }
-        if(nextSong < songs.size())
-        {
-            System.out.println("next music in 5s");
-            // create new song
-            String url = songs.get(nextSong).getId();
-            String newGoodAnswer = songs.get(nextSong).getAnswer();
 
-            playMusic(url);
+            if(nextSong < songs.size())
+            {
+                // create new Audio and play it
+                String url = songs.get(nextSong).getId();
+                String newGoodAnswer = songs.get(nextSong).getAnswer();
+                Audio newSong = new Audio(url, newGoodAnswer);
 
-            // new good answer;
-            this.goodAnswer = newGoodAnswer;
-            System.out.println("new good answer = "+ goodAnswer);
-            // for next call to this method
-            nextSong++;
-        }
-        else{
-            nextSong = 0;
+                playMusic(newSong);
+                goodAnswer = newGoodAnswer;
+                System.out.println("new good answer = "+ goodAnswer);
+                // for next call to this method
+                nextSong++;
+            }
+            else{
+                nextSong = 0;
+            }
         }
     }
 

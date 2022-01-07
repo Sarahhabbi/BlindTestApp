@@ -15,7 +15,7 @@ public class RepositoryFactory {
     public static  CompositeRepository<Audio> audios() {
         return new CompositeRepository<>(AudioRepository.getInstance(DATABASE.getConnection()));
     }
-    
+
 }
 
 

@@ -37,20 +37,6 @@
 
             </children>
          <center>
-            <Button fx:id="playMusic" mnemonicParsing="false" onAction="#playMusic" prefHeight="46.0" prefWidth="69.0" style="-fx-background-radius: 20px; -fx-background-color: linear-gradient(#fff,  #2BC76F);" BorderPane.alignment="CENTER">
-               <graphic>
-                  <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../image/play-3-32.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-               <font>
-                  <Font name="Sylfaen" size="20.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor></Button>
          </center>
         </BorderPane>
         <TextField fx:id="answerField" layoutX="253.0" layoutY="419.0" prefHeight="35.0" prefWidth="343.0" promptText="Enter your answer hier..." style="-fx-background-radius: 7px; -fx-border-color: #e97e6c; -fx-border-radius: 7px; -fx-border-width: 2px;" />
