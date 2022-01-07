@@ -8,8 +8,7 @@ import java.io.IOException;
 
 public class BlindTestApplication extends Application {
 
-    public static int ROUND = 2;
-
+    public static int ROUND = 4;
 
     @Override
     public void start(Stage stage) throws IOException{
