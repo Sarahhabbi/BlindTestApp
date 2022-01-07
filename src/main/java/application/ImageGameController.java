@@ -79,8 +79,9 @@ public class ImageGameController implements Initializable {
 
             System.out.println("You have 30s to answer! ");
             Future<Integer> future = timer();
-
+            /* tant que timer n'est pas finis j'attend (je boucle)*/
             while(!future.isDone()) {
+
             }
             System.out.println("TIMER IS FINISHED...\n");
 

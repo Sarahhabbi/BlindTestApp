@@ -192,9 +192,11 @@ public class MusicGameController implements Initializable {
         // stops the current music
         if(mediaPlayer != null){
             mediaPlayer.stop();
-            System.out.println("next music in 5s");   // wait 5s before playing next
+            System.out.println("next music in 5s");
+            // wait 5s before playing next
             Thread.sleep(5000);
 
+            // CHANGE MUSIC
             if(nextSong < songs.size())
             {
                 // create new Audio and play it
