@@ -9,7 +9,6 @@ public class Server {
 
     private ServerSocket serverSocket;
 
-
     public Server(ServerSocket serverSocket) throws IOException {
         System.out.println("Creating a server on port "+ serverSocket.getInetAddress().getHostAddress());
         this.serverSocket = serverSocket;

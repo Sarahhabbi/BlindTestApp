@@ -37,8 +37,6 @@ public class MusicGameController implements Initializable {
     private Button submitBtn;
 
 
-
-
     /**********************************************************************/
 
     /* for playlist and audio */

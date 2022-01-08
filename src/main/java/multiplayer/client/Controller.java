@@ -123,6 +123,22 @@ public class Controller extends Thread implements Initializable {
             closeEverything(socket, reader, writer);
         }
     }
+    public void closeEverything(Socket socket, BufferedReader bufferedReader, PrintWriter writer) {
+        try {
+            if (bufferedReader != null) {
+                bufferedReader.close();
+            }
+            if (writer != null) {
+                writer.close();
+            }
+            if (socket != null) {
+                socket.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     // sending pseudo to ClientHandler
     public void submitPseudo(ActionEvent event){
@@ -141,7 +157,7 @@ public class Controller extends Thread implements Initializable {
         try {
             String msg = reader.readLine();
             if(msg.equals("Pseudo already exists")){
-                displayAlert(Alert.AlertType.ERROR, windowOwner, "Pseudo Pris", "Pseudo déjà utilisé");
+                displayAlert(Alert.AlertType.ERROR, windowOwner, "Pseudo pris", "Pseudo déjà utilisé veuillez essayer à nouveau");
             }
             else{
 
@@ -182,30 +198,11 @@ public class Controller extends Thread implements Initializable {
                 centerPane.getChildren().add(createGameBtn);
                 centerPane.getChildren().add(joinGameBtn);
 
-
-
-
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-    }
-
-    public void closeEverything(Socket socket, BufferedReader bufferedReader, PrintWriter writer) {
-        try {
-            if (bufferedReader != null) {
-                bufferedReader.close();
-            }
-            if (writer != null) {
-                writer.close();
-            }
-            if (socket != null) {
-                socket.close();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public void changeWindow() {

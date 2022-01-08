@@ -13,7 +13,6 @@ import java.util.concurrent.Future;
 
 public class ClientHandler extends Thread {
 
-    //public static List<ClientHandler> clientHandlers = Collections.synchronizedList(new ArrayList<>());
     public static Map<String,ClientHandler> clientHandlers = Collections.synchronizedMap(new HashMap<String,ClientHandler>());
 
     private Socket socket;  //socket du front
