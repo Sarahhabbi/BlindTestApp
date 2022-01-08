@@ -122,7 +122,8 @@ public class MusicGameController implements Initializable {
     }
 
     public void playMusic(Audio audio) {
-        media = new Media(new File(audio.getId()).toURI().toString());
+        String s="C:\\Users\\33768\\OneDrive\\Documents\\BlindTestApp_\\src\\main\\resources\\music\\";
+        media = new Media(new File(s+audio.getId()).toURI().toString());
         mediaPlayer = new MediaPlayer(media);
         mediaPlayer.setVolume(23 * 0.01);
         mediaPlayer.play();

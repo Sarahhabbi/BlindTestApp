@@ -13,6 +13,7 @@ module com.example.demo {
     requires java.sql;
     requires java.desktop;
     requires junit;
+    requires org.testng;
 
     opens application to javafx.fxml;
     exports application;
