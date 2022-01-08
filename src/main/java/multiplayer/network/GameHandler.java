@@ -3,16 +3,16 @@ package multiplayer.network;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class GameHandler implements Runnable {
-    public static ArrayList<GameHandler> games;
-    private ArrayList<ClientHandler> players;    /* accès aux sockets de tous les joueurs de la partie */
-    private String name ;
+public class GameHandler extends Thread {
+    public static ArrayList<GameHandler> games = new ArrayList<GameHandler>();
+    private ArrayList<ClientHandler> players = new ArrayList<ClientHandler>();    /* accès aux sockets de tous les joueurs de la partie */
+    private String gameName ;
     private String admin ;
     private boolean start;
     private HashMap<String,Integer> scores = new HashMap<>(); // stock le nombre de bonne réponse --> {pseudo : score}
 
     public GameHandler(String name, String admin) {
-        this.name = name;
+        this.gameName = name;
         this.admin = admin;
         this.start = false;
     }
@@ -51,7 +51,7 @@ public class GameHandler implements Runnable {
 
     public synchronized static boolean exists (String gameName){
         for(GameHandler game : games){
-            if(game.getName().equals(gameName) == true){
+            if(game.getGameName().equals(gameName) == true){
                 return true;
             }
         }
@@ -64,19 +64,20 @@ public class GameHandler implements Runnable {
     public static void remove(ClientHandler player){
         games.remove(player);
     }
+    
     public synchronized static GameHandler getGame(String name) throws Exception {
         if(exists(name) ==  true){
             for(GameHandler game : games){
-                if(game.getName().equals(name) == true && game.start==false){
+                if(game.getGameName().equals(name) == true && game.start==false){
                     System.out.println(name + " found");
                     return game;
                 }
                 else{
-                    throw new Exception("La partie demandée a déjà commencé, veuillez choisir une autre partie");
+                    throw new Exception("/ started");
                 }
             }
         }else{
-            throw new Exception("La partie demandée n'existe pas");
+            throw new Exception("/ not exists");
         }
         return null;
     }
@@ -87,13 +88,13 @@ public class GameHandler implements Runnable {
             games.add(newGame);
             return newGame;
         }else{
-            throw new Exception("La partie existe déjà");
+            throw new Exception("/ exists");
         }
     }
 
     public synchronized void deleteGame(String gameName){
         for(GameHandler game : games){
-            if(game.getName().equals(gameName)){
+            if(game.getGameName().equals(gameName)){
                 System.out.println(gameName + " deleted");
                 games.remove(game);
             }
@@ -104,21 +105,17 @@ public class GameHandler implements Runnable {
 
     }
 
-    public String getName() {
-        return name;
+    public String getGameName() {
+        return gameName;
     }
-    public void setName(String name) {
-        this.name = name;
+    public void setGameName(String name) {
+        this.gameName = gameName;
     }
     public HashMap<String, Integer> getScores() {
         return scores;
     }
     public void setScores(HashMap<String, Integer> scores) {
         this.scores = scores;
-    }
-
-    public void startGame() {
-
     }
 
     public void giveAnswer(String answer) {

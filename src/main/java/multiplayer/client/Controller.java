@@ -14,7 +14,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -50,13 +49,14 @@ public class Controller extends Thread implements Initializable {
     private BufferedReader reader;
     private PrintWriter writer;
     private Socket socket;
+    private boolean isAdmin;
+    private String currentPage = "mainMultiplayerPage";
 
     /********************************************************************/
 
     private Stage stage;
     private Scene scene;
     private static Parent root;
-
 
     /********************************************************************/
 
@@ -116,21 +116,19 @@ public class Controller extends Thread implements Initializable {
     public void run(){
         try {
             String msg = reader.readLine(); // LIT LES MESSAGES QUE LE SERVER LUI A ENVOYE (ClientHandler et GameHandler)
-            while(socket.isConnected()==true && msg != null) {
+            while(socket.isConnected()==true && msg != null && currentPage.equals("mainMultiplayerPage")) {
 
-                System.out.println("SERVER sent : " + msg);
+                System.out.println("Controllerrrr SERVER sent : " + msg);
 
                 String[] words = msg.split(" ");
                 if (words[0].equals("/") == true) {
                     handleServerResponse(msg);
-                }else{
-                    /* gérer ce que game handler envoie */
                 }
-
                 msg = reader.readLine();   // prochaine message recu
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+//            System.out.println(e.getMessage());
+            e.printStackTrace();
             closeEverything(socket, reader, writer);
         }
     }
@@ -147,6 +145,7 @@ public class Controller extends Thread implements Initializable {
                     }
                 });
                 break;
+
             case "/ unique":
                 /* MAJ UI */
                 Platform.runLater(new Runnable() {
@@ -156,13 +155,14 @@ public class Controller extends Thread implements Initializable {
                     }
                 });
                 break;
+
             default:
                 System.out.println("any case");
                 break;
         }
     }
 
-    public void closeEverything(Socket socket, BufferedReader bufferedReader, PrintWriter writer) {
+    public static void closeEverything(Socket socket, BufferedReader bufferedReader, PrintWriter writer) {
         try {
             if (bufferedReader != null) {
                 bufferedReader.close();
@@ -192,13 +192,12 @@ public class Controller extends Thread implements Initializable {
 
             }
         }
-
     }
+
     public void sendPseudo(String pseudo) {
         writer.println(pseudo);  // envoi le pseudo au ClientHandler
         System.out.println("sendPseudo() -> Sent pseudo ("+ pseudo +") to Client handler");
     }
-
 
     public void update(){
 
@@ -248,7 +247,6 @@ public class Controller extends Thread implements Initializable {
         createGameBtn.setPadding(new Insets(5,5,5,5));
         joinGameBtn.setPadding(new Insets(5,5,5,5));
 
-
         //**************************************************************************
         createGameBtn.setLayoutX(70);
         createGameBtn.setLayoutY(48);
@@ -263,30 +261,50 @@ public class Controller extends Thread implements Initializable {
 
         //**********************************************
 
+        createGameBtn.setOnAction(e -> {
+            goToJoinGame(e,true);
+        });
 
-
+        joinGameBtn.setOnAction(e -> {
+            goToJoinGame(e,false);
+        });
 
     }
 
-    public void changeWindow() {
-        /*try {
-            Stage stage = (Stage) userName.getScene().getWindow();
-            Parent root = FXMLLoader.load(this.getClass().getResource("Room.fxml"));
-            stage.setScene(new Scene(root, 330, 560));
-            stage.setTitle(username + "");
-            stage.setOnCloseRequest(event -> {
-                System.exit(0);
-            });
-            stage.setResizable(false);
-            stage.show();
+    private void goToJoinGame(ActionEvent e, boolean isAdmin) {
+        try {
+            System.out.println("Joining a game");
+            String title = "BlindTest.IO";
+            String pageToLoad = "/multiplayer/client/joinGamePage.fxml";
+            this.isAdmin = isAdmin;
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
+            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(pageToLoad)));
+            root = loader.load();
+
+            System.out.println("trying to interrupt current thread");
+            this.interrupt();
+
+            currentPage = "joinPage";
+
+            /* create a page JoinGameController */
+            JoinGameController joinGameController = loader.getController();
+            System.out.println("sending player info to joinGameController");
+            joinGameController.storePlayerInformation(socket, reader, writer, isAdmin);
+
+            /* changing the scene */
+            stage = (Stage)((Node)e.getSource()).getScene().getWindow();
+            scene = new Scene(root);
+            stage.setScene(scene);
+            stage.setTitle(title);
+            stage.show();
+            System.out.println("fin debug");
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
     }
 
     //afficher des pop up pour les erreurs ou les succes
-    private static void displayAlert(Alert.AlertType alertType, Window windowOwner, String title, String message){
+    public static void displayAlert(Alert.AlertType alertType, Window windowOwner, String title, String message){
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
         alert.setHeaderText(null);

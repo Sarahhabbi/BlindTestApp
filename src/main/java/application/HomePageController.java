@@ -49,7 +49,7 @@ public class HomePageController implements Initializable {
             }
             else if(event.getSource().equals(joinGameBtn))
             {
-                pageToLoad = "/application/joinGamePage.fxml";
+                pageToLoad = "/multiplayer/client/joinGamePage.fxml";
                 title = ("BlindTest.IO | Join a game");
             }
             root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(pageToLoad)));

@@ -80,7 +80,8 @@ public class ClientHandler extends Thread {
 
             while (socket.isConnected()==true && answer!=null) {
                 System.out.println("CLIENT SENT : "+ answer);
-//                handlePlayerAnswer(answer);
+                handlePlayerAnswer(answer);
+                answer = bufferedReader.readLine();
             }
         } catch (Exception e) {
             closeEverything(socket, bufferedReader, writer);
@@ -89,40 +90,69 @@ public class ClientHandler extends Thread {
 
     }
 
-    /* public void handlePlayerAnswer(String answer) {
+     public void handlePlayerAnswer(String answer) {
         if(answer != null){
             String[] parseAnswer = answer.split(" ");
             String first = parseAnswer[0];
 
             if(parseAnswer.length >= 2){
-
+                String arg = parseAnswer[1];
                 switch(first) {
                     case "create":
+                        createGame(arg);
+                        break;
                     case "join":
-                        if(parseAnswer.length >= 2){
-                            String name = parseAnswer[1];
-                            GameHandler game = null;
-                            try {
-                                game = GameHandler.getGame(name);
-                                setGameHandler(game);
-                                game.addPlayer(this);
-                            } catch (Exception e) {
-                                writer.println(e.getMessage());
-                                System.out.println(e.getMessage());
-                            }
-                        }
-                        System.out.println("COULDN'T JOIN NO GAME NAME");
-
+                        joinGame(arg);
+                        break;
                     case "start":
-                        Thread t = new Thread(gameHandler);
-
-                        t.start();
+                        startGame();
+                        break;
                     default :
 //                        gameHandler.giveAnswer();
+                        break;
                 }
             }
         }
-    }*/
+    }
+
+    public void createGame(String gameName){
+        GameHandler game = null;
+        try {
+            game = GameHandler.addGame(gameName, this.playerPseudo);
+            setGameHandler(game);
+            game.addPlayer(this);
+            writer.println("unique");
+            System.out.println(this.playerPseudo + " created " + gameName);
+        }
+        catch (Exception e) {
+            writer.println(e.getMessage());
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void joinGame(String gameName){
+        GameHandler game = null;
+        try {
+            game = GameHandler.getGame(gameName);
+            setGameHandler(game);
+            game.addPlayer(this);
+            System.out.println(this.playerPseudo + " joined " + gameName + " game");
+            writer.println("joined");
+        }
+        catch (Exception e) {
+            writer.println(e.getMessage());
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void startGame(){
+        if(gameHandler.getAdmin().equals(this.playerPseudo) == true){
+            gameHandler.start();
+        }else{
+            System.out.println("not admin cannot start the game");
+            writer.println("not admin cannot start the game"); // normalemet il n'y aura jamais ce cas
+        }
+    }
 
     public void removeClientHandler(){
         clientHandlers.remove(this);
