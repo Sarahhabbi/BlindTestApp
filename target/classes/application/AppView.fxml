@@ -17,7 +17,7 @@
 <?import javafx.scene.text.Text?>
 
 <?import javafx.scene.layout.BorderPane?>
-<AnchorPane prefHeight="475.0" prefWidth="720.0" style="-fx-background-color: #333239;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.GlobalGameController">
+<AnchorPane prefHeight="475.0" prefWidth="720.0" style="-fx-background-color: #333239;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ImageGameController">
    <children>
       <Label alignment="CENTER" layoutX="11.0" layoutY="26.0" prefHeight="79.0" prefWidth="228.0" style="-fx-border-width: 3px; -fx-border-color: #e97e6c;" text="BlindTest.IO" textFill="#e97e6c">
          <font>
@@ -39,7 +39,7 @@
             </Text>
             <ImageView fx:id="imageBox" fitHeight="188.0" fitWidth="327.0" layoutX="65.0" layoutY="109.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../image/BlindTestImage/Christiano.jpeg" />
+                  <Image url="https://miro.medium.com/max/1400/1*4Ha05TwcqYA1s0BG2FQPJg.jpeg" />
                </image>
             </ImageView>
          </children>

@@ -4,24 +4,20 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import repositories.RepositoryFactory;
-
-
 import java.io.IOException;
-import java.util.ArrayList;
-import static java.lang.Thread.sleep;
 
 public class BlindTestApplication extends Application {
 
-    public static int ROUND = 5;
+    public static int ROUND = 2;
+
 
     @Override
-    public void start(Stage stage) throws IOException, InterruptedException {
+    public void start(Stage stage) throws IOException{
 
-        FXMLLoader fxmlLoader = new FXMLLoader(BlindTestApplication.class.getResource("/application/AppView.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(BlindTestApplication.class.getResource("/application/musicView.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
 
-        stage.setTitle("BlindTest.IO | HomePage!");
+        stage.setTitle("BlindTest.IO | App View!");
         stage.setScene(scene);
         stage.show();
     }
