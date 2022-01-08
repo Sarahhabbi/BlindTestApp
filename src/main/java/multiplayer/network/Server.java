@@ -36,10 +36,8 @@ public class Server {
                 ClientHandler clientHandler = new ClientHandler(socket);
 
                 // create a new thread object
-                Thread thread = new Thread(clientHandler);
-                System.out.println("A new thread was assigned to this client");
-
-                thread.start();
+                //Thread thread = new Thread(clientHandler);
+                //System.out.println("A new thread was assigned to this client");
             }
         }catch(IOException e){
             this.closeServerSocket();
@@ -50,7 +48,7 @@ public class Server {
     public static void main(String[] args) {
         Server server;
 
-        try (ServerSocket serverSocket = new ServerSocket(8080)) {
+        try (ServerSocket serverSocket = new ServerSocket(1234)) {
             server = new Server(serverSocket);
             server.startServer();
         } catch (IOException e) {

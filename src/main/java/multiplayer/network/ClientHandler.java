@@ -3,19 +3,27 @@ package multiplayer.network;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
-public class ClientHandler implements Runnable {
+public class ClientHandler extends Thread {
 
-    public static List<ClientHandler> clientHandlers = Collections.synchronizedList(new ArrayList<>());
+    //public static List<ClientHandler> clientHandlers = Collections.synchronizedList(new ArrayList<>());
+    public static Map<String,ClientHandler> clientHandlers = Collections.synchronizedMap(new HashMap<String,ClientHandler>());
+
     private Socket socket;  //socket du front
-
     private BufferedReader bufferedReader; //read message
     private PrintWriter writer;
+
     private String playerPseudo;
     private String joinedGame;       // le joueur enverra le nom de la partie qu'il rejoins
     private GameHandler gameHandler;
+    private ExecutorService executor = Executors.newSingleThreadExecutor();
 
 
     public ClientHandler(Socket socket) {
@@ -23,11 +31,9 @@ public class ClientHandler implements Runnable {
             this.socket = socket;
             this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.writer = new PrintWriter(socket.getOutputStream(), true);
-
-            this.playerPseudo = bufferedReader.readLine();  // username is sent in sendMessage() method in Client class
-            this.clientHandlers.add(this);
+            initPseudo();
+            this.clientHandlers.put(playerPseudo,this);
             this.joinedGame = null;
-
             System.out.println("SERVER: " + playerPseudo + " is connected to the server !");
 
         } catch (IOException e) {
@@ -36,20 +42,47 @@ public class ClientHandler implements Runnable {
         }
     }
 
+    public Future<Integer> timer() {
+        return executor.submit(() -> {
+
+
+
+            return 0;
+        });
+    }
+
+    public Future<Integer> initPseudo(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // verifier que pseudo est unique sinon envoyer une exception au Client
+                String pseudo = null;
+                try {
+                    pseudo = bufferedReader.readLine();
+                    boolean pseudoIsUnique = clientHandlers.contains(pseudo);
+                    int tries = 0;
+                    while (clientHandlers.containsKey(pseudo) && tries < 4) {
+                        writer.println("Pseudo already exists");
+                        pseudo = bufferedReader.readLine();tries++;
+                    }
+                    playerPseudo = pseudo;  // username is sent in sendPseudo() method in Client class
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+
     /* listen to player answers*/
     @Override
     public void run() {
         try {
             String answer = bufferedReader.readLine();
-
-            while (answer != null) {
-
-                handlePlayerAnswer(answer);
-                /* if(answer.equals("start") == true){   // admin à envoyer "start"
-                    gameHandler.startGame();
-                }else{
-                    gameHandler.giveAnswer(answer);
-                } */
+            while (socket.isConnected() == true) {
+                System.out.println("CLIENT SENT : "+ answer);
+                // handlePlayerAnswer(answer);
             }
         } catch (Exception e) {
             closeEverything(socket, bufferedReader, writer);
@@ -58,7 +91,7 @@ public class ClientHandler implements Runnable {
 
     }
 
-    public void handlePlayerAnswer(String answer) {
+    /* public void handlePlayerAnswer(String answer) {
         if(answer != null){
             String[] parseAnswer = answer.split(" ");
             String first = parseAnswer[0];
@@ -68,7 +101,6 @@ public class ClientHandler implements Runnable {
                 switch(first) {
                     case "create":
                     case "join":
-
                         if(parseAnswer.length >= 2){
                             String name = parseAnswer[1];
                             GameHandler game = null;
@@ -88,12 +120,10 @@ public class ClientHandler implements Runnable {
                         t.start();
                     default :
 //                        gameHandler.giveAnswer();
-                        /* player answer to question */
-
                 }
             }
         }
-    }
+    }*/
 
     public void removeClientHandler(){
         clientHandlers.remove(this);

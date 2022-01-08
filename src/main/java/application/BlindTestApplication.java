@@ -13,7 +13,7 @@ public class BlindTestApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException{
 
-        FXMLLoader fxmlLoader = new FXMLLoader(BlindTestApplication.class.getResource("/application/musicView.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(BlindTestApplication.class.getResource("/multiplayer/client/multiPlayer.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
 
         stage.setTitle("BlindTest.IO | App View!");

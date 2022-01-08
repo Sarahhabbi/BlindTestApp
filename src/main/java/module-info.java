@@ -16,4 +16,6 @@ module com.example.demo {
 
     opens application to javafx.fxml;
     exports application;
+    opens multiplayer.client to javafx.fxml;
+    exports multiplayer.client;
 }
