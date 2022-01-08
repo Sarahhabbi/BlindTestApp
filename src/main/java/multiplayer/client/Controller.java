@@ -180,12 +180,19 @@ public class Controller extends Thread implements Initializable {
 
     // sending pseudo to ClientHandler
     public void submitPseudo(ActionEvent event){
+        Window windowOwner = submitPseudo.getScene().getWindow();
         String pseudo = usernameField.getText().toLowerCase();
-        try{
-            sendPseudo(pseudo);
-        }catch(Exception e){
-
+        if (pseudo.isEmpty() == true){
+            displayAlert(Alert.AlertType.ERROR,windowOwner,"Pseudo vide", "Veuillez saisir un pseudo");
         }
+        else{
+            try{
+                sendPseudo(pseudo);
+            }catch(Exception e){
+
+            }
+        }
+
     }
     public void sendPseudo(String pseudo) {
         writer.println(pseudo);  // envoi le pseudo au ClientHandler
@@ -196,43 +203,69 @@ public class Controller extends Thread implements Initializable {
     public void update(){
 
         System.out.println("ICI ON ARRIVE");
-        //enlever les éléments inutiles
+
         globalContainer.getChildren().remove(usernameField);
         globalContainer.getChildren().remove(submitPseudo);
         globalContainer.getChildren().remove(usernameText);
 
-        //créer les boutons à ajouter
+
         Button createGameBtn = new Button("Create Game");
         Button joinGameBtn = new Button("Join Game");
-        StackPane centerPane = new StackPane();
-        System.out.println(" 1 DEBUG REMOVING ELMENTS ");
-        System.out.println(" 2 DEBUG REMOVING ELMENTS ");
-        centerPane.setMinSize(200, 200);
-        centerPane.setLayoutX(117);
-        centerPane.setLayoutY(200);
+        Pane centerPane = new Pane();
 
-        //************************
+        //centerPane.setStyle("-fx-background-color: red");
+
+        //******************************************************
+
+        centerPane.setPrefSize(200, 200);
+        centerPane.setLayoutX(190);
+        centerPane.setLayoutY(140);
+
         globalContainer.getChildren().add(centerPane);
-        System.out.println(" 3 DEBUG REMOVING ELEMENTS ");
-        //styliser les boutons
-        createGameBtn.setStyle("-fx-background-radius: 15px");
-        createGameBtn.setStyle("-fx-font-family: Verdana Pro Cond Semibold");
+
+        //***************************************************************
 
 
-        joinGameBtn.setStyle("-fx-background-radius: 15px");
-        joinGameBtn.setStyle("-fx-font-family: Verdana Pro Cond Semibold");
+        createGameBtn.setStyle("-fx-background-radius: 15px; " +
+                "-fx-font-family: Lucida; " +
+                "-fx-font-weight: bold;" +
+                "-fx-font-size: 16px");
+
+        createGameBtn.setPrefWidth(110);
+        createGameBtn.setPrefHeight(30);
+
+
+        joinGameBtn.setStyle("-fx-background-radius: 15px; " +
+                "-fx-font-family: Lucida; " +
+                "-fx-font-weight: bold; " +
+                "-fx-font-size: 16px");
+
+        joinGameBtn.setPrefWidth(110);
+        joinGameBtn.setPrefHeight(30);
+
+        //***********************************************************************
 
         createGameBtn.setPadding(new Insets(5,5,5,5));
         joinGameBtn.setPadding(new Insets(5,5,5,5));
 
-        createGameBtn.setLayoutX(74);
+
+        //**************************************************************************
+        createGameBtn.setLayoutX(70);
         createGameBtn.setLayoutY(48);
 
-        joinGameBtn.setLayoutX(74);
-        joinGameBtn.setLayoutY(130);
+        joinGameBtn.setLayoutX(70);
+        joinGameBtn.setLayoutY(120);
+
+        //*****************************************************************
 
         centerPane.getChildren().add(createGameBtn);
         centerPane.getChildren().add(joinGameBtn);
+
+        //**********************************************
+
+
+
+
     }
 
     public void changeWindow() {
