@@ -13,6 +13,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -151,6 +153,14 @@ public class Controller extends Thread implements Initializable {
                 //créer les boutons à ajouter
                 Button createGameBtn = new Button("Create Game");
                 Button joinGameBtn = new Button("Join Game");
+                StackPane centerPane = new StackPane();
+
+                centerPane.setMinSize(200, 200);
+                centerPane.setLayoutX(117);
+                centerPane.setLayoutY(200);
+
+                //ajouter au container
+                globalContainer.getChildren().add(centerPane);
 
                 //styliser les boutons
                 createGameBtn.setStyle("-fx-background-radius: 15px" +
@@ -161,12 +171,17 @@ public class Controller extends Thread implements Initializable {
                 );
 
                 createGameBtn.setPadding(new Insets(5,5,5,5));
+                joinGameBtn.setPadding(new Insets(5,5,5,5));
 
+                createGameBtn.setLayoutX(74);
+                createGameBtn.setLayoutY(48);
 
+                joinGameBtn.setLayoutX(74);
+                joinGameBtn.setLayoutY(130);
 
-                //ajouter les boutons dans le container principal
-                globalContainer.getChildren().add(createGameBtn);
-                globalContainer.getChildren().add(joinGameBtn);
+                centerPane.getChildren().add(createGameBtn);
+                centerPane.getChildren().add(joinGameBtn);
+
 
 
 

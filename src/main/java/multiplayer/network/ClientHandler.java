@@ -31,7 +31,11 @@ public class ClientHandler extends Thread {
             this.socket = socket;
             this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.writer = new PrintWriter(socket.getOutputStream(), true);
-            initPseudo();
+            Future<Integer> future = initPseudo();
+
+            while(!future.isDone()){
+            }
+
             this.clientHandlers.put(playerPseudo,this);
             this.joinedGame = null;
             System.out.println("SERVER: " + playerPseudo + " is connected to the server !");
@@ -42,38 +46,26 @@ public class ClientHandler extends Thread {
         }
     }
 
-    public Future<Integer> timer() {
+    public Future<Integer> initPseudo() {
         return executor.submit(() -> {
-
-
-
-            return 0;
+            // verifier que pseudo est unique sinon envoyer une exception au Client
+            String pseudo = null;
+            try {
+                pseudo = bufferedReader.readLine();
+                boolean pseudoIsUnique = clientHandlers.containsKey(pseudo);
+                int tries = 0;
+                while (clientHandlers.containsKey(pseudo) && tries < 4) {
+                    writer.println("Pseudo already exists");
+                    pseudo = bufferedReader.readLine();tries++;
+                }
+                playerPseudo = pseudo;  // username is sent in sendPseudo() method in Client class
+                return 0;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return -1;
+            }
         });
     }
-
-    public Future<Integer> initPseudo(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                // verifier que pseudo est unique sinon envoyer une exception au Client
-                String pseudo = null;
-                try {
-                    pseudo = bufferedReader.readLine();
-                    boolean pseudoIsUnique = clientHandlers.contains(pseudo);
-                    int tries = 0;
-                    while (clientHandlers.containsKey(pseudo) && tries < 4) {
-                        writer.println("Pseudo already exists");
-                        pseudo = bufferedReader.readLine();tries++;
-                    }
-                    playerPseudo = pseudo;  // username is sent in sendPseudo() method in Client class
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-    }
-
 
     /* listen to player answers*/
     @Override
