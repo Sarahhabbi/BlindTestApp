@@ -55,13 +55,13 @@ public class ClientHandler extends Thread {
                 int tries = 0;
 
                 while (pseudoIsNotUnique == true && tries < 4) {
-                    writer.println("/ Pseudo already exists");
+                    writer.println("/ exists");
 
                     pseudo = bufferedReader.readLine();
                     pseudoIsNotUnique = clientHandlers.containsKey(pseudo);
                     tries++;
                 }
-                writer.println("/ Pseudo is unique");
+                writer.println("/ unique");
 
                 playerPseudo = pseudo;  // username is sent in sendPseudo() method in Client class
                 return 0;
@@ -80,7 +80,7 @@ public class ClientHandler extends Thread {
 
             while (socket.isConnected()==true && answer!=null) {
                 System.out.println("CLIENT SENT : "+ answer);
-                 handlePlayerAnswer(answer);
+//                handlePlayerAnswer(answer);
             }
         } catch (Exception e) {
             closeEverything(socket, bufferedReader, writer);

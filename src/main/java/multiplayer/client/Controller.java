@@ -70,7 +70,6 @@ public class Controller extends Thread implements Initializable {
     public void goBackHome(ActionEvent event) throws IOException {
         try {
             System.out.println("Closing everything, player is going back home");
-            closeEverything(socket, reader, writer);
 
             String title = "BlindTest.IO";
             String pageToLoad = " ";
@@ -79,6 +78,8 @@ public class Controller extends Thread implements Initializable {
             {
                 pageToLoad = "/application/startPage.fxml";
             }
+
+            closeEverything(socket, reader, writer);
 
             root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(pageToLoad)));
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
@@ -114,34 +115,53 @@ public class Controller extends Thread implements Initializable {
     @Override
     public void run(){
         try {
-            String msg = reader.readLine(); // LIT LES MESSAGES QUE LE SERVER LUI A ENVOYE (GameHandler?
-            System.out.println("SERVER sent : " + msg);
-            String [] words = msg.split(" ");
+            String msg = reader.readLine(); // LIT LES MESSAGES QUE LE SERVER LUI A ENVOYE (ClientHandler et GameHandler)
+            while(socket.isConnected()==true && msg != null) {
 
-            if(words[0].equals("/") == true){
-//                handleServerResponse(msg);
+                System.out.println("SERVER sent : " + msg);
 
+                String[] words = msg.split(" ");
+                if (words[0].equals("/") == true) {
+                    handleServerResponse(msg);
+                }else{
+                    /* gérer ce que game handler envoie */
+                }
+
+                msg = reader.readLine();   // prochaine message recu
             }
-            if(msg.equals("Pseudo already exists")) {
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            closeEverything(socket, reader, writer);
+        }
+    }
+
+    public void handleServerResponse(String msg) {
+        switch(msg){
+            case "/ exists":
+                /* DISPLAY ERROR FOR PSEUDO */
                 Window windowOwner = submitPseudo.getScene().getWindow();
-                displayAlert(Alert.AlertType.ERROR, windowOwner, "Pseudo pris", "Pseudo déjà utilisé veuillez essayer à nouveau");
-            }
-            else if(msg.equals("Pseudo is unique")) {
-                System.out.println("4 DEBUG REMOVING ELMENTS ");
-
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        displayAlert(Alert.AlertType.ERROR, windowOwner, "Pseudo pris", "Pseudo déjà utilisé veuillez essayer à nouveau");
+                    }
+                });
+                break;
+            case "/ unique":
+                /* MAJ UI */
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
                         update();
                     }
                 });
-            }
-
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            closeEverything(socket, reader, writer);
+                break;
+            default:
+                System.out.println("any case");
+                break;
         }
     }
+
     public void closeEverything(Socket socket, BufferedReader bufferedReader, PrintWriter writer) {
         try {
             if (bufferedReader != null) {
@@ -158,7 +178,6 @@ public class Controller extends Thread implements Initializable {
         }
     }
 
-
     // sending pseudo to ClientHandler
     public void submitPseudo(ActionEvent event){
         String pseudo = usernameField.getText().toLowerCase();
@@ -170,7 +189,6 @@ public class Controller extends Thread implements Initializable {
     }
     public void sendPseudo(String pseudo) {
         writer.println(pseudo);  // envoi le pseudo au ClientHandler
-
         System.out.println("sendPseudo() -> Sent pseudo ("+ pseudo +") to Client handler");
     }
 
