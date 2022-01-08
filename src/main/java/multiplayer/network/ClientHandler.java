@@ -38,7 +38,7 @@ public class ClientHandler extends Thread {
             this.clientHandlers.put(playerPseudo,this);
             this.joinedGame = null;
             System.out.println("SERVER: " + playerPseudo + " is connected to the server !");
-
+            this.start();
         } catch (IOException e) {
             closeEverything(socket, bufferedReader, writer);
             e.printStackTrace();
@@ -51,12 +51,18 @@ public class ClientHandler extends Thread {
             String pseudo = null;
             try {
                 pseudo = bufferedReader.readLine();
-                boolean pseudoIsUnique = clientHandlers.containsKey(pseudo);
+                boolean pseudoIsNotUnique = clientHandlers.containsKey(pseudo); // false si clientHandler n'a pas ce pseudo
                 int tries = 0;
-                while (clientHandlers.containsKey(pseudo) && tries < 4) {
-                    writer.println("Pseudo already exists");
-                    pseudo = bufferedReader.readLine();tries++;
+
+                while (pseudoIsNotUnique == true && tries < 4) {
+                    writer.println("/ Pseudo already exists");
+
+                    pseudo = bufferedReader.readLine();
+                    pseudoIsNotUnique = clientHandlers.containsKey(pseudo);
+                    tries++;
                 }
+                writer.println("/ Pseudo is unique");
+
                 playerPseudo = pseudo;  // username is sent in sendPseudo() method in Client class
                 return 0;
             } catch (IOException e) {
@@ -71,9 +77,10 @@ public class ClientHandler extends Thread {
     public void run() {
         try {
             String answer = bufferedReader.readLine();
-            while (socket.isConnected() == true) {
+
+            while (socket.isConnected()==true && answer!=null) {
                 System.out.println("CLIENT SENT : "+ answer);
-                // handlePlayerAnswer(answer);
+                 handlePlayerAnswer(answer);
             }
         } catch (Exception e) {
             closeEverything(socket, bufferedReader, writer);
@@ -108,6 +115,7 @@ public class ClientHandler extends Thread {
 
                     case "start":
                         Thread t = new Thread(gameHandler);
+
                         t.start();
                     default :
 //                        gameHandler.giveAnswer();

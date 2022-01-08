@@ -5,26 +5,45 @@ import java.util.HashMap;
 
 public class GameHandler implements Runnable {
     public static ArrayList<GameHandler> games;
-    public ArrayList<ClientHandler> players;    /* accès aux sockets de tous les joueurs de la partie */
+    private ArrayList<ClientHandler> players;    /* accès aux sockets de tous les joueurs de la partie */
     private String name ;
     private String admin ;
-
+    private boolean start;
     private HashMap<String,Integer> scores = new HashMap<>(); // stock le nombre de bonne réponse --> {pseudo : score}
 
     public GameHandler(String name, String admin) {
         this.name = name;
         this.admin = admin;
+        this.start = false;
     }
-
 
     @Override
     public void run() {
+       /* for(int round=0;round<5;round++) {
+            Runnable barrierAction = () -> System.out.println("La partie va commencer");
+            CyclicBarrier barrier = new CyclicBarrier(3, barrierAction);
+            for (int i = 0; i <players.size(); i++) {
+                Worker t = new Worker(i, barrier,players.get(i).getWriter());
+                t.start(); //ils envoient l'image
+            }
+        }
+
+        System.out.println("Il y a "+ clientHandlers.size()+" clients");
+        if(clientHandlers.size()==4) {
+            Runnable barrierAction = () -> System.out.println("Round ");
+            CyclicBarrier barrier = new CyclicBarrier(4, barrierAction);
+            for (int i = 0; i < clientHandlers.size(); i++) {
+                Worker t = new Worker(i, barrier, clientHandlers.get(i));
+                t.start(); //ils envoient l'image
+                System.out.println(clientHandlers.get(i).toString());
+            }
+        } */
+
         /* while loop pour les round*/
             /* envoi image à tous les players*/
             /* thread sleep timer*/
             /* on envoi "end round" à tous les players */
             /* on récupere les reponses de chaque joueur et on vérifie qui a gagné ce tour la et MAJ scores */
-
             /* thread spleep */
         /* une fois tous les round terminés on récupère dans la HashMap le pseudo de celui qui a le max score ->
          autre methode qui parcours la HashMap score*/
@@ -42,12 +61,18 @@ public class GameHandler implements Runnable {
     public synchronized void addPlayer(ClientHandler player){
             this.players.add(player);
     }
+    public static void remove(ClientHandler player){
+        games.remove(player);
+    }
     public synchronized static GameHandler getGame(String name) throws Exception {
         if(exists(name) ==  true){
             for(GameHandler game : games){
-                if(game.getName().equals(name) == true){
+                if(game.getName().equals(name) == true && game.start==false){
                     System.out.println(name + " found");
                     return game;
+                }
+                else{
+                    throw new Exception("La partie demandée a déjà commencé, veuillez choisir une autre partie");
                 }
             }
         }else{
@@ -93,8 +118,24 @@ public class GameHandler implements Runnable {
     }
 
     public void startGame() {
+
     }
 
     public void giveAnswer(String answer) {
     }
+
+    public ArrayList<ClientHandler> getPlayers() {
+        return players;
+    }
+
+    public String getAdmin() {
+        return admin;
+    }
+
+    public boolean isStart() {
+        return start;
+    }
+
+
+
 }

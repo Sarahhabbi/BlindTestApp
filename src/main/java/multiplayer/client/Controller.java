@@ -114,10 +114,29 @@ public class Controller extends Thread implements Initializable {
     @Override
     public void run(){
         try {
-            while(socket.isConnected() == true) {
-                String msg = reader.readLine(); // LIT LES MESSAGES QUE LE SERVER LUI A ENVOYE (GameHandler?
-                System.out.println("SERVER sent : " + msg);
+            String msg = reader.readLine(); // LIT LES MESSAGES QUE LE SERVER LUI A ENVOYE (GameHandler?
+            System.out.println("SERVER sent : " + msg);
+            String [] words = msg.split(" ");
+
+            if(words[0].equals("/") == true){
+//                handleServerResponse(msg);
+
             }
+            if(msg.equals("Pseudo already exists")) {
+                Window windowOwner = submitPseudo.getScene().getWindow();
+                displayAlert(Alert.AlertType.ERROR, windowOwner, "Pseudo pris", "Pseudo déjà utilisé veuillez essayer à nouveau");
+            }
+            else if(msg.equals("Pseudo is unique")) {
+                System.out.println("4 DEBUG REMOVING ELMENTS ");
+
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        update();
+                    }
+                });
+            }
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
             closeEverything(socket, reader, writer);
@@ -150,59 +169,52 @@ public class Controller extends Thread implements Initializable {
         }
     }
     public void sendPseudo(String pseudo) {
-        Window windowOwner = submitPseudo.getScene().getWindow();
-
         writer.println(pseudo);  // envoi le pseudo au ClientHandler
+
         System.out.println("sendPseudo() -> Sent pseudo ("+ pseudo +") to Client handler");
-        try {
-            String msg = reader.readLine();
-            if(msg.equals("Pseudo already exists")){
-                displayAlert(Alert.AlertType.ERROR, windowOwner, "Pseudo pris", "Pseudo déjà utilisé veuillez essayer à nouveau");
-            }
-            else{
+    }
 
-                //enlever les éléments inutiles
-                globalContainer.getChildren().remove(usernameField);
-                globalContainer.getChildren().remove(submitPseudo);
-                globalContainer.getChildren().remove(usernameText);
 
-                //créer les boutons à ajouter
-                Button createGameBtn = new Button("Create Game");
-                Button joinGameBtn = new Button("Join Game");
-                StackPane centerPane = new StackPane();
+    public void update(){
 
-                centerPane.setMinSize(200, 200);
-                centerPane.setLayoutX(117);
-                centerPane.setLayoutY(200);
+        System.out.println("ICI ON ARRIVE");
+        //enlever les éléments inutiles
+        globalContainer.getChildren().remove(usernameField);
+        globalContainer.getChildren().remove(submitPseudo);
+        globalContainer.getChildren().remove(usernameText);
 
-                //ajouter au container
-                globalContainer.getChildren().add(centerPane);
+        //créer les boutons à ajouter
+        Button createGameBtn = new Button("Create Game");
+        Button joinGameBtn = new Button("Join Game");
+        StackPane centerPane = new StackPane();
+        System.out.println(" 1 DEBUG REMOVING ELMENTS ");
+        System.out.println(" 2 DEBUG REMOVING ELMENTS ");
+        centerPane.setMinSize(200, 200);
+        centerPane.setLayoutX(117);
+        centerPane.setLayoutY(200);
 
-                //styliser les boutons
-                createGameBtn.setStyle("-fx-background-radius: 15px" +
-                        "-fx-font-family: Verdana Pro Cond Semibold"
-                );
-                joinGameBtn.setStyle("-fx-background-radius: 15px" +
-                        "-fx-font-family: Verdana Pro Cond Semibold"
-                );
+        //************************
+        globalContainer.getChildren().add(centerPane);
+        System.out.println(" 3 DEBUG REMOVING ELEMENTS ");
+        //styliser les boutons
+        createGameBtn.setStyle("-fx-background-radius: 15px");
+        createGameBtn.setStyle("-fx-font-family: Verdana Pro Cond Semibold");
 
-                createGameBtn.setPadding(new Insets(5,5,5,5));
-                joinGameBtn.setPadding(new Insets(5,5,5,5));
 
-                createGameBtn.setLayoutX(74);
-                createGameBtn.setLayoutY(48);
+        joinGameBtn.setStyle("-fx-background-radius: 15px");
+        joinGameBtn.setStyle("-fx-font-family: Verdana Pro Cond Semibold");
 
-                joinGameBtn.setLayoutX(74);
-                joinGameBtn.setLayoutY(130);
+        createGameBtn.setPadding(new Insets(5,5,5,5));
+        joinGameBtn.setPadding(new Insets(5,5,5,5));
 
-                centerPane.getChildren().add(createGameBtn);
-                centerPane.getChildren().add(joinGameBtn);
+        createGameBtn.setLayoutX(74);
+        createGameBtn.setLayoutY(48);
 
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        joinGameBtn.setLayoutX(74);
+        joinGameBtn.setLayoutY(130);
 
+        centerPane.getChildren().add(createGameBtn);
+        centerPane.getChildren().add(joinGameBtn);
     }
 
     public void changeWindow() {
@@ -221,7 +233,6 @@ public class Controller extends Thread implements Initializable {
             e.printStackTrace();
         }*/
     }
-
 
     //afficher des pop up pour les erreurs ou les succes
     private static void displayAlert(Alert.AlertType alertType, Window windowOwner, String title, String message){
