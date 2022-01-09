@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import multiplayer.network.ComSocket;
 
 import java.io.BufferedReader;
 import java.io.PrintWriter;
@@ -22,9 +23,7 @@ public class PlayerController  extends Thread implements Initializable {
 
     /********************************************************************/
 
-    private BufferedReader reader;
-    private PrintWriter writer;
-    private Socket socket;
+    private ComSocket comSocket;
     private boolean isAdmin;
     private boolean pseudoExists;
     private boolean gameNameExists;
@@ -37,20 +36,20 @@ public class PlayerController  extends Thread implements Initializable {
     @Override
     public void run(){
         try {
-            String msg = reader.readLine(); // LIT LES MESSAGES QUE LE SERVER LUI A ENVOYE (ClientHandler et GameHandler)
+            String msg = comSocket.read(); // LIT LES MESSAGES QUE LE SERVER LUI A ENVOYE (ClientHandler et GameHandler)
 
-            while(socket.isConnected()==true && msg!=null) {
+            while(comSocket.isConnected()==true && msg!=null) {
 
                 handleServerResponse(msg);
                 System.out.println("PlayerController SERVER sent : " + msg);
 
-                msg = reader.readLine();   // prochaine message recu
+                msg = comSocket.read();   // prochaine message recu
             }
             System.out.println("FIN THREAD PLAYER GAME CONTROLLER ");
 
         } catch (Exception e) {
             e.printStackTrace();
-            Controller.closeEverything(socket, reader, writer);
+            Controller.closeEverything(comSocket);
         }
     }
 
@@ -66,12 +65,10 @@ public class PlayerController  extends Thread implements Initializable {
 
     }
 
-    public void storePlayerInformation(boolean isAdmin, boolean gameNameExists, Socket socket, BufferedReader reader, PrintWriter writer) {
+    public void storePlayerInformation(boolean isAdmin, boolean gameNameExists, ComSocket comSocket) {
         this.isAdmin = isAdmin;
         this.gameNameExists = gameNameExists;
-        this.socket = socket;
-        this.reader = reader;
-        this.writer = writer;
+        this.comSocket=comSocket;
     }
 
     @Override

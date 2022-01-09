@@ -58,7 +58,7 @@ public class MyImageRepository implements Repository<MyImage> {
 
         try {
             PreparedStatement ps = this.DBConnexion.prepareStatement("DELETE FROM images WHERE id=?");
-            ps.setString(1, obj.getUrl());
+            ps.setString(1, obj.getId());
             ps.executeUpdate();
             System.out.println(" successfully deleted to CHANNEL_USERS table !");
         } catch (SQLException e) {

@@ -15,10 +15,7 @@ public class ClientHandler extends Thread {
 
     public static Map<String,ClientHandler> clientHandlers = Collections.synchronizedMap(new HashMap<String,ClientHandler>());
 
-    private Socket socket;  //socket du front
-    private BufferedReader bufferedReader; //read message
-    private PrintWriter writer;
-
+    private ComSocket comSocket;
     private String playerPseudo;
     private String joinedGame;       // le joueur enverra le nom de la partie qu'il rejoins
     private GameHandler gameHandler;
@@ -27,9 +24,7 @@ public class ClientHandler extends Thread {
 
     public ClientHandler(Socket socket) {
         try{
-            this.socket = socket;
-            this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            this.writer = new PrintWriter(socket.getOutputStream(), true);
+            this.comSocket=new ComSocket(socket);
             Future<Integer> future = initPseudo();
 
             while(!future.isDone()){
@@ -40,7 +35,7 @@ public class ClientHandler extends Thread {
             System.out.println("SERVER: " + playerPseudo + " is connected to the server !");
             this.start();
         } catch (IOException e) {
-            closeEverything(socket, bufferedReader, writer);
+            closeEverything(comSocket);
             e.printStackTrace();
         }
     }
@@ -50,25 +45,25 @@ public class ClientHandler extends Thread {
             // verifier que pseudo est unique sinon envoyer une exception au Client
             String pseudo = null;
             try {
-                pseudo = bufferedReader.readLine();
+                pseudo =comSocket.read();
                 boolean pseudoIsNotUnique = clientHandlers.containsKey(pseudo); // false si clientHandler n'a pas ce pseudo
-                int tries = 0;
+                while (pseudoIsNotUnique == true) {
+                    comSocket.write("/ EXISTS_PSEUDO");
 
-                while (pseudoIsNotUnique == true && tries < 4) {
-                    writer.println("/ EXISTS_PSEUDO");
-
-                    pseudo = bufferedReader.readLine();
+                    pseudo = comSocket.read();
                     pseudoIsNotUnique = clientHandlers.containsKey(pseudo);
                     tries++;
                 }
-                writer.println("/ UNIQUE_PSEUDO");
+                comSocket.write("/ UNIQUE_PSEUDO");
 
                 playerPseudo = pseudo;  // username is sent in sendPseudo() method in Client class
                 return 0;
             } catch (IOException e) {
                 e.printStackTrace();
                 return -1;
-            }
+            }/*catch(Exception e){
+                e.printStackTrace();
+            }*/
         });
     }
 
@@ -76,21 +71,21 @@ public class ClientHandler extends Thread {
     @Override
     public void run() {
         try {
-            String answer = bufferedReader.readLine();
+            String answer = comSocket.read();
 
-            while (socket.isConnected()==true && answer!=null) {
+            while (comSocket.isConnected()==true && answer!=null) {
                 System.out.println("CLIENT SENT : "+ answer);
                 handlePlayerAnswer(answer);
-                answer = bufferedReader.readLine();
+                answer = comSocket.read();
             }
         } catch (Exception e) {
-            closeEverything(socket, bufferedReader, writer);
+            closeEverything(comSocket);
             e.printStackTrace();
         }
 
     }
 
-     public void handlePlayerAnswer(String answer) {
+     public void handlePlayerAnswer(String answer) throws IOException {
         if(answer != null){
             String[] parseAnswer = answer.split(" ");
             String first = parseAnswer[0];
@@ -99,7 +94,7 @@ public class ClientHandler extends Thread {
                 String arg = parseAnswer[1];
                 switch(first) {
                     case "create":
-                        createGame(arg);
+                        createGame(arg,false,5);
                         break;
                     case "join":
                         joinGame(arg);
@@ -116,42 +111,42 @@ public class ClientHandler extends Thread {
         }
     }
 
-    public void createGame(String gameName){
+    public void createGame(String gameName,boolean isaudio,int round) throws IOException {
         GameHandler game = null;
         try {
-            game = GameHandler.addGame(gameName, this.playerPseudo);
+            game = GameHandler.addGame(gameName, this.playerPseudo,isaudio,round);
             setGameHandler(game);
             game.addPlayer(this);
-            writer.println("/ UNIQUE_GAMENAME");
+            comSocket.write("/ UNIQUE_GAMENAME");
             System.out.println(this.playerPseudo + " created " + gameName);
         }
         catch (Exception e) {
-            writer.println(e.getMessage());
+            comSocket.write(e.getMessage());
             System.out.println(e.getMessage());
         }
     }
 
-    public void joinGame(String gameName){
+    public void joinGame(String gameName) throws IOException {
         GameHandler game = null;
         try {
             game = GameHandler.getGame(gameName);
             setGameHandler(game);
             game.addPlayer(this);
             System.out.println(this.playerPseudo + " joined " + gameName + " game");
-            writer.println("/ JOINED");
+            comSocket.write("/ JOINED");
         }
         catch (Exception e) {
-            writer.println(e.getMessage());
+            comSocket.write(e.getMessage());
             System.out.println(e.getMessage());
         }
     }
 
-    public void startGame(){
+    public void startGame() throws IOException {
         if(gameHandler.getAdmin().equals(this.playerPseudo) == true){
             gameHandler.start();
         }else{
             System.out.println("not admin cannot start the game");
-            writer.println("not admin cannot start the game"); // normalemet il n'y aura jamais ce cas
+            comSocket.write("not admin cannot start the game"); // normalemet il n'y aura jamais ce cas
         }
     }
 
@@ -159,17 +154,9 @@ public class ClientHandler extends Thread {
         clientHandlers.remove(this);
     }
 
-    public void closeEverything(Socket socket, BufferedReader bufferedReader, PrintWriter writer) {
+    public void closeEverything(ComSocket comSocket) {
         try{
-            if(bufferedReader != null){
-                bufferedReader.close();
-            }
-            if(writer != null){
-                writer.close();
-            }
-            if(socket != null){
-                socket.close();
-            }
+            comSocket.closeEverything();
             removeClientHandler();
         } catch (Exception e) {
             e.printStackTrace();
@@ -177,24 +164,7 @@ public class ClientHandler extends Thread {
 
     }
 
-    public Socket getSocket() {
-        return socket;
-    }
-    public void setSocket(Socket socket) {
-        this.socket = socket;
-    }
-    public BufferedReader getBufferedReader() {
-        return bufferedReader;
-    }
-    public void setBufferedReader(BufferedReader bufferedReader) {
-        this.bufferedReader = bufferedReader;
-    }
-    public PrintWriter getWriter() {
-        return writer;
-    }
-    public void setWriter(PrintWriter writer) {
-        this.writer = writer;
-    }
+    public ComSocket getComSocket() {return comSocket;}
     public String getPlayerPseudo() {
         return playerPseudo;
     }

@@ -15,6 +15,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import multiplayer.network.ClientHandler;
+import multiplayer.network.ComSocket;
 
 import java.io.*;
 import java.net.*;
@@ -44,9 +46,7 @@ public class Controller extends Thread implements Initializable {
     /********************************************************************/
 
 
-    private BufferedReader reader;
-    private PrintWriter writer;
-    private Socket socket;
+    private ComSocket comSocket;
 
     private boolean isAdmin;
 
@@ -68,7 +68,8 @@ public class Controller extends Thread implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        if(socket == null){
+        if(comSocket == null){
+            System.out.println("CONTROLLER");
             connectSocket();
         }
     }
@@ -85,7 +86,7 @@ public class Controller extends Thread implements Initializable {
                 pageToLoad = "/application/startPage.fxml";
             }
 
-            closeEverything(socket, reader, writer);
+            this.comSocket.closeEverything();
 
             root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(pageToLoad)));
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
@@ -101,17 +102,22 @@ public class Controller extends Thread implements Initializable {
     @FXML
     public void quitGame (ActionEvent event){
         System.out.println("Closing everything, player is quiting");
-        closeEverything(socket, reader, writer);
+        this.comSocket.closeEverything();
         Platform.exit();
     }
 
     public void connectSocket() {
         try {
-            socket = new Socket("localhost", 1234);
-            System.out.println("Socket is connected with server on port 1234!");
-            reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            writer = new PrintWriter(socket.getOutputStream(), true);
+            System.out.println("Connection à la socket");
+            Socket s=new Socket("localhost", 8080);
+            if(s==null){
+                System.out.println("La socket est nulle");
+            }
+            this.comSocket = new ComSocket(s);
+            System.out.println("Socket is connected with server on port 8080!");
             this.start();
+        } catch(ConnectException e){
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -120,8 +126,8 @@ public class Controller extends Thread implements Initializable {
     @Override
     public void run(){
         try {
-            String msg = reader.readLine(); // LIT LES MESSAGES QUE LE SERVER LUI A ENVOYE (ClientHandler et GameHandler)
-            while(socket.isConnected()==true && msg != null &&  this.currentPage.equals("mainMultiplayerPage")==true && pseudoExists == true) {
+            String msg = comSocket.read(); // LIT LES MESSAGES QUE LE SERVER LUI A ENVOYE (ClientHandler et GameHandler)
+            while(comSocket.isConnected()==true && msg != null &&  this.currentPage.equals("mainMultiplayerPage")==true && pseudoExists == true){
 
                 System.out.println(currentPage + " SERVER sent : " + msg);
 
@@ -129,12 +135,13 @@ public class Controller extends Thread implements Initializable {
                 if (words[0].equals("/") == true) {
                     handleServerResponse(msg);
                 }
+                msg = comSocket.read();
             }
-            System.out.println("FIN THREAD CONTROLLER");
+                System.out.println("FIN THREAD CONTROLLER");
         } catch (Exception e) {
 //            System.out.println(e.getMessage());
             e.printStackTrace();
-            closeEverything(socket, reader, writer);
+            this.comSocket.closeEverything();
         }
     }
 
@@ -187,8 +194,8 @@ public class Controller extends Thread implements Initializable {
             }
         }
     }
-    public void sendPseudo(String pseudo) {
-        writer.println(pseudo);  // envoi le pseudo au ClientHandler
+    public void sendPseudo(String pseudo) throws IOException {
+        comSocket.write(pseudo);  // envoi le pseudo au ClientHandler
         System.out.println("sendPseudo() -> Sent pseudo ("+ pseudo +") to Client handler");
     }
 
@@ -200,7 +207,7 @@ public class Controller extends Thread implements Initializable {
             displayAlert(Alert.AlertType.ERROR, windowOwner, "Entrez un pseudo", "Veuillez entrer un pseudo");
         }else{
             this.currentPage = "createGamePage";
-            changeWindow(e,"/multiplayer/client/createGamePage.fxml", "BlindTest.IO | Join game", true, this.gameNameExists,this.socket, this.reader, this.writer);
+            changeWindow(e,"/multiplayer/client/createGamePage.fxml", "BlindTest.IO | Join game", true, this.gameNameExists,comSocket);
         }
     }
 
@@ -211,12 +218,12 @@ public class Controller extends Thread implements Initializable {
         if(pseudo.isEmpty() == true || playerPseudo==null || pseudoExists==true){
             displayAlert(Alert.AlertType.ERROR, windowOwner, "Entrez un pseudo", "Veuillez entrer un pseudo");
         }else{
-            changeWindow(e,"/multiplayer/client/joinGamePage.fxml", "BlindTest.IO | Join game", false, this.gameNameExists,this.socket, this.reader, this.writer);
+            changeWindow(e,"/multiplayer/client/joinGamePage.fxml", "BlindTest.IO | Join game", false, this.gameNameExists,comSocket);
         }
     }
 
     //rediriger vers une autre page
-    public void changeWindow(ActionEvent e, String pageToLoad, String title, boolean isAdmin, boolean gameNameExists, Socket socket, BufferedReader reader, PrintWriter writer){
+    public void changeWindow(ActionEvent e, String pageToLoad, String title, boolean isAdmin, boolean gameNameExists,ComSocket comSocket){
         try{
             FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(pageToLoad)));
             root = loader.load();
@@ -225,7 +232,7 @@ public class Controller extends Thread implements Initializable {
                 this.currentPage = "joinGamePage";
                 JoinGameController joinGameController = loader.getController();
                 System.out.println("sending player info to JOIN GAME CONTROLLER");
-                joinGameController.storePlayerInformation(isAdmin, gameNameExists, socket, reader, writer);
+                joinGameController.storePlayerInformation(isAdmin, gameNameExists,comSocket);
             }
 
             else{
@@ -233,7 +240,7 @@ public class Controller extends Thread implements Initializable {
 
                 CreateGameController createGameController = loader.getController();
                 System.out.println("sending player info to CREATE GAME CONTROLLER");
-                createGameController.storePlayerInformation(isAdmin, gameNameExists, socket, reader, writer);
+                createGameController.storePlayerInformation(isAdmin, gameNameExists,comSocket);
             }
 
             /* changing the scene */
@@ -257,20 +264,14 @@ public class Controller extends Thread implements Initializable {
         alert.initOwner(windowOwner);
         alert.show();
     }
-    public static void closeEverything(Socket socket, BufferedReader bufferedReader, PrintWriter writer) {
-        try {
-            if (bufferedReader != null) {
-                bufferedReader.close();
-            }
-            if (writer != null) {
-                writer.close();
-            }
-            if (socket != null) {
-                socket.close();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+
+
+
+
+    public static void closeEverything(ComSocket comSocket) {
+        comSocket.closeEverything();
+
     }
 
 }

@@ -154,9 +154,9 @@ public class ImageGameController implements Initializable {
 
             String newGoodAnswer = images.get(nextImage).getAnswer();
             MyImage image = new MyImage(url, newGoodAnswer);
-
+            Image i =new Image(image.getId());
             // change the image
-            imageBox.setImage(image);
+            imageBox.setImage(i);
 
             // new good answer;
             this.goodAnswer = newGoodAnswer;

@@ -31,23 +31,23 @@
                 <Bloom threshold="0.37" />
             </effect>
         </Label>
-      <Text fill="#e97e6c" layoutX="153.0" layoutY="169.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please chose a game mode ! " wrappingWidth="300.837890625">
-         <font>
-            <Font name="Sylfaen" size="25.0" />
-         </font>
-         <effect>
-            <Bloom />
-         </effect>
-      </Text>
-      <Button fx:id="practiceBtn" layoutX="249.0" layoutY="211.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="108.0" style="-fx-background-radius: 15px;" text="Practice">
-         <font>
-            <Font name="Verdana Pro Cond Semibold" size="17.0" />
-         </font>
-      </Button>
-      <Button fx:id="multiPlayerBtn" layoutX="249.0" layoutY="282.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="108.0" style="-fx-background-radius: 15px;" text="Multiplayer">
-         <font>
-            <Font name="Verdana Pro Cond Semibold" size="17.0" />
-         </font>
-      </Button>
+        <Text fill="#e97e6c" layoutX="153.0" layoutY="169.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please chose a game mode ! " wrappingWidth="300.837890625">
+            <font>
+                <Font name="Sylfaen" size="25.0" />
+            </font>
+            <effect>
+                <Bloom />
+            </effect>
+        </Text>
+        <Button fx:id="practiceBtn" layoutX="249.0" layoutY="211.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="108.0" style="-fx-background-radius: 15px;" text="Practice">
+            <font>
+                <Font name="Verdana Pro Cond Semibold" size="17.0" />
+            </font>
+        </Button>
+        <Button fx:id="multiPlayerBtn" layoutX="249.0" layoutY="282.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="108.0" style="-fx-background-radius: 15px;" text="Multiplayer">
+            <font>
+                <Font name="Verdana Pro Cond Semibold" size="17.0" />
+            </font>
+        </Button>
     </children>
 </AnchorPane>

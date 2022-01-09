@@ -3,18 +3,18 @@ package models;
 import database.Database;
 import javafx.scene.image.Image;
 
-public class MyImage extends Image implements HasId{
+public class MyImage implements HasId{
     private String answer;
-
+    private String url;
     public MyImage(String url, String answer) {
-        super(url);
+        this.url=url;
         this.answer = answer;
     }
 
 
     @Override
     public String getId(){
-        return getUrl();
+        return this.url;
     }
 
     public String getAnswer() {

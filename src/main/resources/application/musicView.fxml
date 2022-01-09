@@ -36,8 +36,8 @@
                 </Text>
 
             </children>
-         <center>
-         </center>
+            <center>
+            </center>
         </BorderPane>
         <TextField fx:id="answerField" layoutX="253.0" layoutY="419.0" prefHeight="35.0" prefWidth="343.0" promptText="Enter your answer hier..." style="-fx-background-radius: 7px; -fx-border-color: #e97e6c; -fx-border-radius: 7px; -fx-border-width: 2px;" />
         <Button fx:id="submitBtn" layoutX="606.0" layoutY="419.0" mnemonicParsing="false" onAction="#handlePlayerAnswer" prefHeight="35.0" prefWidth="98.0" style="-fx-background-color: #009C41; -fx-background-radius: 10px;" text="Submit" textFill="WHITE">

@@ -1,6 +1,7 @@
 package multiplayer.client;
 
 import javafx.fxml.Initializable;
+import multiplayer.network.ComSocket;
 
 import java.io.BufferedReader;
 import java.io.PrintWriter;
@@ -9,22 +10,17 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class AdminController extends Thread implements Initializable  {
-    private BufferedReader reader;
-    private PrintWriter writer;
-
-    private Socket socket;
+    private ComSocket comSocket;
     private boolean isAdmin;
     private boolean pseudoExists;
     private boolean gameNameExists;
     private String currentPage = "adminPage";
 
 
-    public void storePlayerInformation(boolean isAdmin, boolean gameNameExists, Socket socket, BufferedReader reader, PrintWriter writer) {
+    public void storePlayerInformation(boolean isAdmin, boolean gameNameExists, ComSocket comSocket) {
         this.isAdmin = isAdmin;
         this.gameNameExists = gameNameExists;
-        this.socket = socket;
-        this.reader = reader;
-        this.writer = writer;
+        this.comSocket=comSocket;
     }
 
 
