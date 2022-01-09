@@ -109,7 +109,7 @@ public class Controller extends Thread implements Initializable {
     public void connectSocket() {
         try {
             System.out.println("Connection à la socket");
-            Socket s=new Socket("localhost", 8080);
+            Socket s=new Socket("localhost", 5000);
             if(s==null){
                 System.out.println("La socket est nulle");
             }
@@ -144,6 +144,7 @@ public class Controller extends Thread implements Initializable {
             this.comSocket.closeEverything();
         }
     }
+    /****************************************  PSEUDO  *****************************************************/
 
     public void handleServerResponse(String msg) {
         switch(msg){
@@ -165,7 +166,6 @@ public class Controller extends Thread implements Initializable {
     }
 
 
-    /****************************************  PSEUDO  *****************************************************/
 
     // sending pseudo to ClientHandler
     public void submitPseudo(ActionEvent e){
@@ -198,6 +198,8 @@ public class Controller extends Thread implements Initializable {
         comSocket.write(pseudo);  // envoi le pseudo au ClientHandler
         System.out.println("sendPseudo() -> Sent pseudo ("+ pseudo +") to Client handler");
     }
+
+    /****************************************  GAME  *****************************************************/
 
     public void createGameBtn(ActionEvent e) {
         Window windowOwner = ((Node)e.getSource()).getScene().getWindow();

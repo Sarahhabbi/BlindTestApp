@@ -25,7 +25,7 @@ public class MyImageRepository implements Repository<MyImage> {
     public MyImage save(MyImage obj) {
         try (PreparedStatement ps = this.DBConnexion.prepareStatement("INSERT INTO images (id,answer) VALUES (?, ?)")) {
 
-            ps.setString(1,obj.getUrl());
+            ps.setString(1,obj.getId());
             ps.setString(2,obj.getAnswer());
             ps.executeUpdate();
             System.out.println(" successfully added to MyImage table !");

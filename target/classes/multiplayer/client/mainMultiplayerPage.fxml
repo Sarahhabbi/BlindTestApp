@@ -40,7 +40,7 @@
             <Bloom />
          </effect>
         </Text>
-        <TextField fx:id="usernameField" layoutX="270.0" layoutY="190.0" prefHeight="27.0" prefWidth="169.0" promptText="Enter your username here ..." style="-fx-background-color: transparent; -fx-border-width: 0px 0px 2px 0px; -fx-border-color: #e97e6c; -fx-text-fill: #ffffff;" />
+        <TextField fx:id="usernameField" layoutX="270.0" layoutY="190.0" prefHeight="27.0" prefWidth="169.0" promptText="Enter your username here ..." style="-fx-background-color: #68686b; -fx-border-width: 0px 0px 2px 0px; -fx-border-color: #e97e6c;" />
         <Button fx:id="quitBtn" layoutX="120.0" layoutY="348.0" mnemonicParsing="false" onAction="#quitGame" prefHeight="25.0" prefWidth="82.0" style="-fx-background-radius: 25px; -fx-background-color: #939396; -fx-font-weight: bold;" text="Quit">
             <graphic>
                 <ImageView fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">

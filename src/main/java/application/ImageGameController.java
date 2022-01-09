@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -150,7 +151,7 @@ public class ImageGameController implements Initializable {
         if(nextImage < images.size())
         {
             // create new Image
-            String url = images.get(nextImage).getUrl();
+            String url = images.get(nextImage).getId();
 
             String newGoodAnswer = images.get(nextImage).getAnswer();
             MyImage image = new MyImage(url, newGoodAnswer);

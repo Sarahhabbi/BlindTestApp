@@ -35,7 +35,7 @@
                 </Text>
                 <ImageView fx:id="imageBox" fitHeight="188.0" fitWidth="327.0" layoutX="65.0" layoutY="109.0" pickOnBounds="true" preserveRatio="true">
                     <image>
-                        <Image url="https://miro.medium.com/max/1400/1*4Ha05TwcqYA1s0BG2FQPJg.jpeg" />
+                        <Image url="https://cdn131.picsart.com/322154549016211.png" />
                     </image>
                 </ImageView>
             </children>

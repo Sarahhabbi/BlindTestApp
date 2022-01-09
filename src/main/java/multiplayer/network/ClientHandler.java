@@ -43,6 +43,7 @@ public class ClientHandler extends Thread {
     public Future<Integer> initPseudo() {
         return executor.submit(() -> {
             // verifier que pseudo est unique sinon envoyer une exception au Client
+            int tries=0;
             String pseudo = null;
             try {
                 pseudo =comSocket.read();

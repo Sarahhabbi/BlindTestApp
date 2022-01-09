@@ -46,6 +46,7 @@ public class CreateGameController extends Thread implements Initializable {
     private Stage stage;
     private Scene scene;
     private static Parent root;
+    private boolean firsttime=false;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -126,13 +127,16 @@ public class CreateGameController extends Thread implements Initializable {
         /* player chose "create a game"*/
         if(isAdmin == true){
 
-            System.out.println("->  IS ADMIN");
-            this.comSocket.write("create " + gameName);  // envoi le pseudo au ClientHandler
-            System.out.println("submitGameName() -> Sent \"create "+ gameName +"\" to Client handler");
+        System.out.println("->  IS ADMIN");
+        this.comSocket.write("create " + gameName);  // envoi le pseudo au ClientHandler
+        System.out.println("submitGameName() -> Sent \"create "+ gameName +"\" to Client handler");
+        if(this.firsttime==false) {
             this.start();
-            try {
-                Thread.sleep(1000);
-                System.out.println("GAME EXISTS = "+ gameNameExists);
+            this.firsttime = true;
+        }
+        try {
+            Thread.sleep(1000);
+            System.out.println("GAME EXISTS = "+ gameNameExists);
 
                 if(this.gameNameExists == true){
                     Controller.displayAlert(Alert.AlertType.ERROR,windowOwner,"GameName exits", "Veuillez saisir un nom de partie qui n'existe pas");
