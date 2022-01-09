@@ -264,7 +264,7 @@ public class GameHandler extends Thread {
 
     public ArrayList<String> getWinnerGame(){
         ArrayList<String> winner =null;
-        int winnerScore=0;
+        /*int winnerScore=0;
         for (Map.Entry<String, Integer> pair: scores.entrySet()){
             if(pair.getValue() > winnerScore){
                 winner.clear();
@@ -275,7 +275,8 @@ public class GameHandler extends Thread {
                 winner.add(pair.getKey());
             }
         }
-        return winner ;
+        return winner ;*/
+        return null;
     }
 
 
