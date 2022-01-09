@@ -188,6 +188,7 @@ public class Controller extends Thread implements Initializable {
                 else if (this.pseudoExists == false){
                     this.playerPseudo = pseudo;
                     System.out.println("rejoignez ou créez une partie !");
+                    submitPseudo.setDisable(true);
                 }
             }catch(Exception ex){
                 ex.printStackTrace();

@@ -4,6 +4,7 @@ import javafx.fxml.Initializable;
 import multiplayer.network.ComSocket;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.URL;
@@ -15,7 +16,7 @@ public class AdminController extends Thread implements Initializable  {
     private boolean pseudoExists;
     private boolean gameNameExists;
     private String currentPage = "adminPage";
-
+    private boolean started=false;
 
     public void storePlayerInformation(boolean isAdmin, boolean gameNameExists, ComSocket comSocket) {
         this.isAdmin = isAdmin;

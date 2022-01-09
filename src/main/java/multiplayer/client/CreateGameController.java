@@ -72,17 +72,11 @@ public class CreateGameController extends Thread implements Initializable {
     public void run(){
         try {
             System.out.println("on rentre dans le thread Create game controller wait for server responses ....");
-            /*if(this.comSocket.getOis().available()==0){
-                System.out.println("Le serveur n'a rien envoyé");
-            }*/
-            //String msg = this.comSocket.read(); // LIT LES MESSAGES QUE LE SERVER LUI A ENVOYE (ClientHandler et GameHandler)
             while(comSocket.isConnected()==true && currentPage.equals("createGamePage") ) {
                 String msg = this.comSocket.read(); // LIT LES MESSAGES QUE LE SERVER LUI A ENVOYE (ClientHandler et GameHandler)
                 System.out.println("Reponse du serveur "+ msg);
                 handleServerResponse(msg);
 
-                /*System.out.println("createGamePage SERVER sent : " + msg);
-                msg = this.comSocket.read();   // prochaine message recu*/
             }
             System.out.println("FIN THREAD CREATE GAME CONTROLLER ");
 
