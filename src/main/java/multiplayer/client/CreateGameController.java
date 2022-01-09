@@ -137,7 +137,7 @@ public class CreateGameController extends Thread implements Initializable {
                     Controller.displayAlert(Alert.AlertType.ERROR,windowOwner,"GameName exits", "Veuillez saisir un nom de partie qui n'existe pas");
                 }
                 else if (this.gameNameExists == false){
-                    changeWindow(e,"/multiplayer/client/multiplayerGamePage.fxml", "BlindTest.IO | Multiplayer game as admin", this.isAdmin, this.gameNameExists,this.socket, this.reader, this.writer);
+                    changeWindow(e,"/multiplayer/client/adminPage.fxml", "BlindTest.IO | Multiplayer game as admin", this.isAdmin, this.gameNameExists,this.socket, this.reader, this.writer);
                 }
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
@@ -156,7 +156,7 @@ public class CreateGameController extends Thread implements Initializable {
                     Controller.displayAlert(Alert.AlertType.ERROR,windowOwner,"GameName NOT FOUND", "Veuillez saisir un nom de partie qui existe déjà");
                 }
                 else{
-                    changeWindow(e,"/multiplayer/client/multiplayerGamePage.fxml", "BlindTest.IO | Multiplayer game as simple player", this.isAdmin, this.gameNameExists,this.socket, this.reader, this.writer);
+                    changeWindow(e,"/multiplayer/client/playerPage.fxml", "BlindTest.IO | Multiplayer game as simple player", this.isAdmin, this.gameNameExists,this.socket, this.reader, this.writer);
                 }
             } catch (InterruptedException ex) {
                 ex.printStackTrace();

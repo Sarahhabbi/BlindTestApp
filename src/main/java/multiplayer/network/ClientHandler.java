@@ -105,6 +105,7 @@ public class ClientHandler extends Thread {
                         joinGame(arg);
                         break;
                     case "start":
+                        /* ICI METTRE CONDITION START A TRUE POUR KILL RUN*/
                         startGame();
                         break;
                     default :

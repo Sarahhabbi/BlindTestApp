@@ -20,7 +20,6 @@ public class PlayerController  extends Thread implements Initializable {
     @FXML
     private Button submitBtn;
 
-
     /********************************************************************/
 
     private BufferedReader reader;
@@ -30,6 +29,7 @@ public class PlayerController  extends Thread implements Initializable {
     private boolean pseudoExists;
     private boolean gameNameExists;
     private String currentPage = "playerPage";
+
     /********************************************************************/
 
 

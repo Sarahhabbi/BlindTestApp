@@ -11,6 +11,7 @@ import java.util.ResourceBundle;
 public class AdminController extends Thread implements Initializable  {
     private BufferedReader reader;
     private PrintWriter writer;
+
     private Socket socket;
     private boolean isAdmin;
     private boolean pseudoExists;
