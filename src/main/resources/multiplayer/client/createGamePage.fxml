@@ -31,7 +31,7 @@
                 <Font size="13.0" />
             </font>
         </Button>
-        <Label layoutX="98.0" layoutY="175.0" prefHeight="26.0" prefWidth="154.0" text="Join a game:" textFill="#030101" textOverrun="CLIP">
+        <Label layoutX="98.0" layoutY="175.0" prefHeight="26.0" prefWidth="154.0" text="Create a game:" textFill="#030101" textOverrun="CLIP">
             <font>
                 <Font name="Sylfaen" size="20.0" />
             </font>

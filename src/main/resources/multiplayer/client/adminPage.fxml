@@ -13,7 +13,6 @@
 <?import javafx.scene.text.Text?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #333239;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="multiplayer.client.AdminController">
-
     <children>
         <Label alignment="CENTER" layoutX="11.0" layoutY="26.0" prefHeight="79.0" prefWidth="228.0" style="-fx-border-width: 3px; -fx-border-color: #e97e6c;" text="BlindTest.IO" textFill="#e97e6c">
             <font>
@@ -33,15 +32,15 @@
                         <Glow level="0.44" />
                     </effect>
                 </Text>
-                <ImageView fx:id="imageBox" fitHeight="188.0" fitWidth="327.0" layoutX="65.0" layoutY="109.0" pickOnBounds="true" preserveRatio="true">
+                <ImageView fx:id="image" fitHeight="188.0" fitWidth="327.0" layoutX="65.0" layoutY="109.0" pickOnBounds="true" preserveRatio="true">
                     <image>
-                        <Image url="https://miro.medium.com/max/1400/1*4Ha05TwcqYA1s0BG2FQPJg.jpeg" />
+                        <Image url="https://cdn131.picsart.com/322154549016211.png" />
                     </image>
                 </ImageView>
             </children>
-         <center>
-            <ImageView fx:id="image" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
-         </center>
+            <center>
+                <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
+            </center>
         </BorderPane>
         <TextField fx:id="answerField" layoutX="253.0" layoutY="419.0" prefHeight="35.0" prefWidth="343.0" promptText="Enter your answer hier..." style="-fx-background-radius: 7px; -fx-border-color: #e97e6c; -fx-border-radius: 7px; -fx-border-width: 2px;" />
         <Button fx:id="submitBtn" layoutX="606.0" layoutY="419.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="98.0" style="-fx-background-color: #009C41; -fx-background-radius: 10px;" text="Submit" textFill="WHITE">
@@ -49,7 +48,12 @@
                 <Font name="Lucida Console" size="18.0" />
             </font>
         </Button>
-        <Button fx:id="startBtn" layoutX="91.0" layoutY="215.0" mnemonicParsing="false" text="Start" />
-    </children>
 
+        <Button fx:id="startBtn" onAction="#startGame" layoutX="91.0" layoutY="215.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="98.0" style="-fx-background-color: #009C41; -fx-background-radius: 10px;" text="Start" textFill="WHITE">
+            <font>
+                <Font name="Lucida Console" size="18.0" />
+            </font>
+        </Button>
+
+    </children>
 </AnchorPane>

@@ -28,6 +28,8 @@ public class PlayerController  extends Thread implements Initializable {
     private boolean pseudoExists;
     private boolean gameNameExists;
     private String currentPage = "playerPage";
+    private String gameName;
+
 
     /********************************************************************/
 
@@ -36,20 +38,32 @@ public class PlayerController  extends Thread implements Initializable {
     @Override
     public void run(){
         try {
-            String msg = comSocket.read(); // LIT LES MESSAGES QUE LE SERVER LUI A ENVOYE (ClientHandler et GameHandler)
+            System.out.println("On entre dans PLAYER THREAD");
+            Thread.sleep(1000);
+            String msg=null;
+            while(msg==null){
+                try{
+                    msg = comSocket.read(); // LIT LES MESSAGES QUE LE SERVER LUI A ENVOYE (ClientHandler et GameHandler)
+                }catch (Exception e) {
+                    System.out.printf("C'est complique");
+                    msg=null;
+                    // Controller.closeEverything(comSocket);
+                }
+            }
+
 
             while(comSocket.isConnected()==true && msg!=null) {
 
-                handleServerResponse(msg);
+                // handleServerResponse(msg);
                 System.out.println("PlayerController SERVER sent : " + msg);
-
                 msg = comSocket.read();   // prochaine message recu
             }
             System.out.println("FIN THREAD PLAYER GAME CONTROLLER ");
 
         } catch (Exception e) {
+            System.out.printf("DEBUUUUUUUGG");
             e.printStackTrace();
-            Controller.closeEverything(comSocket);
+            // Controller.closeEverything(comSocket);
         }
     }
 
@@ -65,10 +79,13 @@ public class PlayerController  extends Thread implements Initializable {
 
     }
 
-    public void storePlayerInformation(boolean isAdmin, boolean gameNameExists, ComSocket comSocket) {
+    public void storePlayerInformation(boolean isAdmin, boolean gameNameExists, ComSocket comSocket, String gameName) {
         this.isAdmin = isAdmin;
         this.gameNameExists = gameNameExists;
         this.comSocket=comSocket;
+        this.gameName = gameName;
+        System.out.println("RECEIVED gameName = " + this.gameName);
+        this.start();
     }
 
     @Override

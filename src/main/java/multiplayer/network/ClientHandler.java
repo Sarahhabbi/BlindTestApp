@@ -48,12 +48,12 @@ public class ClientHandler extends Thread {
             try {
                 pseudo =comSocket.read();
                 boolean pseudoIsNotUnique = clientHandlers.containsKey(pseudo); // false si clientHandler n'a pas ce pseudo
-                while (pseudoIsNotUnique == true) {
+                while (pseudoIsNotUnique == true && tries < 4) {
                     comSocket.write("/ EXISTS_PSEUDO");
+                    tries++;
 
                     pseudo = comSocket.read();
                     pseudoIsNotUnique = clientHandlers.containsKey(pseudo);
-                    tries++;
                 }
                 comSocket.write("/ UNIQUE_PSEUDO");
 
@@ -74,11 +74,17 @@ public class ClientHandler extends Thread {
         try {
             String answer = comSocket.read();
 
-            while (comSocket.isConnected()==true && answer!=null) {
+            while ((comSocket.isConnected() == true) && (answer != null)) {
                 System.out.println("CLIENT SENT : "+ answer);
                 handlePlayerAnswer(answer);
+                // pour kill le thread
+                if(this.gameHandler!=null && this.gameHandler.isStart()==true){
+                    break;
+                }
                 answer = comSocket.read();
             }
+            System.out.println("FIN CLIENT HANDLER RUNNING" );
+
         } catch (Exception e) {
             closeEverything(comSocket);
             e.printStackTrace();
@@ -96,12 +102,16 @@ public class ClientHandler extends Thread {
                 switch(first) {
                     case "create":
                         createGame(arg,false,5);
+                        System.out.println("Created " + this.gameHandler);
                         break;
                     case "join":
                         joinGame(arg);
+                        System.out.println("Joined " + this.gameHandler);
+
                         break;
                     case "start":
                         /* ICI METTRE CONDITION START A TRUE POUR KILL RUN*/
+                        this.gameHandler.setStart(true);
                         startGame();
                         break;
                     default :
@@ -115,10 +125,11 @@ public class ClientHandler extends Thread {
     public void createGame(String gameName,boolean isaudio,int round) throws IOException {
         GameHandler game = null;
         try {
-            game = GameHandler.addGame(gameName, this.playerPseudo,isaudio,round);
+            game = GameHandler.createGame(gameName, this.playerPseudo,isaudio,round);
             setGameHandler(game);
             game.addPlayer(this);
             comSocket.write("/ UNIQUE_GAMENAME");
+            this.gameHandler = game;
             System.out.println(this.playerPseudo + " created " + gameName);
         }
         catch (Exception e) {
@@ -133,6 +144,7 @@ public class ClientHandler extends Thread {
             game = GameHandler.getGame(gameName);
             setGameHandler(game);
             game.addPlayer(this);
+            this.gameHandler = game;
             System.out.println(this.playerPseudo + " joined " + gameName + " game");
             comSocket.write("/ JOINED");
         }
@@ -144,6 +156,7 @@ public class ClientHandler extends Thread {
 
     public void startGame() throws IOException {
         if(gameHandler.getAdmin().equals(this.playerPseudo) == true){
+            System.out.println("STARTING CLIENT HANDLER ");
             gameHandler.start();
         }else{
             System.out.println("not admin cannot start the game");

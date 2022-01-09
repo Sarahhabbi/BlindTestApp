@@ -38,7 +38,7 @@ public class JoinGameController extends Thread implements Initializable {
     private boolean isAdmin;
     private boolean gameNameExists;
     private String currentPage = "joinGamePage";
-
+    private String gameName;
 
 
     /********************************************************************/
@@ -49,6 +49,7 @@ public class JoinGameController extends Thread implements Initializable {
     private Stage stage;
     private Scene scene;
     private static Parent root;
+    private boolean firsttime = false;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -59,7 +60,7 @@ public class JoinGameController extends Thread implements Initializable {
         this.isAdmin = isAdmin;
         this.gameNameExists = gameNameExists;
         this.comSocket=comSocket;
-        this.start();
+        // this.start();
     }
 
     @FXML
@@ -98,11 +99,12 @@ public class JoinGameController extends Thread implements Initializable {
             System.out.println("on rentre dans le thread wait for server responses ....");
             String msg = comSocket.read(); // LIT LES MESSAGES QUE LE SERVER LUI A ENVOYE (ClientHandler et GameHandler)
 
-            while(comSocket.isConnected()==true && msg!=null &&  currentPage.equals("joinGamePage") == true && gameNameExists==false) {
-
+            while(comSocket.isConnected()==true && msg!=null &&  currentPage.equals("joinGamePage") == true) {
+                if(gameNameExists == true){
+                    break;
+                }
                 handleServerResponse(msg);
                 System.out.println("JoinGame SERVER sent : " + msg);
-
                 msg =  comSocket.read();   // prochaine message recu
             }
             System.out.println("FIN THREAD JOIN GAME CONTROLLER ");
@@ -143,46 +145,33 @@ public class JoinGameController extends Thread implements Initializable {
             return;
         }
 
-        /* player chose "create a game"*/
-        if(isAdmin == true){
-
-            System.out.println("->  IS ADMIN");
-            comSocket.write("create " + gameName);  // envoi le pseudo au ClientHandler
-            System.out.println("submitGameName() -> Sent \"create "+ gameName +"\" to Client handler");
-
-            try {
-                Thread.sleep(1000);
-                System.out.println("GAME EXISTS = "+ gameNameExists);
-
-                if(this.gameNameExists == true){
-                    Controller.displayAlert(Alert.AlertType.ERROR,windowOwner,"GameName exits", "Veuillez saisir un nom de partie qui n'existe pas");
-                }
-                else if (this.gameNameExists == false){
-                    changeWindow(e,"/multiplayer/client/multiplayerGamePage.fxml", "BlindTest.IO | Multiplayer game as admin", this.isAdmin, this.gameNameExists,this.comSocket);
-                }
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
-            }
+        if(this.firsttime==false) {
+            this.start();
+            this.firsttime = true;
         }
 
         /* player chose "join a game" */
-        else if (isAdmin == false){
-            System.out.println("-> IS NOOOT ADMIN");
+        System.out.println("JOIN GAME CONTROLLER DEBUG isAdmin ? " + isAdmin);
 
-            comSocket.write("join " + gameNameExists);  // envoi le pseudo au ClientHandler
-            System.out.println("submitGameName()-> Sent \"join "+ gameName +"\"to Client handler");
-            try {
-                Thread.sleep(300);
-                if(gameNameExists == false){
-                    Controller.displayAlert(Alert.AlertType.ERROR,windowOwner,"GameName NOT FOUND", "Veuillez saisir un nom de partie qui existe déjà");
-                }
-                else{
-                    changeWindow(e,"/multiplayer/client/multiplayerGamePage.fxml", "BlindTest.IO | Multiplayer game as simple player", this.isAdmin, this.gameNameExists,this.comSocket);
-                }
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
+        System.out.println("-> IS NOOOT ADMIN");
+
+        comSocket.write("join " + gameName);  // envoi le pseudo au ClientHandler
+        System.out.println("submitGameName()-> Sent \"join "+ gameName +"\"to Client handler");
+
+        try {
+            Thread.sleep(300);
+            if(gameNameExists == false){
+                Controller.displayAlert(Alert.AlertType.ERROR,windowOwner,"GameName NOT FOUND", "Veuillez saisir un nom de partie qui existe déjà");
             }
+            else{
+                this.gameName = gameName;
+                System.out.println("REDIRECTION VERS PLAYER PAGE");
+                changeWindow(e,"/multiplayer/client/playerPage.fxml", "BlindTest.IO | Multiplayer game as simple player", this.isAdmin, this.gameNameExists,this.comSocket);
+            }
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
         }
+
     }
 
     public void changeWindow(ActionEvent e, String pageToLoad, String title, boolean isAdmin, boolean gameNameExists,ComSocket comSocket){
@@ -194,7 +183,7 @@ public class JoinGameController extends Thread implements Initializable {
             /* create a page JoinGameController */
             PlayerController playerController = loader.getController();
             System.out.println("sending player info to playerController");
-            playerController.storePlayerInformation(isAdmin, gameNameExists, comSocket);
+            playerController.storePlayerInformation(isAdmin, gameNameExists, comSocket, this.gameName);
 
             /* changing the scene */
             stage = (Stage)((Node)e.getSource()).getScene().getWindow();

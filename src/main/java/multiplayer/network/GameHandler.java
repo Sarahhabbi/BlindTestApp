@@ -31,58 +31,6 @@ public class GameHandler extends Thread {
 
     private static ArrayList<ExecutorService> executor = new ArrayList<>();
 
-    public Future<PlayerAnswer> RoundImages(int i, int ID, CyclicBarrier barrier, ClientHandler client) {
-        return executor.get(i).submit(() -> {
-            try {
-                ComSocket s=client.getComSocket();
-                s.write("Thread #" + i + " is waiting at the barrier.");
-                barrier.await();
-                s.write("La partie "+ID+" va commencer");
-                s.writeImage(images.get(i));
-                Thread.sleep(5000);
-                PlayerAnswer answer=(PlayerAnswer) s.readPlayerAnswer();
-                s.write("FIN DU TOUR");
-                if(ID==4) {
-                    s.write("FIN DU TOUR");
-                }
-                return answer;
-                //Code a faire
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (BrokenBarrierException e) {
-                System.out.println("Barrier is broken.");
-            }
-            return null;
-        });
-
-    }
-
-    public Future<PlayerAnswer> Roundaudios(int i, int ID, CyclicBarrier barrier, ClientHandler client) {
-        return executor.get(i).submit(() -> {
-            try {
-                ComSocket s=client.getComSocket();
-                s.write("Thread #" + i + " is waiting at the barrier.");
-                barrier.await();
-                s.write("La partie "+ID+" va commencer");
-                s.writeAudio(audios.get(i));
-                Thread.sleep(5000);
-                PlayerAnswer answer=(PlayerAnswer) s.readPlayerAnswer();
-               s.write("FIN DU TOUR");
-                if(ID==4) {
-                    s.write("FIN DU TOUR");
-                }
-                return answer;
-                //Code a faire
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (BrokenBarrierException e) {
-                System.out.println("Barrier is broken.");
-                e.printStackTrace();
-            }
-            return null;
-        });
-    }
-
     public GameHandler(String name, String admin,int round) {
         this.name = name;
         this.admin = admin;
@@ -109,6 +57,69 @@ public class GameHandler extends Thread {
         GameHandler.games.put(name,this);
     }
 
+    public Future<PlayerAnswer> RoundImages(int index, int round, CyclicBarrier barrier, ClientHandler client) {
+        return executor.get(index).submit(() -> {
+            try {
+                ComSocket s = client.getComSocket();
+
+                s.write("Thread #" + index + " is waiting at the barrier."+round);
+                System.out.println("Thread #" + index + " is waiting at the barrier."+round);
+                barrier.await();
+
+                s.write("La partie "+round+" va commencer"+round);
+                System.out.println("La partie "+round+" va commencer"+round);
+                //s.writeImage(images.get(i));
+
+                Thread.sleep(5000);
+
+                //PlayerAnswer answer=(PlayerAnswer) s.readPlayerAnswer();
+                s.write("FIN DU TOUR"+round);
+                System.out.println("FIN DU TOUR"+round);
+                if(round == 4) {
+                    s.write("FIN DU JEU");
+                    System.out.println("FIN DU JEU");
+                }
+                //return answer;
+                return null;
+                //Code a faire
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (BrokenBarrierException e) {
+                System.out.println("Barrier is broken.");
+            }
+            return null;
+        });
+
+    }
+
+    public Future<PlayerAnswer> Roundaudios(int i, int ID, CyclicBarrier barrier, ClientHandler client) {
+        return executor.get(i).submit(() -> {
+            try {
+                ComSocket s = client.getComSocket();
+                s.write("Thread #" + i + " is waiting at the barrier.");
+                System.out.println("Thread #" + i + " is waiting at the barrier.");
+                barrier.await();
+                s.write("La partie "+ID+" va commencer");
+                System.out.println("La partie "+ID+" va commencer");
+                s.writeAudio(audios.get(i));
+                Thread.sleep(5000);
+                PlayerAnswer answer=(PlayerAnswer) s.readPlayerAnswer();
+                s.write("FIN DU TOUR");
+                if(ID==4) {
+                    s.write("FIN DU JEU");
+                }
+                return answer;
+                //Code a faire
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (BrokenBarrierException e) {
+                System.out.println("Barrier is broken.");
+                e.printStackTrace();
+            }
+            return null;
+        });
+    }
+
 
     @Override
     public void run() {
@@ -121,9 +132,9 @@ public class GameHandler extends Thread {
     }
 
     public ArrayList<String> playImages(){
-        int n= players.size();
+        int n = players.size();
         System.out.println("Il y a " + n + " clients");
-        Future<PlayerAnswer>[] t=new Future[n];
+        Future<PlayerAnswer>[] t = new Future[n];
 
         for (int r = 0; r < this.round; r++) {
             n = players.size();
@@ -132,6 +143,7 @@ public class GameHandler extends Thread {
 
             for (int i = 0; i < n; i++) {
                 t[i] = RoundImages(i, r, barrier, players.get(i));
+
             }
             ArrayList<PlayerAnswer> results=new ArrayList<>();
             for (int j = 0; j < n; j++) {
@@ -229,27 +241,28 @@ public class GameHandler extends Thread {
         this.players.remove(player);
         this.scores.remove(player);
     }
-
     public synchronized static GameHandler getGame(String name) throws Exception {
-        if(games.containsKey(name) == true){
+        if(games.containsKey(name) == false){
             throw new Exception("/ NOT_EXISTS_GAMENAME");
         }
         GameHandler game=games.get(name);
+
         if(game.start==true){
             throw new Exception("/ STARTED");
         }
         return game;
     }
 
-    public synchronized static GameHandler addGame(String name, String admin,boolean isaudio,int round) throws Exception{
+    public synchronized static GameHandler createGame(String name, String admin,boolean isaudio,int round) throws Exception{
         if(games.containsKey(name)){
             throw new Exception("/ EXISTS_GAMENAME");
         }else{
+
             GameHandler newGame = new GameHandler(name,admin,isaudio,round);
+            games.put(name,newGame);
             return newGame;
         }
     }
-
     public synchronized void deleteGame(String gameName){
         GameHandler game=games.get(gameName);
         if(game!=null){
@@ -261,7 +274,6 @@ public class GameHandler extends Thread {
             player.setJoinedGame(null);
         }
     }
-
     public ArrayList<String> getWinnerGame(){
         ArrayList<String> winner =null;
         /*int winnerScore=0;
@@ -278,9 +290,6 @@ public class GameHandler extends Thread {
         return winner ;*/
         return null;
     }
-
-
-
     public String getname() {return name;}
     public HashMap<String, Integer> getScores() {return scores;}
     public void setScores(HashMap<String, Integer> scores) {this.scores = scores;}
@@ -288,7 +297,9 @@ public class GameHandler extends Thread {
     public ArrayList<ClientHandler> getPlayers() {return players;}
     public String getAdmin() {return admin;}
     public boolean isStart() {return start;}
-
+    public void setStart(boolean start){
+        this.start = start;
+    }
 
 
 }
