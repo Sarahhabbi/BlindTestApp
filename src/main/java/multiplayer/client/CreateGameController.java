@@ -86,7 +86,6 @@ public class CreateGameController extends Thread implements Initializable {
 
         } catch (Exception e) {
             e.printStackTrace();
-//            System.out.println(e.getMessage());
             Controller.closeEverything(socket, reader, writer);
         }
     }
@@ -106,19 +105,7 @@ public class CreateGameController extends Thread implements Initializable {
                 this.gameNameExists = true;
                 System.out.println("game exists " + gameNameExists);
                 break;
-//
-////             for join game
-//            case "/ JOINED":
-//                System.out.println("DEBUG / JOINED");
-//                this.gameNameExists = true;
-//                System.out.println("game exists " + gameNameExists);
-//                break;
-//
-//            case "/ NOT_EXISTS_GAMENAME":
-//                System.out.println("DEBUG / NOT_EXISTS_GAMENAME");
-//                this.gameNameExists = false;
-//                System.out.println("game exists " + gameNameExists);
-//                break;
+
             default:
                 System.out.println("any case create game");
                 break;
@@ -183,11 +170,10 @@ public class CreateGameController extends Thread implements Initializable {
             root = loader.load();
 
 
-           /* *//* create a page JoinGameController *//*
-            MultiplayerGameController multiplayerGameController = loader.getController();
-            System.out.println("sending player info to multiplayerGameController");
-            multiplayerGameController.storePlayerInformation(isAdmin, gameNameExists, socket, reader, writer);
-*/
+            AdminController adminController = loader.getController();
+            System.out.println("sending player info to adminController");
+            adminController.storePlayerInformation(isAdmin, gameNameExists, socket, reader, writer);
+
             /* changing the scene */
             stage = (Stage)((Node)e.getSource()).getScene().getWindow();
             scene = new Scene(root);

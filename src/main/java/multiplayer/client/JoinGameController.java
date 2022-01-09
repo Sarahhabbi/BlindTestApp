@@ -118,20 +118,6 @@ public class JoinGameController extends Thread implements Initializable {
     public void handleServerResponse(String msg) {
         switch(msg){
 
-//            /* for create game */
-//            case "/ UNIQUE_GAMENAME":
-//                System.out.println("DEBUG / UNIQUE_GAMENAME");
-//                this.gameNameExists = false;
-//                System.out.println("game exists " + gameNameExists);
-//                break;
-//
-//            case "/ EXISTS_GAMENAME":
-//                System.out.println("DEBUG / EXISTS_GAMENAME");
-//                this.gameNameExists = true;
-//                System.out.println("game exists " + gameNameExists);
-//                break;
-
-//             for join game
             case "/ JOINED":
                 System.out.println("DEBUG / JOINED");
                 this.gameNameExists = true;
@@ -207,10 +193,10 @@ public class JoinGameController extends Thread implements Initializable {
             root = loader.load();
 
 
-//            /* create a page JoinGameController */
-//            MultiplayerGameController multiplayerGameController = loader.getController();
-//            System.out.println("sending player info to multiplayerGameController");
-//            multiplayerGameController.storePlayerInformation(isAdmin, gameNameExists, socket, reader, writer);
+            /* create a page JoinGameController */
+            PlayerController playerController = loader.getController();
+            System.out.println("sending player info to playerController");
+            playerController.storePlayerInformation(isAdmin, gameNameExists, socket, reader, writer);
 
             /* changing the scene */
             stage = (Stage)((Node)e.getSource()).getScene().getWindow();
