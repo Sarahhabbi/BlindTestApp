@@ -73,7 +73,7 @@ public class JoinGameController extends Thread implements Initializable {
 
             if(event.getSource().equals(goBackHome))
             {
-                pageToLoad = "/application/homePage.fxml";
+                pageToLoad = "/application/startPage.fxml";
             }
 
             root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(pageToLoad)));
