@@ -15,21 +15,18 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-public class JoinGameController extends Thread implements Initializable {
-
+public class CreateGameController extends Thread implements Initializable {
     @FXML
     private TextField gameNameFieldJ;
 
     @FXML
     private Button goBackHome;
-
 
     /********************************************************************/
 
@@ -37,10 +34,9 @@ public class JoinGameController extends Thread implements Initializable {
     private PrintWriter writer;
     private Socket socket;
     private boolean isAdmin;
+    private boolean pseudoExists;
     private boolean gameNameExists;
-    private String currentPage = "joinGamePage";
-
-
+    private String currentPage = "createGamePage";
 
     /********************************************************************/
 
@@ -53,11 +49,19 @@ public class JoinGameController extends Thread implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+//        System.out.println("HELLO FROM CREATE GAME CONTROLLER");
+//        System.out.println("Player info :" );
+//        System.out.println("---> is admin ? " + this.isAdmin);
+//        System.out.println("---> game exists ?" + this.gameNameExists);
+//        System.out.println("---> current page ? " + this.currentPage);
+//        System.out.println("---> socket" + socket);
+//        System.out.println("---> reader" + reader);
+//        System.out.println("---> writer" + writer);
     }
 
     @FXML
     public void storePlayerInformation(boolean isAdmin, boolean gameNameExists, Socket socket, BufferedReader reader, PrintWriter writer) {
-        this.isAdmin = isAdmin;
+        this.isAdmin = true;
         this.gameNameExists = gameNameExists;
         this.socket = socket;
         this.reader = reader;
@@ -65,52 +69,24 @@ public class JoinGameController extends Thread implements Initializable {
         this.start();
     }
 
-    @FXML
-    public void goBackHome(ActionEvent event){
-        try {
-            String title = "BlindTest.IO";
-            String pageToLoad = " ";
-
-            if(event.getSource().equals(goBackHome))
-            {
-                pageToLoad = "/application/homePage.fxml";
-            }
-
-            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(pageToLoad)));
-            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-            scene = new Scene(root);
-            stage.setScene(scene);
-            stage.setTitle(title);
-            stage.show();
-            System.out.println("fin debug");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    //exit the app
-    @FXML
-    public void quitFromGameJoin(ActionEvent event){
-        Platform.exit();
-    }
-
     @Override
     public void run(){
         try {
-            System.out.println("on rentre dans le thread wait for server responses ....");
-            String msg = reader.readLine(); // LIT LES MESSAGES QUE LE SERVER LUI A ENVOYE (ClientHandler et GameHandler)
+            System.out.println("on rentre dans le thread Create game controller wait for server responses ....");
+            String msg = this.reader.readLine(); // LIT LES MESSAGES QUE LE SERVER LUI A ENVOYE (ClientHandler et GameHandler)
 
-            while(socket.isConnected()==true && msg!=null &&  currentPage.equals("joinGamePage") == true && gameNameExists==false) {
+            while(socket.isConnected()==true && msg!=null &&  currentPage.equals("createGamePage") && gameNameExists==true) {
 
                 handleServerResponse(msg);
-                System.out.println("JoinGame SERVER sent : " + msg);
 
-                msg = reader.readLine();   // prochaine message recu
+                System.out.println("createGamePage SERVER sent : " + msg);
+                msg = this.reader.readLine();   // prochaine message recu
             }
-            System.out.println("FIN THREAD JOIN GAME CONTROLLER ");
+            System.out.println("FIN THREAD CREATE GAME CONTROLLER ");
 
         } catch (Exception e) {
             e.printStackTrace();
+//            System.out.println(e.getMessage());
             Controller.closeEverything(socket, reader, writer);
         }
     }
@@ -118,34 +94,34 @@ public class JoinGameController extends Thread implements Initializable {
     public void handleServerResponse(String msg) {
         switch(msg){
 
-//            /* for create game */
-//            case "/ UNIQUE_GAMENAME":
-//                System.out.println("DEBUG / UNIQUE_GAMENAME");
-//                this.gameNameExists = false;
-//                System.out.println("game exists " + gameNameExists);
-//                break;
-//
-//            case "/ EXISTS_GAMENAME":
-//                System.out.println("DEBUG / EXISTS_GAMENAME");
-//                this.gameNameExists = true;
-//                System.out.println("game exists " + gameNameExists);
-//                break;
-
-//             for join game
-            case "/ JOINED":
-                System.out.println("DEBUG / JOINED");
-                this.gameNameExists = true;
-                System.out.println("game exists " + gameNameExists);
-                break;
-
-            case "/ NOT_EXISTS_GAMENAME":
-                System.out.println("DEBUG / NOT_EXISTS_GAMENAME");
+            /* for create game */
+            case "/ UNIQUE_GAMENAME":
+                System.out.println("DEBUG / UNIQUE_GAMENAME");
                 this.gameNameExists = false;
                 System.out.println("game exists " + gameNameExists);
                 break;
-           default:
-               System.out.println("any case join game");
-               break;
+
+            case "/ EXISTS_GAMENAME":
+                System.out.println("DEBUG / EXISTS_GAMENAME");
+                this.gameNameExists = true;
+                System.out.println("game exists " + gameNameExists);
+                break;
+//
+////             for join game
+//            case "/ JOINED":
+//                System.out.println("DEBUG / JOINED");
+//                this.gameNameExists = true;
+//                System.out.println("game exists " + gameNameExists);
+//                break;
+//
+//            case "/ NOT_EXISTS_GAMENAME":
+//                System.out.println("DEBUG / NOT_EXISTS_GAMENAME");
+//                this.gameNameExists = false;
+//                System.out.println("game exists " + gameNameExists);
+//                break;
+            default:
+                System.out.println("any case create game");
+                break;
         }
     }
 
@@ -207,11 +183,11 @@ public class JoinGameController extends Thread implements Initializable {
             root = loader.load();
 
 
-//            /* create a page JoinGameController */
-//            MultiplayerGameController multiplayerGameController = loader.getController();
-//            System.out.println("sending player info to multiplayerGameController");
-//            multiplayerGameController.storePlayerInformation(isAdmin, gameNameExists, socket, reader, writer);
-
+           /* *//* create a page JoinGameController *//*
+            MultiplayerGameController multiplayerGameController = loader.getController();
+            System.out.println("sending player info to multiplayerGameController");
+            multiplayerGameController.storePlayerInformation(isAdmin, gameNameExists, socket, reader, writer);
+*/
             /* changing the scene */
             stage = (Stage)((Node)e.getSource()).getScene().getWindow();
             scene = new Scene(root);
@@ -223,5 +199,32 @@ public class JoinGameController extends Thread implements Initializable {
             ex.printStackTrace();
         }
 
+    }
+
+    public void quitFromGameCreate(ActionEvent actionEvent) {
+        Platform.exit();
+    }
+
+    @FXML
+    public void goBackHome(ActionEvent event){
+        try {
+            String title = "BlindTest.IO";
+            String pageToLoad = " ";
+
+            if(event.getSource().equals(goBackHome))
+            {
+                pageToLoad = "/application/homePage.fxml";
+            }
+
+            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(pageToLoad)));
+            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+            scene = new Scene(root);
+            stage.setScene(scene);
+            stage.setTitle(title);
+            stage.show();
+            System.out.println("fin debug");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

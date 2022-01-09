@@ -55,13 +55,13 @@ public class ClientHandler extends Thread {
                 int tries = 0;
 
                 while (pseudoIsNotUnique == true && tries < 4) {
-                    writer.println("/ exists");
+                    writer.println("/ EXISTS_PSEUDO");
 
                     pseudo = bufferedReader.readLine();
                     pseudoIsNotUnique = clientHandlers.containsKey(pseudo);
                     tries++;
                 }
-                writer.println("/ unique");
+                writer.println("/ UNIQUE_PSEUDO");
 
                 playerPseudo = pseudo;  // username is sent in sendPseudo() method in Client class
                 return 0;
@@ -121,7 +121,7 @@ public class ClientHandler extends Thread {
             game = GameHandler.addGame(gameName, this.playerPseudo);
             setGameHandler(game);
             game.addPlayer(this);
-            writer.println("unique");
+            writer.println("/ UNIQUE_GAMENAME");
             System.out.println(this.playerPseudo + " created " + gameName);
         }
         catch (Exception e) {
@@ -137,7 +137,7 @@ public class ClientHandler extends Thread {
             setGameHandler(game);
             game.addPlayer(this);
             System.out.println(this.playerPseudo + " joined " + gameName + " game");
-            writer.println("joined");
+            writer.println("/ JOINED");
         }
         catch (Exception e) {
             writer.println(e.getMessage());

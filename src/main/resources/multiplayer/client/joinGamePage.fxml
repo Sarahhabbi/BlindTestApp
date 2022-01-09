@@ -9,7 +9,12 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #333239;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="multiplayer.client.JoinGameController">
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            style="-fx-background-color: #333239;"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="multiplayer.client.JoinGameController"
+            prefHeight="400.0" prefWidth="600.0">
     <children>
         <Label layoutX="98.0" layoutY="26.0" prefHeight="87.0" prefWidth="404.0" text="Blind Test.IO" textFill="#e97e6c">
             <font>
@@ -37,9 +42,9 @@
             </font>
         </Label>
         <TextField fx:id="gameNameFieldJ" blendMode="GREEN" layoutX="250.0" layoutY="174.0" prefHeight="27.0" prefWidth="176.0" promptText="Enter a game name " style="-fx-background-color: transparent; -fx-border-width: 0px 0px 2px 0px; -fx-border-color: #e97e6c;">
-         <font>
-            <Font name="Arial" size="16.0" />
-         </font></TextField>
+            <font>
+                <Font name="Arial" size="16.0" />
+            </font></TextField>
         <Button fx:id="quitFromGameJoin" layoutX="120.0" layoutY="348.0" mnemonicParsing="false" onAction="#quitFromGameJoin" prefHeight="25.0" prefWidth="82.0" style="-fx-background-radius: 25px;" text="Quit">
             <graphic>
                 <ImageView fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
@@ -52,9 +57,9 @@
                 <Font size="13.0" />
             </font>
         </Button>
-    <Button fx:id="submitGameNameBtn" layoutX="461.0" layoutY="176.0" mnemonicParsing="false" onAction="#submitGameNameBtn" prefHeight="25.0" prefWidth="82.0" style="-fx-background-radius: 25px;background-radius: 25px; -fx-background-color: #009c41; -fx-font-weight: bold;" text="Submit">
-         <font>
-            <Font name="Arial" size="16.0" />
-         </font></Button>
+        <Button fx:id="submitGameNameBtn"  layoutX="461.0" layoutY="176.0" mnemonicParsing="false" onAction="#submitGameName" prefHeight="25.0" prefWidth="82.0" style="-fx-background-radius: 25px;background-radius: 25px; -fx-background-color: #009c41; -fx-font-weight: bold;" text="Submit">
+            <font>
+                <Font name="Arial" size="16.0" />
+            </font></Button>
     </children>
 </AnchorPane>

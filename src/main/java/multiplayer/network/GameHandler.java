@@ -73,22 +73,22 @@ public class GameHandler extends Thread {
                     return game;
                 }
                 else{
-                    throw new Exception("/ started");
+                    throw new Exception("/ STARTED");
                 }
             }
         }else{
-            throw new Exception("/ not exists");
+            throw new Exception("/ NOT_EXISTS_GAMENAME");
         }
         return null;
     }
 
     public synchronized static GameHandler addGame(String name, String admin) throws Exception{
-        if(!exists(name)){
+        if(exists(name) == false){
             GameHandler newGame = new GameHandler(name,admin);
             games.add(newGame);
             return newGame;
         }else{
-            throw new Exception("/ exists");
+            throw new Exception("/ EXISTS_GAMENAME");
         }
     }
 

@@ -58,5 +58,15 @@
             <Font name="Verdana Pro Cond Semibold" size="16.0" />
          </font>
       </Button>
+      <Button fx:id="joinGameBtn" layoutX="205.0" layoutY="243.0" mnemonicParsing="false" onAction="#joinGameBtn" prefHeight="30.0" prefWidth="130.0" style="-fx-background-radius: 25px; -fx-background-color: #FFFFFFFF; -fx-font-weight: bold;" text="Join a game">
+         <font>
+            <Font name="Verdana Pro Cond Semibold" size="16.0" />
+         </font>
+      </Button>
+      <Button fx:id="createGameBtn" layoutX="205.0" layoutY="293.0" mnemonicParsing="false" onAction="#createGameBtn" prefHeight="30.0" prefWidth="130.0" style="-fx-background-radius: 25px; -fx-background-color: #FFFFFFFF; -fx-font-weight: bold;" text="Create a game">
+         <font>
+            <Font name="Verdana Pro Cond Semibold" size="16.0" />
+         </font>
+      </Button>
     </children>
 </AnchorPane>
