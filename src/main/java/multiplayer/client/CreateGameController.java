@@ -199,7 +199,7 @@ public class CreateGameController extends Thread implements Initializable {
 
             if(event.getSource().equals(goBackHome))
             {
-                pageToLoad = "/application/startPage.fxml";
+                pageToLoad = "/multiplayer/client/mainMultiplayerPage.fxml";
             }
 
             root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(pageToLoad)));
