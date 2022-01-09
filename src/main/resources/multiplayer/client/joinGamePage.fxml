@@ -9,12 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane xmlns="http://javafx.com/javafx"
-            style="-fx-background-color: #333239;"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="multiplayer.client.JoinGameController"
-            prefHeight="400.0" prefWidth="600.0">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #333239;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="multiplayer.client.JoinGameController">
     <children>
         <Label layoutX="98.0" layoutY="26.0" prefHeight="87.0" prefWidth="404.0" text="Blind Test.IO" textFill="#e97e6c">
             <font>
@@ -36,12 +31,15 @@
                 <Font size="13.0" />
             </font>
         </Button>
-        <Label layoutX="98.0" layoutY="175.0" prefHeight="26.0" prefWidth="154.0" text="Join a game:" textFill="WHITE" textOverrun="CLIP">
+        <Label layoutX="98.0" layoutY="175.0" prefHeight="26.0" prefWidth="154.0" text="Join a game:" textFill="#e97e6c" textOverrun="CLIP">
             <font>
-                <Font name="Sylfaen" size="20.0" />
+                <Font name="Sylfaen" size="25.0" />
             </font>
+         <effect>
+            <Bloom />
+         </effect>
         </Label>
-        <TextField fx:id="gameNameFieldJ" blendMode="GREEN" layoutX="250.0" layoutY="174.0" prefHeight="27.0" prefWidth="176.0" promptText="Enter a game name " style="-fx-background-color: transparent; -fx-border-width: 0px 0px 2px 0px; -fx-border-color: #e97e6c;">
+        <TextField fx:id="gameNameFieldJ" layoutX="250.0" layoutY="174.0" prefHeight="27.0" prefWidth="176.0" promptText="Enter a game name " style="-fx-background-color: transparent; -fx-border-width: 0px 0px 2px 0px; -fx-border-color: #e97e6c; -fx-text-fill: #fff;">
             <font>
                 <Font name="Arial" size="16.0" />
             </font></TextField>
@@ -57,7 +55,7 @@
                 <Font size="13.0" />
             </font>
         </Button>
-        <Button fx:id="submitGameNameBtn"  layoutX="461.0" layoutY="176.0" mnemonicParsing="false" onAction="#submitGameName" prefHeight="25.0" prefWidth="82.0" style="-fx-background-radius: 25px;background-radius: 25px; -fx-background-color: #009c41; -fx-font-weight: bold;" text="Submit">
+        <Button fx:id="submitGameNameBtn" layoutX="461.0" layoutY="176.0" mnemonicParsing="false" onAction="#submitGameName" prefHeight="25.0" prefWidth="82.0" style="-fx-background-radius: 25px;background-radius: 25px; -fx-background-color: #009c41; -fx-font-weight: bold;" text="Submit">
             <font>
                 <Font name="Arial" size="16.0" />
             </font></Button>
