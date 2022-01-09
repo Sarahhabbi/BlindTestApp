@@ -109,7 +109,7 @@ public class Controller extends Thread implements Initializable {
     public void connectSocket() {
         try {
             System.out.println("Connection à la socket");
-            Socket s=new Socket("localhost", 5000);
+            Socket s = new Socket("localhost", 3000);
             if(s==null){
                 System.out.println("La socket est nulle");
             }

@@ -112,12 +112,12 @@ public class GameHandler extends Thread {
 
     @Override
     public void run() {
-        if(isAudio){
+        if (isAudio) {
             playAudios();
-        }
-        else{
+        } else {
             playImages();
         }
+
     }
 
     public ArrayList<String> playImages(){
@@ -126,14 +126,16 @@ public class GameHandler extends Thread {
         Future<PlayerAnswer>[] t=new Future[n];
 
         for (int r = 0; r < this.round; r++) {
+            n = players.size();
             Runnable barrierAction = () -> System.out.println("Round ");
-            CyclicBarrier barrier = new CyclicBarrier(4, barrierAction);
-            n= players.size();
+            CyclicBarrier barrier = new CyclicBarrier(n, barrierAction);
+
             for (int i = 0; i < n; i++) {
                 t[i] = RoundImages(i, r, barrier, players.get(i));
             }
             ArrayList<PlayerAnswer> results=new ArrayList<>();
             for (int j = 0; j < n; j++) {
+               while(!t[j].isDone()){}
                 try {
                     results.add(t[j].get());
                 } catch (InterruptedException e) {
@@ -187,7 +189,10 @@ public class GameHandler extends Thread {
     }
 
     private void addRound(ArrayList<PlayerAnswer> results) {
-        ArrayList<PlayerAnswer> bestanswers=new ArrayList<>();
+        if(results.size()==0){
+            System.out.println("il y 0 résultats");
+        }
+        /*ArrayList<PlayerAnswer> bestanswers=new ArrayList<>();
         PlayerAnswer a=results.get(0);
         long time=a.getAnswerTime();
         for(int i=1;i<results.size();i++){
@@ -205,7 +210,8 @@ public class GameHandler extends Thread {
         for(int j=0;j< bestanswers.size();j++){
             a=bestanswers.get(j);
             scores.put(a.getPseudoPlayer(),scores.get(a)+1);
-        }
+        }*/
+        System.out.println("Analyse des resultats du tour");
     }
 
 
@@ -217,6 +223,7 @@ public class GameHandler extends Thread {
         System.out.println("rajout d'un joueur");
         this.scores.put(player.getPlayerPseudo(),0);
         this.players.add(player);
+        executor.add(Executors.newSingleThreadExecutor());
     }
     public void remove(ClientHandler player){
         this.players.remove(player);

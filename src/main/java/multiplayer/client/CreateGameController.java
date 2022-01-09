@@ -122,6 +122,7 @@ public class CreateGameController extends Thread implements Initializable {
         if(isAdmin == true){
 
         System.out.println("->  IS ADMIN");
+        System.out.println("create " + gameName);
         this.comSocket.write("create " + gameName);  // envoi le pseudo au ClientHandler
         System.out.println("submitGameName() -> Sent \"create "+ gameName +"\" to Client handler");
         if(this.firsttime==false) {
