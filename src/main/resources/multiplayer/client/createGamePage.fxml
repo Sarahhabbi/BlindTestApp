@@ -39,7 +39,7 @@
             <Bloom />
          </effect>
         </Label>
-        <TextField fx:id="gameNameFieldJ" blendMode="LIGHTEN" layoutX="250.0" layoutY="174.0" prefHeight="27.0" prefWidth="176.0" promptText="Enter a game name " style="-fx-background-color: d; -fx-border-width: 0px 0px 2px 0px; -fx-border-color: #e97e6c; -fx-text-fill: #fff;">
+        <TextField fx:id="gameNameFieldJ" blendMode="LIGHTEN" layoutX="250.0" layoutY="174.0" prefHeight="27.0" prefWidth="176.0" promptText="Enter a game name " style="-fx-background-color: transparent; -fx-border-width: 0px 0px 2px 0px; -fx-border-color: #e97e6c; -fx-text-fill: #fff;">
             <font>
                 <Font name="Sylfaen" size="16.0" />
             </font></TextField>

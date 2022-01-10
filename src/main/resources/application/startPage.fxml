@@ -9,9 +9,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #333239;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.HomePageController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #333239;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.StartPageController">
     <children>
-        <Button fx:id="quitBtn" layoutX="23.0" layoutY="346.0" mnemonicParsing="false" onAction="#quitFromHome" prefHeight="26.0" prefWidth="69.0" style="-fx-background-radius: 25px;" text="Quit">
+        <Button fx:id="quitBtn" layoutX="23.0" layoutY="346.0" mnemonicParsing="false" onAction="#quitGame" prefHeight="26.0" prefWidth="69.0" style="-fx-background-radius: 25px;" text="Quit">
             <font>
                 <Font name="Verdana Pro Cond Semibold" size="15.0" />
             </font>
@@ -39,12 +39,12 @@
             <Bloom />
          </effect>
       </Text>
-      <Button fx:id="practiceBtn" layoutX="249.0" layoutY="211.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="108.0" style="-fx-background-radius: 15px;" text="Practice">
+      <Button fx:id="practiceBtn" layoutX="249.0" layoutY="211.0" mnemonicParsing="false" onAction="#toPracticeMode" prefHeight="31.0" prefWidth="108.0" style="-fx-background-radius: 15px;" text="Practice">
          <font>
             <Font name="Verdana Pro Cond Semibold" size="17.0" />
          </font>
       </Button>
-      <Button fx:id="multiPlayerBtn" layoutX="249.0" layoutY="282.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="108.0" style="-fx-background-radius: 15px;" text="Multiplayer">
+      <Button fx:id="multiplayerBtn" layoutX="249.0" layoutY="282.0" mnemonicParsing="false" onAction="#toMultiplayer" prefHeight="31.0" prefWidth="108.0" style="-fx-background-radius: 15px;" text="Multiplayer">
          <font>
             <Font name="Verdana Pro Cond Semibold" size="17.0" />
          </font>

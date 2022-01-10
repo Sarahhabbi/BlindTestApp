@@ -32,7 +32,7 @@
                 <Font size="13.0" />
             </font>
         </Button>
-        <Text fx:id="usernameText" fill="#e97e6c" layoutX="52.0" layoutY="208.0" text="Enter a username :" wrappingWidth="202.283203125">
+        <Text fx:id="usernameText" fill="#e97e6c" layoutX="52.0" layoutY="212.0" text="Enter a username :" wrappingWidth="202.283203125">
             <font>
                 <Font name="Sylfaen" size="25.0" />
             </font>
@@ -40,7 +40,10 @@
             <Bloom />
          </effect>
         </Text>
-        <TextField fx:id="usernameField" layoutX="270.0" layoutY="190.0" prefHeight="27.0" prefWidth="169.0" promptText="Enter your username here ..." style="-fx-background-color: transparent; -fx-border-width: 0px 0px 2px 0px; -fx-border-color: #e97e6c; -fx-text-fill: #ffffff;" />
+        <TextField fx:id="usernameField" layoutX="254.0" layoutY="187.0" prefHeight="33.0" prefWidth="221.0" promptText="Enter your username here ..." style="-fx-background-color: transparent; -fx-border-width: 0px 0px 2px 0px; -fx-border-color: #e97e6c; -fx-text-fill: #ffffff;">
+         <font>
+            <Font name="Sylfaen" size="16.0" />
+         </font></TextField>
         <Button fx:id="quitBtn" layoutX="120.0" layoutY="348.0" mnemonicParsing="false" onAction="#quitGame" prefHeight="25.0" prefWidth="82.0" style="-fx-background-radius: 25px; -fx-font-weight: bold;" text="Quit">
             <graphic>
                 <ImageView fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
@@ -53,7 +56,7 @@
                 <Font size="13.0" />
             </font>
         </Button>
-      <Button fx:id="submitPseudo" layoutX="461.0" layoutY="188.0" mnemonicParsing="false" onAction="#submitPseudo" prefHeight="25.0" prefWidth="82.0" style="-fx-background-radius: 25px; -fx-background-color: #009c41; -fx-font-weight: bold;" text="Submit">
+      <Button fx:id="submitPseudo" layoutX="489.0" layoutY="188.0" mnemonicParsing="false" onAction="#submitPseudo" prefHeight="25.0" prefWidth="82.0" style="-fx-background-radius: 25px; -fx-background-color: #009c41; -fx-font-weight: bold;" text="Submit">
          <font>
             <Font name="Verdana Pro Cond Semibold" size="16.0" />
          </font>
