@@ -80,6 +80,7 @@ public class GameHandler extends Thread {
                 s.write("/ SEND ME ANSWER");
 
                 PlayerAnswer answer =s.readPlayerAnswer();
+                System.out.println(answer.getAnswer()+" "+answer.getAnswerTime()+" "+answer.getPseudoPlayer());
                 s.write("/ FIN DU TOUR");
                 System.out.println("FIN DU TOUR"+round);
                 if(round == 4) {
@@ -153,7 +154,7 @@ public class GameHandler extends Thread {
 
             }
             ArrayList<PlayerAnswer> results=new ArrayList<>();
-            for (int j = 0; j < n; j++) {
+            for (int j = n-1; j>=0; j--) {
                while(!t[j].isDone()){}
                 try {
                     results.add(t[j].get());

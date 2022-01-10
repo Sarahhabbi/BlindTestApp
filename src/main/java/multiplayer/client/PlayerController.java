@@ -78,7 +78,7 @@ public class PlayerController  extends Thread implements Initializable {
                         MyImage image= comSocket.readMyImage();
                         System.out.println(image.getId()+" "+image.getAnswer());
                     case "/ SEND ME ANSWER":
-                        PlayerAnswer p = new PlayerAnswer("iamge",1000,"reponse");
+                        PlayerAnswer p = new PlayerAnswer("image",1000,"reponse");
                         comSocket.writePlayerAnswer(p);
 
                         break;

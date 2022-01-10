@@ -47,7 +47,7 @@ public class Server {
     public static void main(String[] args) {
         Server server;
 
-        try (ServerSocket serverSocket = new ServerSocket(3000)) {
+        try (ServerSocket serverSocket = new ServerSocket(2010)) {
             server = new Server(serverSocket);
             server.startServer();
         } catch (IOException e) {
