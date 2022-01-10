@@ -46,7 +46,7 @@
             <Font name="Lucida Console" size="18.0" />
          </font>
       </Button>
-      <Button fx:id="startBtn" layoutX="99.0" layoutY="238.0" mnemonicParsing="false" text="Start" />
+<!--      <Button fx:id="startBtn" layoutX="99.0" layoutY="238.0" mnemonicParsing="false" text="Start" />-->
    </children>
    <opaqueInsets>
       <Insets />

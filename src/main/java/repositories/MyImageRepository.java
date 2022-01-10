@@ -2,7 +2,10 @@ package repositories;
 
 import models.MyImage;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 
@@ -25,7 +28,7 @@ public class MyImageRepository implements Repository<MyImage> {
     public MyImage save(MyImage obj) {
         try (PreparedStatement ps = this.DBConnexion.prepareStatement("INSERT INTO images (id,answer) VALUES (?, ?)")) {
 
-            ps.setString(1,obj.getUrl());
+            ps.setString(1,obj.getId());
             ps.setString(2,obj.getAnswer());
             ps.executeUpdate();
             System.out.println(" successfully added to MyImage table !");
@@ -58,7 +61,7 @@ public class MyImageRepository implements Repository<MyImage> {
 
         try {
             PreparedStatement ps = this.DBConnexion.prepareStatement("DELETE FROM images WHERE id=?");
-            ps.setString(1, obj.getUrl());
+            ps.setString(1, obj.getId());
             ps.executeUpdate();
             System.out.println(" successfully deleted to CHANNEL_USERS table !");
         } catch (SQLException e) {

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.Bloom?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:id="globalContainer" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #333239;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="multiplayer.client.Controller">
+    <children>
+        <Label layoutX="98.0" layoutY="26.0" prefHeight="87.0" prefWidth="404.0" text="Blind Test.IO" textFill="#e97e6c">
+            <font>
+                <Font name="Sylfaen" size="70.0" />
+            </font>
+            <effect>
+                <Bloom />
+            </effect>
+        </Label>
+        <Button fx:id="goBackHome" layoutX="29.0" layoutY="348.0" mnemonicParsing="false" onAction="#goBackHome" prefHeight="25.0" prefWidth="82.0" style="-fx-background-radius: 25px; -fx-background-color: #939396; -fx-font-weight: bold;" text="Home">
+            <graphic>
+                <ImageView fx:id="homeBtn" fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../image/dash1.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+            <font>
+                <Font size="13.0" />
+            </font>
+        </Button>
+        <Text fx:id="usernameText" fill="#e97e6c" layoutX="52.0" layoutY="208.0" text="Enter a username :" wrappingWidth="202.283203125">
+            <font>
+                <Font name="Sylfaen" size="25.0" />
+            </font>
+         <effect>
+            <Bloom />
+         </effect>
+        </Text>
+        <TextField fx:id="usernameField" layoutX="270.0" layoutY="190.0" prefHeight="27.0" prefWidth="169.0" promptText="Enter your username here ..." style="-fx-background-color: #68686b; -fx-border-width: 0px 0px 2px 0px; -fx-border-color: #e97e6c;" />
+        <Button fx:id="quitBtn" layoutX="120.0" layoutY="348.0" mnemonicParsing="false" onAction="#quitGame" prefHeight="25.0" prefWidth="82.0" style="-fx-background-radius: 25px; -fx-background-color: #939396; -fx-font-weight: bold;" text="Quit">
+            <graphic>
+                <ImageView fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../image/exit.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+            <font>
+                <Font size="13.0" />
+            </font>
+        </Button>
+      <Button fx:id="submitPseudo" layoutX="461.0" layoutY="188.0" mnemonicParsing="false" onAction="#submitPseudo" prefHeight="25.0" prefWidth="82.0" style="-fx-background-radius: 25px; -fx-background-color: #009c41; -fx-font-weight: bold;" text="Submit">
+         <font>
+            <Font name="Verdana Pro Cond Semibold" size="16.0" />
+         </font>
+      </Button>
+      <Button fx:id="joinGameBtn" layoutX="205.0" layoutY="243.0" mnemonicParsing="false" onAction="#joinGameBtn" prefHeight="30.0" prefWidth="130.0" style="-fx-background-radius: 25px; -fx-background-color: #FFFFFFFF; -fx-font-weight: bold;" text="Join a game">
+         <font>
+            <Font name="Verdana Pro Cond Semibold" size="16.0" />
+         </font>
+      </Button>
+      <Button fx:id="createGameBtn" layoutX="205.0" layoutY="293.0" mnemonicParsing="false" onAction="#createGameBtn" prefHeight="30.0" prefWidth="130.0" style="-fx-background-radius: 25px; -fx-background-color: #FFFFFFFF; -fx-font-weight: bold;" text="Create a game">
+         <font>
+            <Font name="Verdana Pro Cond Semibold" size="16.0" />
+         </font>
+      </Button>
+    </children>
+</AnchorPane>

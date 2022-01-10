@@ -3,7 +3,6 @@ package Service;
 import models.Audio;
 import models.MyImage;
 import repositories.CompositeRepository;
-import repositories.Repository;
 import repositories.RepositoryFactory;
 
 import java.util.ArrayList;
@@ -41,7 +40,6 @@ public class GameService {
         int i=0;
         while(i < round){
             int e = (int)(Math.random()*size);
-            System.out.println(e);
             if(!id.contains(e)){
                 id.add(e);
                 selectedAudios.add(myAudios.get(e));

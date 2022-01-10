@@ -1,21 +1,20 @@
 package repositories;
 
-import caches.MemoryCache;
 import models.HasId;
 
 import java.util.ArrayList;
 
 public class CompositeRepository<T extends HasId> implements Repository<T> {
 
-    private final MemoryCache memory;
+    //private final MemoryCache memory;
+    private ArrayList<T> liste=new ArrayList<>();
     private final Repository<T> file;
 
     public CompositeRepository(Repository<T> file) {
-        this.memory= new MemoryCache<>();
         ArrayList<T> r = file.findAll();
         System.out.println("taille au debut "+r.size());
         for (T element : r) {
-            this.memory.save(element);
+            liste.add(element);
             System.out.println("Element ajoute "+ element.getId());
         }
         this.file = file;
@@ -23,32 +22,37 @@ public class CompositeRepository<T extends HasId> implements Repository<T> {
 
     @Override
     public T save(T obj) {
-        memory.save(obj);
+        liste.add(obj);
         return file.save(obj);
     }
 
     @Override
     public void delete(T obj) throws Exception{
-        memory.delete(obj);
+       liste.remove(obj);
         file.delete(obj);
     }
 
     @Override
     public ArrayList<T> findAll(){
-        return memory.findAll();
+        return liste;
     }
 
     @Override
     public T find(String id) {
-        return (T)memory.find(id);
+        for (T element : this.liste) {
+            if(id.equals(element.getId())){
+                return element;
+            }
+        }
+        return null;
     }
 
     @Override
     public int count() {
-        return memory.count();
+        return liste.size();
     }
 
     public T get(int i){
-        return (T)memory.get(i);
+        return liste.get(i);
     }
 }

@@ -19,6 +19,10 @@ module com.example.demo {
     requires jlayer;
     requires jaco.mp3.player;
 
+
     opens application to javafx.fxml;
     exports application;
+
+    opens multiplayer.client to javafx.fxml;
+    exports multiplayer.client;
 }

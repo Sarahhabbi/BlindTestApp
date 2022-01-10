@@ -30,7 +30,7 @@
 
             <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <Text fill="#3ba34f" layoutX="21.0" layoutY="314.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Your score :">
+                  <Text fill="#3ba34f" layoutX="21.0" layoutY="314.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Score :">
                      <font>
                         <Font name="Trebuchet MS" size="25.0" />
                      </font>

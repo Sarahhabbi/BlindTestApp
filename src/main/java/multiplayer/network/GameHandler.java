@@ -1,0 +1,310 @@
+package multiplayer.network;
+
+import Service.GameService;
+import models.Audio;
+import models.MyImage;
+import models.PlayerAnswer;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.concurrent.*;
+
+public class GameHandler extends Thread {
+    public static HashMap<String,GameHandler> games=new HashMap<>();
+
+    public ArrayList<ClientHandler> players = new ArrayList<ClientHandler>();    /* accès aux sockets de tous les joueurs de la partie */
+    private HashMap<String,Integer> scores = new HashMap<>();
+
+    public final GameService gameservice;
+    public ArrayList<MyImage> images;
+    public ArrayList<Audio> audios;
+
+    private final String name ;
+    private final String admin ;
+    private boolean start;
+    private int round;
+    private boolean isAudio;
+
+    private static ArrayList<ExecutorService> executor = new ArrayList<>();
+
+    public GameHandler(String name, String admin,int round) {
+        this.name = name;
+        this.admin = admin;
+        this.start=false;
+        this.round=round;
+        this.isAudio=false;
+        this.gameservice=new GameService();
+        this.images=gameservice.randomList(5);
+        GameHandler.games.put(name,this);
+    }
+
+    public GameHandler(String name, String admin,boolean isAudio,int round) {
+        this.name = name;
+        this.admin = admin;
+        this.round=round;
+        this.start=false;
+        this.isAudio=false;
+        this.gameservice=new GameService();
+        if(isAudio){
+            this.audios=gameservice.randomListaudio(5);
+        }else{
+            this.images=gameservice.randomList(5);
+        }
+        GameHandler.games.put(name,this);
+    }
+
+    public Future<PlayerAnswer> RoundImages(int index, int round, CyclicBarrier barrier, ClientHandler client) {
+        return executor.get(index).submit(() -> {
+            try {
+                ComSocket s = client.getComSocket();
+
+//                s.write("Thread #" + index + " is waiting at the barrier.\n");
+                System.out.println("Thread #" + index + " is waiting at the barrier.");
+                barrier.await();
+                if(round==-1){
+                    s.write("/ GAME START");
+                    return null;
+                }
+//                s.write("/ La partie "+round+" va commencer\n");
+                s.write("/ START IN 5s");
+                System.out.println("La partie "+round+" va commencer");
+
+                System.out.println("IMAGE: " + images.get(index).getId());
+                s.write("IMAGE " + images.get(index).getId()+" "+images.get(index).getAnswer());
+
+                Thread.sleep(5000);
+                s.write("/ SEND ME ANSWER");
+                String si =s.read();
+                String[] words=si.split("");
+                PlayerAnswer answer =new PlayerAnswer(words[0],Integer.valueOf(words[0]),words[2]);
+                System.out.println(answer.getAnswer()+" "+answer.getAnswerTime()+" "+answer.getPseudoPlayer());
+                s.write("/ FIN DU TOUR");
+                System.out.println("FIN DU TOUR"+round);
+                if(round == 4) {
+                    s.write("/ FIN DU JEU");
+                    System.out.println("FIN DU JEU");
+                }
+                //return answer;
+                return null;
+                //Code a faire
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (BrokenBarrierException e) {
+                System.out.println("Barrier is broken.");
+            }
+            return null;
+        });
+
+    }
+
+    public Future<PlayerAnswer> Roundaudios(int i, int ID, CyclicBarrier barrier, ClientHandler client) {
+        return executor.get(i).submit(() -> {
+            try {
+                ComSocket s = client.getComSocket();
+                s.write("Thread #" + i + " is waiting at the barrier.\n");
+                System.out.println("Thread #" + i + " is waiting at the barrier.");
+                barrier.await();
+                s.write("La partie "+ID+" va commencer\n");
+                System.out.println("La partie "+ID+" va commencer");
+                s.writeAudio(audios.get(i));
+                Thread.sleep(5000);
+                PlayerAnswer answer=(PlayerAnswer) s.readPlayerAnswer();
+                s.write("FIN DU TOUR\n");
+                if(ID==4) {
+                    s.write("FIN DU JEU");
+                }
+                return answer;
+                //Code a faire
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (BrokenBarrierException e) {
+                System.out.println("Barrier is broken.");
+                e.printStackTrace();
+            }
+            return null;
+        });
+    }
+
+
+    @Override
+    public void run() {
+        if (isAudio) {
+            playAudios();
+        } else {
+            playImages();
+        }
+
+    }
+
+    public ArrayList<String> playImages(){
+        int n = players.size();
+        System.out.println("Il y a " + n + " clients");
+        Future<PlayerAnswer>[] t = new Future[n];
+
+        for (int r = -1; r < this.round; r++) {
+            n = players.size();
+            Runnable barrierAction = () -> System.out.println("Round ");
+            CyclicBarrier barrier = new CyclicBarrier(n, barrierAction);
+
+            for (int i = 0; i < n; i++) {
+                t[i] = RoundImages(i, r, barrier, players.get(i));
+
+            }
+            ArrayList<PlayerAnswer> results=new ArrayList<>();
+            for (int j = n-1; j>=0; j--) {
+               while(!t[j].isDone()){}
+                try {
+                    results.add(t[j].get());
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
+            addRound(results);
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        return getWinnerGame();
+
+    }
+
+
+    public ArrayList<String> playAudios(){
+        int n= players.size();
+        System.out.println("Il y a " + n + " clients");
+        Future<PlayerAnswer>[] t=new Future[n];
+
+        for (int r = 0; r < this.round; r++) {
+            Runnable barrierAction = () -> System.out.println("Round ");
+            CyclicBarrier barrier = new CyclicBarrier(4, barrierAction);
+            n= players.size();
+            for (int i = 0; i < n; i++) {
+                t[i] = Roundaudios(i, r, barrier, players.get(i));
+            }
+            ArrayList<PlayerAnswer> results=new ArrayList<>();
+            for (int j = 0; j < n; j++) {
+                try {
+                    results.add(t[j].get());
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
+            addRound(results);
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        return getWinnerGame();
+    }
+
+    private void addRound(ArrayList<PlayerAnswer> results) {
+        if(results.size()==0){
+            System.out.println("il y 0 résultats");
+        }
+        /*ArrayList<PlayerAnswer> bestanswers=new ArrayList<>();
+        PlayerAnswer a=results.get(0);
+        long time=a.getAnswerTime();
+        for(int i=1;i<results.size();i++){
+            a=results.get(i);
+            if(a.getAnswerTime()==time){
+                bestanswers.add(a);
+            }
+            if(a.getAnswerTime()<time){
+                time=a.getAnswerTime();
+                bestanswers.clear();
+                bestanswers.add(a);
+            }
+
+        }
+        for(int j=0;j< bestanswers.size();j++){
+            a=bestanswers.get(j);
+            scores.put(a.getPseudoPlayer(),scores.get(a)+1);
+        }*/
+        System.out.println("Analyse des resultats du tour");
+    }
+
+
+    public synchronized static boolean exists (String gameName){
+        return games.containsKey(gameName);
+    }
+
+    public synchronized void addPlayer(ClientHandler player){
+        System.out.println("rajout d'un joueur");
+        this.scores.put(player.getPlayerPseudo(),0);
+        this.players.add(player);
+        executor.add(Executors.newSingleThreadExecutor());
+    }
+    public void remove(ClientHandler player){
+        this.players.remove(player);
+        this.scores.remove(player);
+    }
+    public synchronized static GameHandler getGame(String name) throws Exception {
+        if(games.containsKey(name) == false){
+            throw new Exception("/ NOT_EXISTS_GAMENAME");
+        }
+        GameHandler game=games.get(name);
+
+        if(game.start==true){
+            throw new Exception("/ STARTED");
+        }
+        return game;
+    }
+
+    public synchronized static GameHandler createGame(String name, String admin,boolean isaudio,int round) throws Exception{
+        if(games.containsKey(name)){
+            throw new Exception("/ EXISTS_GAMENAME");
+        }else{
+
+            GameHandler newGame = new GameHandler(name,admin,isaudio,round);
+            games.put(name,newGame);
+            return newGame;
+        }
+    }
+    public synchronized void deleteGame(String gameName){
+        GameHandler game=games.get(gameName);
+        if(game!=null){
+            System.out.println(gameName + " deleted");
+            games.remove(gameName);
+        }
+        for(ClientHandler player : players){
+            System.out.println(player.getPlayerPseudo() + " a quitté");
+            player.setJoinedGame(null);
+        }
+    }
+    public ArrayList<String> getWinnerGame(){
+        ArrayList<String> winner =null;
+        /*int winnerScore=0;
+        for (Map.Entry<String, Integer> pair: scores.entrySet()){
+            if(pair.getValue() > winnerScore){
+                winner.clear();
+                winner.add(pair.getKey());
+                winnerScore=pair.getValue();
+            }
+            else if(winnerScore == pair.getValue()){
+                winner.add(pair.getKey());
+            }
+        }
+        return winner ;*/
+        return null;
+    }
+    public String getname() {return name;}
+    public HashMap<String, Integer> getScores() {return scores;}
+    public void setScores(HashMap<String, Integer> scores) {this.scores = scores;}
+    public void giveAnswer(String answer) {}
+    public ArrayList<ClientHandler> getPlayers() {return players;}
+    public String getAdmin() {return admin;}
+    public boolean isStart() {return start;}
+    public void setStart(boolean start){
+        this.start = start;
+    }
+
+
+}
