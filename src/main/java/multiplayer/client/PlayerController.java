@@ -51,17 +51,13 @@ public class PlayerController  extends Thread implements Initializable {
                     System.out.println("1 PlayerController SERVER sent : " + msg);
 
                 }catch (Exception e) {
-                    System.out.printf("C'est complique");
+                    System.out.println("C'est complique");
                     msg=null;
                 }
             }
-            while (comSocket.isConnected() == true && msg != null) {
-                if (msg.equals("/ GAME START") == true) {
-                    System.out.println("Admin Controller SERVER sent : " + msg);
-                    this.jouer();
-                }
-            }
-            System.out.println("FIN THREAD ADMIN CONTROLLER ");
+            System.out.println(msg);
+            this.jouer();
+            //System.out.println("FIN THREAD ADMIN CONTROLLER ");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -70,53 +66,36 @@ public class PlayerController  extends Thread implements Initializable {
     }
     public void jouer() {
 
-        try{
             while (comSocket.isConnected() == true) {
-                String msg = comSocket.read();
-                switch(msg) {
-                    case "/ START IN 5s":
-                        MyImage image= comSocket.readMyImage();
-                        System.out.println(image.getId()+" "+image.getAnswer());
-                    case "/ SEND ME ANSWER":
-                        PlayerAnswer p = new PlayerAnswer("image",1000,"reponse");
-                        comSocket.writePlayerAnswer(p);
+                try{
+                    String msg = comSocket.read();
+                    switch(msg) {
+                        case "/  GAME START":
+                        case "/ START IN 5s":
+                            String image= comSocket.read();
+                            String[] words =image.split(" ");
+                            MyImage i=new MyImage(words[2],words[3]);
+                            System.out.println(i.getId()+" "+i.getAnswer());
+                        case "/ SEND ME ANSWER":
+                            PlayerAnswer p = new PlayerAnswer("image",1000,"reponse");
+                            comSocket.write("image 140000 reponse");
 
-                        break;
-                    case "/ FIN DU TOUR":
+                            break;
+                        case "/ FIN DU TOUR":
 
-                    case "/ FIN DU JEU":
-                        break;
-                    default :
+                        case "/ FIN DU JEU":
+                            break;
+                        default :
 
+                    }
+                }catch (Exception exception) {
+                    exception.printStackTrace();
                 }
             }
-        } catch (Exception exception) {
-            exception.printStackTrace();
         }
 
-    }
 
-    private void handleServerResponse(String msg) {
-        switch(msg){
 
-            /* for create game */
-            case "/ START IN 5s":
-                System.out.println("/ START IN 5s");
-                break;
-
-            case "/ SEND ME ANSWER":
-                System.out.println("DEBUG / SEND ME ANSWER");
-                break;
-
-            case "/ FIN DU TOUR":
-                System.out.println("DEBUG / FIN DU TOUR");
-                break;
-
-            default:
-                System.out.println("any case player game controller");
-                break;
-        }
-    }
 
     @FXML
     public void submitAnswer(ActionEvent e){

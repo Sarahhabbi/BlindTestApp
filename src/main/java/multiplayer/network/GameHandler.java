@@ -74,12 +74,13 @@ public class GameHandler extends Thread {
                 System.out.println("La partie "+round+" va commencer");
 
                 System.out.println("IMAGE: " + images.get(index).getId());
-                s.writeImage(images.get(index));
+                s.write("IMAGE " + images.get(index).getId()+" "+images.get(index).getAnswer());
 
                 Thread.sleep(5000);
                 s.write("/ SEND ME ANSWER");
-
-                PlayerAnswer answer =s.readPlayerAnswer();
+                String si =s.read();
+                String[] words=si.split("");
+                PlayerAnswer answer =new PlayerAnswer(words[0],Integer.valueOf(words[0]),words[2]);
                 System.out.println(answer.getAnswer()+" "+answer.getAnswerTime()+" "+answer.getPseudoPlayer());
                 s.write("/ FIN DU TOUR");
                 System.out.println("FIN DU TOUR"+round);

@@ -92,11 +92,13 @@ public class AdminController extends Thread implements Initializable {
                 String msg = comSocket.read();
                 switch(msg) {
                     case "/ START IN 5s":
-                        MyImage image= comSocket.readMyImage();
-                        System.out.println(image.getId()+" "+image.getAnswer());
+                        String image= comSocket.read();
+                        String[] words =image.split(" ");
+                        MyImage i=new MyImage(words[2],words[3]);
+                        System.out.println(i.getId()+" "+i.getAnswer());
                     case "/ SEND ME ANSWER":
                         PlayerAnswer p = new PlayerAnswer("iamge",1000,"reponse");
-                        comSocket.writePlayerAnswer(p);
+                        comSocket.write("image 140000 reponse");
 
                         break;
                     case "/ FIN DU TOUR":
