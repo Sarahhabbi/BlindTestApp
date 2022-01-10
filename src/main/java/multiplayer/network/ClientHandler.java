@@ -78,7 +78,7 @@ public class ClientHandler extends Thread {
                 System.out.println("CLIENT SENT : "+ answer);
                 handlePlayerAnswer(answer);
                 // pour kill le thread
-                if(this.gameHandler!=null && this.gameHandler.isStart()==true){
+                if(this.gameHandler.isStart()==true){
                     break;
                 }
                 answer = comSocket.read();
@@ -157,6 +157,11 @@ public class ClientHandler extends Thread {
     public void startGame() throws IOException {
         if(gameHandler.getAdmin().equals(this.playerPseudo) == true){
             System.out.println("STARTING CLIENT HANDLER ");
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             gameHandler.start();
         }else{
             System.out.println("not admin cannot start the game");

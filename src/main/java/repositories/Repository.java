@@ -4,7 +4,7 @@ import models.HasId;
 
 import java.util.ArrayList;
 
-public interface Repository<T extends HasId> {
+public interface Repository<T> {
 
     T save(T obj);
 

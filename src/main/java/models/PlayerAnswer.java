@@ -2,7 +2,7 @@ package models;
 
 import java.io.Serializable;
 
-public class PlayerAnswer{
+public class PlayerAnswer implements Serializable {
     private String pseudoPlayer;
     private long answerTime ; //getTimeInMillis()
     private String answer;

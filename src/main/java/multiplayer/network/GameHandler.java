@@ -62,21 +62,28 @@ public class GameHandler extends Thread {
             try {
                 ComSocket s = client.getComSocket();
 
-                s.write("Thread #" + index + " is waiting at the barrier."+round);
-                System.out.println("Thread #" + index + " is waiting at the barrier."+round);
+//                s.write("Thread #" + index + " is waiting at the barrier.\n");
+                System.out.println("Thread #" + index + " is waiting at the barrier.");
                 barrier.await();
+                if(round==-1){
+                    s.write("/ GAME START");
+                    return null;
+                }
+//                s.write("/ La partie "+round+" va commencer\n");
+                s.write("/ START IN 5s");
+                System.out.println("La partie "+round+" va commencer");
 
-                s.write("La partie "+round+" va commencer"+round);
-                System.out.println("La partie "+round+" va commencer"+round);
-                //s.writeImage(images.get(i));
+                System.out.println("IMAGE: " + images.get(index).getId());
+                s.writeImage(images.get(index));
 
                 Thread.sleep(5000);
+                s.write("/ SEND ME ANSWER");
 
-                //PlayerAnswer answer=(PlayerAnswer) s.readPlayerAnswer();
-                s.write("FIN DU TOUR"+round);
+                PlayerAnswer answer =s.readPlayerAnswer();
+                s.write("/ FIN DU TOUR");
                 System.out.println("FIN DU TOUR"+round);
                 if(round == 4) {
-                    s.write("FIN DU JEU");
+                    s.write("/ FIN DU JEU");
                     System.out.println("FIN DU JEU");
                 }
                 //return answer;
@@ -96,15 +103,15 @@ public class GameHandler extends Thread {
         return executor.get(i).submit(() -> {
             try {
                 ComSocket s = client.getComSocket();
-                s.write("Thread #" + i + " is waiting at the barrier.");
+                s.write("Thread #" + i + " is waiting at the barrier.\n");
                 System.out.println("Thread #" + i + " is waiting at the barrier.");
                 barrier.await();
-                s.write("La partie "+ID+" va commencer");
+                s.write("La partie "+ID+" va commencer\n");
                 System.out.println("La partie "+ID+" va commencer");
                 s.writeAudio(audios.get(i));
                 Thread.sleep(5000);
                 PlayerAnswer answer=(PlayerAnswer) s.readPlayerAnswer();
-                s.write("FIN DU TOUR");
+                s.write("FIN DU TOUR\n");
                 if(ID==4) {
                     s.write("FIN DU JEU");
                 }
@@ -136,7 +143,7 @@ public class GameHandler extends Thread {
         System.out.println("Il y a " + n + " clients");
         Future<PlayerAnswer>[] t = new Future[n];
 
-        for (int r = 0; r < this.round; r++) {
+        for (int r = -1; r < this.round; r++) {
             n = players.size();
             Runnable barrierAction = () -> System.out.println("Round ");
             CyclicBarrier barrier = new CyclicBarrier(n, barrierAction);
