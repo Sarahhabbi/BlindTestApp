@@ -4,8 +4,12 @@ import Service.GameService;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
@@ -15,6 +19,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.Stage;
 import javazoom.jl.decoder.JavaLayerException;
 import models.Audio;
 import se.michaelthelin.spotify.model_objects.specification.Paging;
@@ -22,20 +27,15 @@ import se.michaelthelin.spotify.model_objects.specification.Playlist;
 import se.michaelthelin.spotify.model_objects.specification.PlaylistTrack;
 import se.michaelthelin.spotify.model_objects.specification.Track;
 
-import java.io.File;
+import java.io.*;
 
 import jaco.mp3.player.MP3Player;
 import java.io.File;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -59,6 +59,13 @@ public class MusicGameController implements Initializable {
 
     @FXML
     private Text score;
+
+    @FXML
+    private Button homeBtn;
+
+    private Stage stage;
+    private Scene scene;
+    private static Parent root;
     /**********************************************************************/
 
 //    private static String url = "../BlindTestApp/src/main/resources/music/bruno-mars-talking-to-the-moon-lyrics_d62CgrRx.mp3";
@@ -266,6 +273,7 @@ public class MusicGameController implements Initializable {
 
         paneGame.setBottom(hbox);
     }
+
     public void changeSong() throws InterruptedException {
         // stops the current music
         if(mediaPlayer != null) {
@@ -291,5 +299,28 @@ public class MusicGameController implements Initializable {
         System.out.println("new good answer = "+ goodAnswer);
         // for next call to this method
         nextSong++;
+    }
+
+    @FXML
+    public void goBackHome(ActionEvent event) throws IOException {
+        try {
+            String title = "BlindTest.IO";
+            String pageToLoad = " ";
+
+            if(event.getSource().equals(homeBtn))
+            {
+                pageToLoad = "/application/startPage.fxml";
+            }
+
+            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(pageToLoad)));
+            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+            scene = new Scene(root);
+            stage.setScene(scene);
+            stage.setTitle(title);
+            stage.show();
+            System.out.println("fin debug");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

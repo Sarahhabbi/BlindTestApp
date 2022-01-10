@@ -4,8 +4,12 @@ import Service.GameService;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -15,10 +19,13 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.Stage;
 import models.MyImage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -37,6 +44,9 @@ public class ImageGameController implements Initializable {
     private TextField answerField;
 
     @FXML
+    private Button homeBtn;
+
+    @FXML
     private Button submitBtn;
 
     private final GameService gameService = new GameService();
@@ -48,6 +58,11 @@ public class ImageGameController implements Initializable {
     volatile private int numberOfRound = 1;
 
     private ExecutorService executor = Executors.newSingleThreadExecutor();
+
+
+    private Stage stage;
+    private Scene scene;
+    private static Parent root;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -185,6 +200,29 @@ public class ImageGameController implements Initializable {
         }
         else{
             nextImage = 0;
+        }
+    }
+
+    @FXML
+    public void goBackHome(ActionEvent event) throws IOException {
+        try {
+            String title = "BlindTest.IO";
+            String pageToLoad = " ";
+
+            if(event.getSource().equals(homeBtn))
+            {
+                pageToLoad = "/application/startPage.fxml";
+            }
+
+            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(pageToLoad)));
+            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+            scene = new Scene(root);
+            stage.setScene(scene);
+            stage.setTitle(title);
+            stage.show();
+            System.out.println("fin debug");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
