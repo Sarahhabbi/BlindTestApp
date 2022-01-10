@@ -63,7 +63,7 @@
                 <Font name="Lucida Console" size="18.0" />
             </font>
         </Button>
-      <Button fx:id="homeBtn" layoutX="46.0" layoutY="424.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="89.0" style="-fx-background-radius: 15;" text="Home">
+      <Button fx:id="homeBtn" layoutX="46.0" layoutY="424.0" mnemonicParsing="false" onAction="#goBackHome" prefHeight="28.0" prefWidth="89.0" style="-fx-background-radius: 15;" text="Home">
          <font>
             <Font name="Verdana Pro Cond Semibold" size="14.0" />
          </font>
