@@ -15,16 +15,34 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javazoom.jl.decoder.JavaLayerException;
 import models.Audio;
+import se.michaelthelin.spotify.model_objects.specification.Paging;
+import se.michaelthelin.spotify.model_objects.specification.Playlist;
+import se.michaelthelin.spotify.model_objects.specification.PlaylistTrack;
+import se.michaelthelin.spotify.model_objects.specification.Track;
+
 import java.io.File;
+
+import jaco.mp3.player.MP3Player;
+import java.io.File;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import static application.BlindTestApplication.ROUND;
+import static spotify.songs.Spotify.getPlaylist;
+import static spotify.songs.Spotify.getTrack;
 
 public class MusicGameController implements Initializable {
     @FXML
@@ -35,23 +53,31 @@ public class MusicGameController implements Initializable {
 
     @FXML
     private Button submitBtn;
-    
+
+    @FXML
+    private Text rightAnswer;
+
+    @FXML
+    private Text score;
     /**********************************************************************/
 
 //    private static String url = "../BlindTestApp/src/main/resources/music/bruno-mars-talking-to-the-moon-lyrics_d62CgrRx.mp3";
 
     /* for playlist and audio */
-    private final GameService gameService = new GameService();
-    private ArrayList<Audio> songs = gameService.randomListaudio(ROUND);
-    private Media media;
-    private MediaPlayer mediaPlayer;
+//    private final GameService gameService = new GameService();
+//    private ArrayList<Audio> songs = gameService.randomListaudio(ROUND);
+//    private Media media;
+    private MP3Player mediaPlayer;
     private int nextSong = 1;
 
     private int numberOfRound = 1;
     
     /* for player answer */
-    private String goodAnswer;    
+    @FXML
+    private String goodAnswer;
     private int counterRightAnswer = 0;
+    HashMap<String, String> tracks = new HashMap<String, String>();
+
 
     /* for timer */
     private ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -60,10 +86,27 @@ public class MusicGameController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        String id = "02S8NI790lOwAGOWwf0rLg";
+        Playlist playlist = getPlaylist(id);
+        Paging<PlaylistTrack> track = playlist.getTracks();
+        PlaylistTrack[] trackUrl = track.getItems();
 
-        playMusic(songs.get(0));
-        goodAnswer = songs.get(0).getAnswer();
-        
+        for(int i = 0;i < trackUrl.length; i++){
+            String idTrack = trackUrl[i].getTrack().getId();
+
+            Track t = getTrack(idTrack);
+            String goodAnswer = trackUrl[i].getTrack().getName().toLowerCase(); /* title of the track */
+            System.out.println(goodAnswer);
+            if(t!=null){
+                tracks.put(goodAnswer, t.getPreviewUrl());
+            }
+        }
+
+//        /* initialize first music */
+//        playMusic(songs.get(0));
+//        goodAnswer = songs.get(0).getAnswer();
+
+        /* start the game */
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -78,10 +121,10 @@ public class MusicGameController implements Initializable {
 
     public Future<Integer> timer() {
         return executor.submit(() -> {
-            Thread.sleep(10000);
+            changeSong();
+            Thread.sleep(15000);
             System.out.println("Next round !");
             System.out.println("Changing the song");
-            changeSong();
             return 0;
         });
     }
@@ -121,23 +164,54 @@ public class MusicGameController implements Initializable {
         paneGame.setCenter(hbox);
     }
 
+    public synchronized void updateCurrentScore(){
+        rightAnswer.setText("La bonne réponse était: \n\"" + goodAnswer+"\"");
+        score.setText(String.valueOf(counterRightAnswer));
+    }
+
     public void playMusic(Audio audio) {
-        media = new Media(new File(audio.getId()).toURI().toString());
-        mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.setVolume(23 * 0.01);
-        mediaPlayer.play();
+//        media = new Media(new File(audio.getId()).toURI().toString());
+//        mediaPlayer = new MediaPlayer(media);
+//        mediaPlayer.setVolume(23 * 0.01);
+//        mediaPlayer.play();
+        try {
+            if(audio.getId()!=null){
+                URL url = new URL(audio.getId());
+                mediaPlayer = new MP3Player(url);
+                mediaPlayer.play();
+            }else{
+                Audio newSong = findNewSong();
+                playMusic(newSong);
+            }
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+    }
+    public Audio findNewSong(){
+        List keys = new ArrayList(tracks.keySet());
+
+        int e = (int)(Math.random() * keys.size());
+        String newGoodAnswer = (String)keys.get(e);
+
+        String url = tracks.get(newGoodAnswer);
+        Audio newSong = new Audio(url, newGoodAnswer);
+        return newSong;
     }
 
     public void displayFinalResult(){
         HBox hbox = new HBox();
-        Text textSent = new Text("Your final result is " + counterRightAnswer);
+        Button goToGameType = new Button("Home Page");
         hbox.setPadding(new Insets(5,5,5,10));
         hbox.setLayoutX(100.0);
-        hbox.getChildren().add(textSent);
+        hbox.getChildren().add(goToGameType);
 
-        paneGame.setCenter(hbox);
         paneGame.getChildren().remove(answerField);
         paneGame.getChildren().remove(submitBtn);
+        paneGame.getChildren().remove(score);
+        paneGame.getChildren().remove(rightAnswer);
+        paneGame.setCenter(hbox);
     }
     
     public void handlePlayerAnswer(ActionEvent event){
@@ -168,19 +242,7 @@ public class MusicGameController implements Initializable {
                 color = "#ff2222";
                 rightOrWrongResponse = "Mauvaise réponse, essayez de nouveau";
             }
-            HBox hbox = new HBox();
-            Text textSent = new Text(rightOrWrongResponse);
-            TextFlow textFlow = new TextFlow(textSent);
-
-            //just styling the box for the message
-            textFlow.setStyle("-fx-background-radius: 15px; -fx-color: rgb(255,255,255); -fx-background-color:" + color + ";");
-            textFlow.setPadding(new Insets(5,10,5,10));
-            textSent.setFill(Color.color(0.934,0.945,0.996));
-            hbox.setPadding(new Insets(5,5,5,10));
-            hbox.setLayoutX(100.0);
-            hbox.getChildren().add(textFlow);
-
-            paneGame.setBottom(hbox);
+            alertMessageAnswer(rightOrWrongResponse, color); /* MAJ UI*/
             answerField.clear();
         }
         else
@@ -188,42 +250,46 @@ public class MusicGameController implements Initializable {
             displayFinalResult();
         }
     }
-/*
-2
-        1
-        0
-        3
-*/
-/*
-    2
-            0
-            1
-            3*/
 
+    public void alertMessageAnswer(String rightOrWrongResponse, String color){
+        HBox hbox = new HBox();
+        Text textSent = new Text(rightOrWrongResponse);
+        TextFlow textFlow = new TextFlow(textSent);
+
+        //just styling the box for the message
+        textFlow.setStyle("-fx-background-radius: 15px; -fx-color: rgb(255,255,255); -fx-background-color:" + color + ";");
+        textFlow.setPadding(new Insets(5,10,5,10));
+        textSent.setFill(Color.color(0.934,0.945,0.996));
+        hbox.setPadding(new Insets(5,5,5,10));
+        hbox.setLayoutX(100.0);
+        hbox.getChildren().add(textFlow);
+
+        paneGame.setBottom(hbox);
+    }
     public void changeSong() throws InterruptedException {
         // stops the current music
-        if(mediaPlayer != null){
+        if(mediaPlayer != null) {
             mediaPlayer.stop();
             System.out.println("next music in 5s");   // wait 5s before playing next
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    updateCurrentScore();
+                }
+            });
             Thread.sleep(5000);
-
-            if(nextSong < songs.size())
-            {
-                // create new Audio and play it
-                String url = songs.get(nextSong).getId();
-                String newGoodAnswer = songs.get(nextSong).getAnswer();
-                Audio newSong = new Audio(url, newGoodAnswer);
-
-                playMusic(newSong);
-                goodAnswer = newGoodAnswer;
-                System.out.println("new good answer = "+ goodAnswer);
-                // for next call to this method
-                nextSong++;
-            }
-            else{
-                nextSong = 0;
-            }
         }
-    }
+        // create new Audio and play it
+//        String url = songs.get(nextSong).getId();
+//        String newGoodAnswer = songs.get(nextSong).getAnswer();
 
+        Audio newSong = findNewSong();
+
+        playMusic(newSong);
+        goodAnswer = newSong.getAnswer();
+
+        System.out.println("new good answer = "+ goodAnswer);
+        // for next call to this method
+        nextSong++;
+    }
 }

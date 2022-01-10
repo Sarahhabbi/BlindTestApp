@@ -13,6 +13,11 @@ module com.example.demo {
     requires java.sql;
     requires java.desktop;
     requires junit;
+    requires se.michaelthelin.spotify;
+    requires org.apache.httpcomponents.core5.httpcore5;
+    requires nv.i18n;
+    requires jlayer;
+    requires jaco.mp3.player;
 
     opens application to javafx.fxml;
     exports application;

@@ -25,7 +25,6 @@ public class GameService {
         while(i < round){
             int e = (int)(Math.random()*size);
             if(! id.contains(e)){
-                System.out.println(e);
                 id.add(e);
                 selectedImages.add(myImages.get(e));
                 i++;

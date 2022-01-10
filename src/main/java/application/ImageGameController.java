@@ -65,7 +65,7 @@ public class ImageGameController implements Initializable {
 
     public Future<Integer> timer() {
         return executor.submit(() -> {
-            Thread.sleep(10000);
+            Thread.sleep(15000);
             System.out.println("Next round !");
             System.out.println("Changing the image");
             changeImage();
@@ -129,6 +129,14 @@ public class ImageGameController implements Initializable {
             color = "#ff2222";
             rightOrWrongResponse = "Mauvaise réponse, essayez de nouveau";
         }
+
+        alertMessageAnswer(rightOrWrongResponse, color); /* MAJ UI*/
+
+        answerField.clear();
+    }
+
+
+    public void alertMessageAnswer(String rightOrWrongResponse, String color){
         HBox hbox = new HBox();
         Text textSent = new Text(rightOrWrongResponse);
         TextFlow textFlow = new TextFlow(textSent);
@@ -142,7 +150,18 @@ public class ImageGameController implements Initializable {
         hbox.getChildren().add(textFlow);
 
         paneGame.setBottom(hbox);
-        answerField.clear();
+    }
+    public synchronized void displayFinalResultMusic(){
+        System.out.println("final result music");
+        paneGame.getChildren().remove(answerField);
+        paneGame.getChildren().remove(submitBtn);
+        HBox hbox = new HBox();
+        Text textSent = new Text("Your final result is " + counterRightAnswer);
+        hbox.setPadding(new Insets(5,5,5,10));
+        hbox.setLayoutX(100.0);
+        hbox.getChildren().add(textSent);
+
+        paneGame.setCenter(hbox);
     }
 
     public void changeImage(){

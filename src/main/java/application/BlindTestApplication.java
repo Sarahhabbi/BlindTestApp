@@ -8,12 +8,12 @@ import java.io.IOException;
 
 public class BlindTestApplication extends Application {
 
-    public static int ROUND = 4;
+    public static int ROUND = 5;
 
     @Override
     public void start(Stage stage) throws IOException{
 
-        FXMLLoader fxmlLoader = new FXMLLoader(BlindTestApplication.class.getResource("/application/musicView.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(BlindTestApplication.class.getResource("/application/startPage.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
 
         stage.setTitle("BlindTest.IO | App View!");
