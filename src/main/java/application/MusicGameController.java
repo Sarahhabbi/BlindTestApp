@@ -86,7 +86,7 @@ public class MusicGameController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        String id = "02S8NI790lOwAGOWwf0rLg";
+        String id = "1rylA7B1Y5YxOzs36plKgc";
         Playlist playlist = getPlaylist(id);
         Paging<PlaylistTrack> track = playlist.getTracks();
         PlaylistTrack[] trackUrl = track.getItems();
@@ -169,36 +169,6 @@ public class MusicGameController implements Initializable {
         score.setText(String.valueOf(counterRightAnswer));
     }
 
-    public void playMusic(Audio audio) {
-//        media = new Media(new File(audio.getId()).toURI().toString());
-//        mediaPlayer = new MediaPlayer(media);
-//        mediaPlayer.setVolume(23 * 0.01);
-//        mediaPlayer.play();
-        try {
-            if(audio.getId()!=null){
-                URL url = new URL(audio.getId());
-                mediaPlayer = new MP3Player(url);
-                mediaPlayer.play();
-            }else{
-                Audio newSong = findNewSong();
-                playMusic(newSong);
-            }
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
-    }
-    public Audio findNewSong(){
-        List keys = new ArrayList(tracks.keySet());
-
-        int e = (int)(Math.random() * keys.size());
-        String newGoodAnswer = (String)keys.get(e);
-
-        String url = tracks.get(newGoodAnswer);
-        Audio newSong = new Audio(url, newGoodAnswer);
-        return newSong;
-    }
 
     public void displayFinalResult(){
         HBox hbox = new HBox();
@@ -221,7 +191,7 @@ public class MusicGameController implements Initializable {
             String rightOrWrongResponse;
             String color;   // background color depending on the answer wrong=red/ right=green
 
-            if(playerAnswer.equals(goodAnswer) == true) {
+            if(playerAnswer.equals(this.goodAnswer) == true) {
                 answerField.clear();
                 System.out.println("good answer ->"  + playerAnswer);
                 color = "#4ab721";
@@ -233,9 +203,9 @@ public class MusicGameController implements Initializable {
                 // next round
                 numberOfRound++;
 
-                if(numberOfRound > ROUND){
+               /* if(numberOfRound > ROUND){
                     displayFinalResult();
-                }
+                }*/
             }
             else{
                 System.out.println("bad answer ->"  + playerAnswer);
@@ -266,6 +236,39 @@ public class MusicGameController implements Initializable {
 
         paneGame.setBottom(hbox);
     }
+
+    public void playMusic(Audio audio) {
+//        media = new Media(new File(audio.getId()).toURI().toString());
+//        mediaPlayer = new MediaPlayer(media);
+//        mediaPlayer.setVolume(23 * 0.01);
+//        mediaPlayer.play();
+        try {
+            if(audio.getId()!=null){
+                URL url = new URL(audio.getId());
+                mediaPlayer = new MP3Player(url);
+                mediaPlayer.play();
+            }else{
+                Audio newSong = findNewSong();
+                playMusic(newSong);
+            }
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public Audio findNewSong(){
+        List keys = new ArrayList(tracks.keySet());
+
+        int e = (int)(Math.random() * keys.size());
+        String newGoodAnswer = (String)keys.get(e);
+
+        String url = tracks.get(newGoodAnswer);
+        Audio newSong = new Audio(url, newGoodAnswer);
+        return newSong;
+    }
+
     public void changeSong() throws InterruptedException {
         // stops the current music
         if(mediaPlayer != null) {
@@ -286,9 +289,9 @@ public class MusicGameController implements Initializable {
         Audio newSong = findNewSong();
 
         playMusic(newSong);
-        goodAnswer = newSong.getAnswer();
+        this.goodAnswer = newSong.getAnswer();
 
-        System.out.println("new good answer = "+ goodAnswer);
+        System.out.println("new good answer = "+ this.goodAnswer);
         // for next call to this method
         nextSong++;
     }
